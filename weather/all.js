@@ -11,7 +11,8 @@ app.controller('MainController', function ($scope, $http, $document, uiGmapGoogl
   $scope.map = {center: {latitude: 0, longitude: 0}, zoom: 11, events: {click: getClickedLocation}};
 
   function getClickedLocation(map, event, data) {
-    getDataByLocation(data[0].latLng.H, data[0].latLng.L);
+    //disabled since not working (API changed)
+	//getDataByLocation(data[0].latLng.H, data[0].latLng.L);
   }
 
   $scope.getDirection = function (deg) {
