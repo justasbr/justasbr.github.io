@@ -1,0 +1,63 @@
+* {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box; }
+
+[ng\:cloak], [ng-cloak], .ng-cloak {
+  display: none !important; }
+
+div {
+  font-size: 16px;
+  font-weight: 100; }
+
+.weather-day-outer {
+  height: 200px;
+  padding: 0; }
+
+.weather-day-inner {
+  border: 1px solid;
+  margin: 5px; }
+
+.weather {
+  flex: auto;
+  margin: 0 20px; }
+
+h1 {
+  text-align: center; }
+
+.city {
+  font-weight: 600; }
+
+div.weather {
+  border: 0px; }
+
+.weatherIcon {
+  height: 80px;
+  width: 80px; }
+
+.header {
+  width: 75%; }
+
+.cityInput {
+  width: 100%; }
+
+.cityInputDiv {
+  width: 20%;
+  margin: 0 auto; }
+
+.city-input-button {
+  margin-top: 2px;
+  margin-bottom: 20px;
+  width: 100%; }
+
+body, html {
+  height: 100%;
+  width: 100%; }
+
+.angular-google-map-container {
+  -webkit-transition: height 0.5s;
+  /* Safari */
+  transition: height 0.5s;
+  height: 0px;
+  width: 100%;
+  position: relative; }
