@@ -1604,12 +1604,9 @@ function shareTeamFromCard(code) {
   if (el) { el.textContent = 'Copied to clipboard!'; setTimeout(() => el.textContent = '', 2000); }
 }
 
-// Apply hash on load (or restore from localStorage)
+// Apply hash on load (only if URL has a hash)
 if (location.hash) {
   applyHash();
-} else {
-  const saved = localStorage.getItem('euroleague_team');
-  if (saved) highlightTeam(saved);
 }
 
 // ─── Scroll hints ───
