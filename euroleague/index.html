@@ -1348,6 +1348,13 @@ function renderHeatmap() {
     });
     hBody.innerHTML += `<tr id="hm-${t.code}">${cells}</tr>`;
   });
+  hBody.querySelectorAll('tr').forEach(tr => {
+    tr.style.cursor = 'pointer';
+    tr.addEventListener('click', () => {
+      const code = tr.id.replace('hm-', '');
+      location.hash = code;
+    });
+  });
 }
 
 document.querySelectorAll('.sortable-hm').forEach(th => {
