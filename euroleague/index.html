@@ -1257,7 +1257,7 @@ function renderStandings() {
     const zone = t.pos <= D.playoff_spots ? 'playoff' : t.pos <= D.playin_end ? 'playin' : 'out';
     tbody.innerHTML += `<tr id="team-${t.code}">
       <td class="zone-${zone}">${t.pos}</td>
-      <td><img class="team-logo" src="${t.logo}" alt=""><span class="team-name">${t.name}</span><span class="team-chevron">&rsaquo;</span><span class="team-code">${t.wins}-${t.losses}</span>${t.verdict ? `<span class="verdict-pill verdict-pill-${t.verdict.toLowerCase().replace(/\s+/g,'-')}">${t.verdict}</span>` : ''}</td>
+      <td><img class="team-logo" src="${t.logo}" alt=""><span class="team-name">${t.name}</span><span class="team-chevron">&rsaquo;</span><span class="team-code">${t.wins}-${t.losses}</span></td>
       <td class="right elo-cell">${t.elo} <span class="team-code">#${t.rank}</span></td>
       <td class="right pct-playoff">${t.playoff > 0 ? t.playoff.toFixed(1) + '%' : '—'}</td>
       <td class="right pct-playin">${t.playin > 0 ? t.playin.toFixed(1) + '%' : '—'}</td>
