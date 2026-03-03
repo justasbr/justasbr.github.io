@@ -1624,6 +1624,19 @@ function toggleWif(idx, side, teamCode) {
   if (_wifForced[idx] === side) {
     delete _wifForced[idx];
   } else {
+    // Count currently forced games for this team (exclude this idx if already forced)
+    const sched = D.schedules[teamCode] || [];
+    const wifMap = {};
+    D.whatif.games.forEach((g, i) => { wifMap[g.round + ':' + g.home_code + ':' + g.away_code] = i; });
+    let count = 0;
+    sched.forEach(g => {
+      const isHome = g.loc === 'vs';
+      const hc = isHome ? teamCode : g.opp_code;
+      const ac = isHome ? g.opp_code : teamCode;
+      const gi = wifMap[g.round + ':' + hc + ':' + ac];
+      if (gi !== undefined && gi !== idx && _wifForced[gi]) count++;
+    });
+    if (count >= 2) return;
     _wifForced[idx] = side;
   }
   _syncWifButtons();
