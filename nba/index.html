@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Basketbolistai — Playoff Preview</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #f0f0f0;
+  color: #222;
+  font-family: 'Atlas Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  padding: 20px;
+  max-width: 1060px;
+  margin: 0 auto;
+}
+
+.header {
+  border-bottom: 2px solid #222;
+  padding-bottom: 12px;
+  margin-bottom: 32px;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 2px;
+  color: #222;
+}
+
+.subtitle {
+  color: #888;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+  color: #222;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 8px;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+h2 .toggle-arrow {
+  font-size: 0.7rem;
+  color: #aaa;
+  transition: transform 0.2s;
+}
+
+h2:hover {
+  color: #d64541;
+}
+
+.section {
+  margin-bottom: 44px;
+}
+
+.section-content {
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.2s ease;
+  max-height: 5000px;
+  opacity: 1;
+}
+
+.section.collapsed .section-content {
+  max-height: 0;
+  opacity: 0;
+  margin: 0;
+}
+
+.section.collapsed h2 {
+  margin-bottom: 0;
+  border-bottom-color: transparent;
+}
+
+.section.collapsed h2 .toggle-arrow {
+  transform: rotate(-90deg);
+}
+
+/* Standings table */
+.standings-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.standings-table th {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 2px solid #ccc;
+  color: #666;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.standings-table td {
+  padding: 7px 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.standings-table tr:hover {
+  background: #e8e8e8;
+}
+
+.standings-table .team-name {
+  font-weight: 600;
+  color: #222;
+}
+
+.standings-table tr.playoff-line td {
+  border-bottom: 2px solid #d64541;
+}
+
+.standings-table .seed-col {
+  color: #d64541;
+  font-weight: 700;
+  width: 36px;
+}
+
+.standings-table .eff-wins {
+  color: #555;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Championship odds bar chart */
+.card {
+  background: #fff;
+  border-radius: 4px;
+  padding: 20px 24px;
+  border: 1px solid #ddd;
+}
+
+.champ-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 0;
+}
+
+.champ-bar-team {
+  width: 180px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #222;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.champ-bar-track {
+  flex: 1;
+  height: 20px;
+  background: #eee;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.champ-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: #d64541;
+  transition: width 0.5s ease;
+  min-width: 2px;
+}
+
+.champ-bar-pct {
+  min-width: 50px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #222;
+}
+
+/* Bracket */
+.bracket-container {
+  background: #fff;
+  border-radius: 4px;
+  padding: 20px 24px;
+  border: 1px solid #ddd;
+  overflow-x: auto;
+}
+
+.bracket-grid {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(170px, 1fr) minmax(160px, 1fr);
+  gap: 0;
+  min-width: 600px;
+}
+
+.bracket-round {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 0 6px;
+}
+
+.bracket-matchup {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 6px 0;
+}
+
+.bracket-team {
+  display: flex;
+  align-items: center;
+  padding: 7px 10px;
+  background: #f7f7f7;
+  border: 1px solid #ddd;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap;
+  position: relative;
+}
+
+.bracket-team:first-child {
+  border-radius: 4px 4px 0 0;
+  border-bottom: none;
+}
+
+.bracket-team:last-child {
+  border-radius: 0 0 4px 4px;
+}
+
+.bracket-team .seed {
+  color: #d64541;
+  font-weight: 700;
+  margin-right: 6px;
+  font-size: 0.72rem;
+  min-width: 18px;
+}
+
+.bracket-team .pct {
+  margin-left: auto;
+  padding-left: 8px;
+  color: #888;
+  font-weight: 700;
+  font-size: 0.72rem;
+}
+
+.bracket-team.favorite {
+  background: #fff;
+  font-weight: 600;
+}
+
+.bracket-team.clickable {
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.bracket-team.clickable:hover {
+  background: #eef;
+  border-color: #999;
+}
+
+.bracket-team.selected {
+  background: #d64541 !important;
+  border-color: #d64541 !important;
+  color: #fff;
+}
+
+.bracket-team.selected .seed {
+  color: #ffcdd2;
+}
+
+.bracket-team.selected .pct {
+  color: #ffcdd2;
+}
+
+.bracket-label {
+  text-align: center;
+  color: #999;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding: 4px 0 6px;
+  font-weight: 600;
+}
+
+/* Advancement table */
+.advancement-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+  font-size: 0.85rem;
+}
+
+.advancement-table th {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 2px solid #ccc;
+  color: #666;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.15s;
+}
+
+.advancement-table th:hover {
+  color: #d64541;
+}
+
+.advancement-table th.sort-active {
+  color: #d64541;
+}
+
+.advancement-table th .sort-arrow {
+  margin-left: 4px;
+  font-size: 0.6rem;
+}
+
+.advancement-table td {
+  padding: 7px 10px;
+  border-bottom: 1px solid #e0e0e0;
+  font-variant-numeric: tabular-nums;
+}
+
+.advancement-table .team-name {
+  font-weight: 600;
+  color: #222;
+}
+
+/* Matchup breakdowns */
+.matchup-card {
+  background: #fff;
+  border-radius: 4px;
+  padding: 16px 20px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
+.matchup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.matchup-header .team-left { color: #d64541; }
+.matchup-header .team-right { color: #2b7bb9; }
+.matchup-header .vs { color: #999; font-size: 0.75rem; }
+
+.tug-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0;
+}
+
+.tug-label {
+  width: 36px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #888;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.tug-track {
+  flex: 1;
+  height: 12px;
+  background: #eee;
+  border-radius: 2px;
+  overflow: hidden;
+  display: flex;
+  position: relative;
+}
+
+.tug-left {
+  height: 100%;
+  background: #d64541;
+  transition: width 0.3s;
+}
+
+.tug-right {
+  height: 100%;
+  background: #2b7bb9;
+  transition: width 0.3s;
+  margin-left: auto;
+}
+
+.tug-marker {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: #ccc;
+}
+
+.tug-elo {
+  width: 36px;
+  font-size: 0.68rem;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.tug-elo.left { color: #d64541; }
+.tug-elo.right { color: #2b7bb9; }
+
+.matchup-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 900px) {
+  .matchup-grid { grid-template-columns: 1fr; }
+}
+
+/* Season awards */
+.awards-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.awards-table th {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 2px solid #ccc;
+  color: #666;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.awards-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.awards-table .cat-name { font-weight: 700; color: #d64541; }
+.awards-table .team-name { font-weight: 600; color: #222; }
+
+/* Radar grid */
+.radar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.radar-card {
+  background: #fff;
+  border-radius: 4px;
+  padding: 14px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.radar-card h3 {
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #222;
+}
+
+.radar-blurb {
+  font-size: 0.7rem;
+  color: #888;
+  line-height: 1.4;
+  margin-bottom: 6px;
+  font-style: italic;
+}
+
+.radar-card canvas { max-height: 200px; }
+
+.radar-card.playoff {
+  border-left: 3px solid #d64541;
+}
+
+/* Superlatives */
+.superlatives-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.superlative-card {
+  background: #fff;
+  border-radius: 4px;
+  padding: 14px 16px;
+  border: 1px solid #ddd;
+  border-left: 3px solid #d64541;
+}
+
+.superlative-team {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+
+.superlative-award {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 6px;
+}
+
+.superlative-reason {
+  font-size: 0.78rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+.footer {
+  text-align: center;
+  color: #999;
+  font-size: 0.72rem;
+  margin-top: 48px;
+  padding: 16px;
+  border-top: 1px solid #ddd;
+}
+
+@media (max-width: 600px) {
+  h1 { font-size: 1.4rem; }
+  body { padding: 12px; }
+  .radar-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .radar-card { padding: 10px; }
+  .champ-bar-team { width: 110px; font-size: 0.75rem; }
+  .matchup-grid { grid-template-columns: 1fr; }
+  .superlatives-grid { grid-template-columns: 1fr; }
+}
+</style>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="ba864bae-fc9f-4efc-8781-9fae15694a7e"></script>
+</head>
+<body>
+
+<div class="header">
+  <h1>BASKETBOLISTAI</h1>
+  <div class="subtitle">Playoff Preview &middot; 14-Team H2H &middot; ELO Model</div>
+</div>
+
+<!-- BRACKET -->
+<div class="section" id="bracket-section">
+  <h2>Playoff Bracket <span class="toggle-arrow">▼</span></h2>
+  <div class="section-content">
+    <div class="bracket-container" id="bracket-visual"></div>
+    <table class="advancement-table" id="advancement-table"></table>
+  </div>
+</div>
+
+<!-- FINAL STANDINGS -->
+<div class="section" id="standings-section">
+  <h2>Final Standings <span class="toggle-arrow">▼</span></h2>
+  <div class="section-content">
+    <table class="standings-table" id="standings-table"></table>
+  </div>
+</div>
+
+<!-- SEASON AWARDS -->
+<div class="section" id="superlatives-section">
+  <h2>Season Awards <span class="toggle-arrow">▼</span></h2>
+  <div class="section-content">
+    <div class="superlatives-grid" id="superlatives-grid"></div>
+  </div>
+</div>
+
+<!-- CAT LEADERS -->
+<div class="section" id="awards-section">
+  <h2>Cat Leaders <span class="toggle-arrow">▼</span></h2>
+  <div class="section-content">
+    <table class="awards-table" id="awards-table"></table>
+  </div>
+</div>
+
+<!-- CATEGORY RADAR -->
+<div class="section collapsed" id="categories">
+  <h2>ELO Scouting Reports <span class="toggle-arrow">▼</span></h2>
+  <div class="section-content">
+    <div class="radar-grid" id="radar-grid"></div>
+  </div>
+</div>
+
+<div class="footer">
+  Generated by Monte Carlo simulation &middot; 50,000 iterations
+</div>
+
+<script>
+const DATA = {"standings": [{"team": "Amen to That", "wins": 12, "losses": 5, "ties": 1, "record": "12-5-1", "eff_wins": 12.5}, {"team": "Hard'n'Braun", "wins": 12, "losses": 5, "ties": 1, "record": "12-5-1", "eff_wins": 12.5}, {"team": "Dydis nesvarbu", "wins": 12, "losses": 6, "ties": 0, "record": "12-6", "eff_wins": 12.0}, {"team": "Scottie does know", "wins": 11, "losses": 6, "ties": 1, "record": "11-6-1", "eff_wins": 11.5}, {"team": "Champagnie Showers", "wins": 11, "losses": 7, "ties": 0, "record": "11-7", "eff_wins": 11.0}, {"team": "Lazdavotojai", "wins": 9, "losses": 8, "ties": 1, "record": "9-8-1", "eff_wins": 9.5}, {"team": "Jaunas tiltas ir kamuolys.", "wins": 9, "losses": 9, "ties": 0, "record": "9-9", "eff_wins": 9.0}, {"team": "DomiNiko LaJokic", "wins": 9, "losses": 9, "ties": 0, "record": "9-9", "eff_wins": 9.0}, {"team": "Hart attack", "wins": 8, "losses": 10, "ties": 0, "record": "8-10", "eff_wins": 8.0}, {"team": "Jackson brothers", "wins": 7, "losses": 11, "ties": 0, "record": "7-11", "eff_wins": 7.0}, {"team": "SkinnyHeadLuka", "wins": 7, "losses": 11, "ties": 0, "record": "7-11", "eff_wins": 7.0}, {"team": "Slim Twins Wins", "wins": 6, "losses": 11, "ties": 1, "record": "6-11-1", "eff_wins": 6.5}, {"team": "ADK(H)D", "wins": 6, "losses": 12, "ties": 0, "record": "6-12", "eff_wins": 6.0}, {"team": "Beaves and Butthead", "wins": 4, "losses": 13, "ties": 1, "record": "4-13-1", "eff_wins": 4.5}], "championship": [{"team": "DomiNiko LaJokic", "pct": 23.8}, {"team": "Amen to That", "pct": 18.0}, {"team": "Dydis nesvarbu", "pct": 15.3}, {"team": "Scottie does know", "pct": 12.0}, {"team": "Hard'n'Braun", "pct": 10.0}, {"team": "Jaunas tiltas ir kamuolys.", "pct": 7.5}, {"team": "Champagnie Showers", "pct": 6.9}, {"team": "Lazdavotojai", "pct": 6.5}, {"team": "Hart attack", "pct": 0.0}, {"team": "Jackson brothers", "pct": 0.0}, {"team": "SkinnyHeadLuka", "pct": 0.0}, {"team": "Slim Twins Wins", "pct": 0.0}, {"team": "ADK(H)D", "pct": 0.0}, {"team": "Beaves and Butthead", "pct": 0.0}], "radar_data": {"Scottie does know": [-31.0, 70.0, 44.0, -37.0, -6.0, 90.0, -4.0, -32.0, 71.0], "Jackson brothers": [-37.0, -75.0, -11.0, 50.0, 21.0, -6.0, 61.0, -105.0, -16.0], "Jaunas tiltas ir kamuolys.": [10.0, 41.0, -60.0, 50.0, 35.0, -63.0, -94.0, 39.0, 73.0], "Hart attack": [-64.0, -59.0, 23.0, 40.0, -52.0, 68.0, -39.0, -33.0, 22.0], "Dydis nesvarbu": [-11.0, 90.0, -49.0, 53.0, 36.0, -88.0, -34.0, 65.0, -68.0], "Champagnie Showers": [-40.0, 108.0, -5.0, -90.0, 13.0, 5.0, 1.0, 53.0, 64.0], "ADK(H)D": [61.0, 41.0, -59.0, -99.0, -26.0, -104.0, 31.0, 0.0, 5.0], "Lazdavotojai": [50.0, -15.0, 4.0, -29.0, 4.0, -20.0, 33.0, -6.0, -33.0], "Slim Twins Wins": [2.0, 4.0, -41.0, -126.0, -130.0, 59.0, -55.0, 97.0, 79.0], "Beaves and Butthead": [-78.0, -76.0, 7.0, -5.0, -42.0, -61.0, -15.0, -42.0, -11.0], "DomiNiko LaJokic": [46.0, -20.0, -29.0, 95.0, 9.0, -47.0, -13.0, 81.0, -19.0], "SkinnyHeadLuka": [35.0, -25.0, -6.0, 22.0, 19.0, 17.0, 65.0, -70.0, -55.0], "Hard'n'Braun": [46.0, 57.0, 39.0, 0.0, 49.0, 51.0, -47.0, 74.0, -58.0], "Amen to That": [11.0, -140.0, 141.0, 75.0, 70.0, 99.0, 112.0, -122.0, -56.0]}, "cat_labels": ["PTS", "3PM", "REB", "AST", "STL", "BLK", "FG%", "FT%", "TO"], "bracket": {"seeds": ["Amen to That", "Hard'n'Braun", "Dydis nesvarbu", "Scottie does know", "Champagnie Showers", "Lazdavotojai", "Jaunas tiltas ir kamuolys.", "DomiNiko LaJokic"], "advancement": {"Amen to That": {"semi": 44.7, "finals": 29.5, "champ": 18.0}, "Hard'n'Braun": {"semi": 53.5, "finals": 21.6, "champ": 10.0}, "Dydis nesvarbu": {"semi": 60.7, "finals": 31.2, "champ": 15.3}, "Scottie does know": {"semi": 56.9, "finals": 27.2, "champ": 11.9}, "Champagnie Showers": {"semi": 43.1, "finals": 18.2, "champ": 7.0}, "Lazdavotojai": {"semi": 39.3, "finals": 16.8, "champ": 6.2}, "Jaunas tiltas ir kamuolys.": {"semi": 46.5, "finals": 19.9, "champ": 8.0}, "DomiNiko LaJokic": {"semi": 55.3, "finals": 35.6, "champ": 23.7}}}, "elo_rankings": [{"team": "Hard'n'Braun", "elo": 1023.0}, {"team": "Amen to That", "elo": 1021.0}, {"team": "Scottie does know", "elo": 1018.0}, {"team": "Champagnie Showers", "elo": 1012.0}, {"team": "DomiNiko LaJokic", "elo": 1012.0}, {"team": "Jaunas tiltas ir kamuolys.", "elo": 1003.0}, {"team": "SkinnyHeadLuka", "elo": 1000.0}, {"team": "Dydis nesvarbu", "elo": 999.0}, {"team": "Lazdavotojai", "elo": 999.0}, {"team": "Hart attack", "elo": 990.0}, {"team": "Slim Twins Wins", "elo": 988.0}, {"team": "Jackson brothers", "elo": 987.0}, {"team": "ADK(H)D", "elo": 983.0}, {"team": "Beaves and Butthead", "elo": 964.0}], "h2h_matrix": {"Amen to That vs Hard'n'Braun": 60.6, "Amen to That vs Dydis nesvarbu": 58.3, "Amen to That vs Scottie does know": 60.8, "Amen to That vs Champagnie Showers": 68.3, "Amen to That vs Lazdavotojai": 66.8, "Amen to That vs Jaunas tiltas ir kamuolys.": 64.4, "Amen to That vs DomiNiko LaJokic": 44.6, "Amen to That vs Hart attack": 59.1, "Amen to That vs Jackson brothers": 77.3, "Amen to That vs SkinnyHeadLuka": 68.7, "Amen to That vs Slim Twins Wins": 59.1, "Amen to That vs ADK(H)D": 71.1, "Amen to That vs Beaves and Butthead": 72.0, "Hard'n'Braun vs Dydis nesvarbu": 44.9, "Hard'n'Braun vs Scottie does know": 48.3, "Hard'n'Braun vs Champagnie Showers": 53.4, "Hard'n'Braun vs Lazdavotojai": 56.2, "Hard'n'Braun vs Jaunas tiltas ir kamuolys.": 53.7, "Hard'n'Braun vs DomiNiko LaJokic": 35.9, "Hard'n'Braun vs Hart attack": 48.1, "Hard'n'Braun vs Jackson brothers": 64.6, "Hard'n'Braun vs SkinnyHeadLuka": 59.5, "Hard'n'Braun vs Slim Twins Wins": 44.7, "Hard'n'Braun vs ADK(H)D": 59.1, "Hard'n'Braun vs Beaves and Butthead": 60.5, "Dydis nesvarbu vs Scottie does know": 55.1, "Dydis nesvarbu vs Champagnie Showers": 60.1, "Dydis nesvarbu vs Lazdavotojai": 61.1, "Dydis nesvarbu vs Jaunas tiltas ir kamuolys.": 58.1, "Dydis nesvarbu vs DomiNiko LaJokic": 37.5, "Dydis nesvarbu vs Hart attack": 50.8, "Dydis nesvarbu vs Jackson brothers": 67.9, "Dydis nesvarbu vs SkinnyHeadLuka": 62.5, "Dydis nesvarbu vs Slim Twins Wins": 53.8, "Dydis nesvarbu vs ADK(H)D": 65.6, "Dydis nesvarbu vs Beaves and Butthead": 65.3, "Scottie does know vs Champagnie Showers": 56.6, "Scottie does know vs Lazdavotojai": 57.0, "Scottie does know vs Jaunas tiltas ir kamuolys.": 55.4, "Scottie does know vs DomiNiko LaJokic": 34.9, "Scottie does know vs Hart attack": 50.0, "Scottie does know vs Jackson brothers": 69.4, "Scottie does know vs SkinnyHeadLuka": 61.0, "Scottie does know vs Slim Twins Wins": 50.9, "Scottie does know vs ADK(H)D": 60.9, "Scottie does know vs Beaves and Butthead": 63.6, "Champagnie Showers vs Lazdavotojai": 52.1, "Champagnie Showers vs Jaunas tiltas ir kamuolys.": 50.7, "Champagnie Showers vs DomiNiko LaJokic": 30.6, "Champagnie Showers vs Hart attack": 41.9, "Champagnie Showers vs Jackson brothers": 63.1, "Champagnie Showers vs SkinnyHeadLuka": 54.4, "Champagnie Showers vs Slim Twins Wins": 42.8, "Champagnie Showers vs ADK(H)D": 53.6, "Champagnie Showers vs Beaves and Butthead": 55.5, "Lazdavotojai vs Jaunas tiltas ir kamuolys.": 48.5, "Lazdavotojai vs DomiNiko LaJokic": 27.8, "Lazdavotojai vs Hart attack": 41.2, "Lazdavotojai vs Jackson brothers": 61.1, "Lazdavotojai vs SkinnyHeadLuka": 52.2, "Lazdavotojai vs Slim Twins Wins": 40.6, "Lazdavotojai vs ADK(H)D": 54.0, "Lazdavotojai vs Beaves and Butthead": 56.3, "Jaunas tiltas ir kamuolys. vs DomiNiko LaJokic": 31.3, "Jaunas tiltas ir kamuolys. vs Hart attack": 43.0, "Jaunas tiltas ir kamuolys. vs Jackson brothers": 61.2, "Jaunas tiltas ir kamuolys. vs SkinnyHeadLuka": 55.8, "Jaunas tiltas ir kamuolys. vs Slim Twins Wins": 42.8, "Jaunas tiltas ir kamuolys. vs ADK(H)D": 57.2, "Jaunas tiltas ir kamuolys. vs Beaves and Butthead": 58.1, "DomiNiko LaJokic vs Hart attack": 63.7, "DomiNiko LaJokic vs Jackson brothers": 79.1, "DomiNiko LaJokic vs SkinnyHeadLuka": 73.2, "DomiNiko LaJokic vs Slim Twins Wins": 63.8, "DomiNiko LaJokic vs ADK(H)D": 73.4, "DomiNiko LaJokic vs Beaves and Butthead": 74.6, "Hart attack vs Jackson brothers": 69.7, "Hart attack vs SkinnyHeadLuka": 61.4, "Hart attack vs Slim Twins Wins": 51.3, "Hart attack vs ADK(H)D": 62.3, "Hart attack vs Beaves and Butthead": 64.8, "Jackson brothers vs SkinnyHeadLuka": 42.7, "Jackson brothers vs Slim Twins Wins": 31.5, "Jackson brothers vs ADK(H)D": 41.0, "Jackson brothers vs Beaves and Butthead": 45.6, "SkinnyHeadLuka vs Slim Twins Wins": 37.8, "SkinnyHeadLuka vs ADK(H)D": 51.8, "SkinnyHeadLuka vs Beaves and Butthead": 53.1, "Slim Twins Wins vs ADK(H)D": 61.7, "Slim Twins Wins vs Beaves and Butthead": 64.6, "ADK(H)D vs Beaves and Butthead": 53.1}, "matchup_breakdowns": [{"team1": "Amen to That", "team2": "DomiNiko LaJokic", "seed1": 1, "seed2": 8, "categories": [{"label": "PTS", "elo1": 1011.0, "elo2": 1046.0}, {"label": "3PM", "elo1": 860.0, "elo2": 980.0}, {"label": "REB", "elo1": 1141.0, "elo2": 971.0}, {"label": "AST", "elo1": 1075.0, "elo2": 1095.0}, {"label": "STL", "elo1": 1070.0, "elo2": 1009.0}, {"label": "BLK", "elo1": 1099.0, "elo2": 953.0}, {"label": "FG%", "elo1": 1112.0, "elo2": 987.0}, {"label": "FT%", "elo1": 878.0, "elo2": 1081.0}, {"label": "TO", "elo1": 944.0, "elo2": 981.0}]}, {"team1": "Hard'n'Braun", "team2": "Jaunas tiltas ir kamuolys.", "seed1": 2, "seed2": 7, "categories": [{"label": "PTS", "elo1": 1046.0, "elo2": 1010.0}, {"label": "3PM", "elo1": 1057.0, "elo2": 1041.0}, {"label": "REB", "elo1": 1039.0, "elo2": 940.0}, {"label": "AST", "elo1": 1000.0, "elo2": 1050.0}, {"label": "STL", "elo1": 1049.0, "elo2": 1035.0}, {"label": "BLK", "elo1": 1051.0, "elo2": 937.0}, {"label": "FG%", "elo1": 953.0, "elo2": 906.0}, {"label": "FT%", "elo1": 1074.0, "elo2": 1039.0}, {"label": "TO", "elo1": 942.0, "elo2": 1073.0}]}, {"team1": "Dydis nesvarbu", "team2": "Lazdavotojai", "seed1": 3, "seed2": 6, "categories": [{"label": "PTS", "elo1": 989.0, "elo2": 1050.0}, {"label": "3PM", "elo1": 1090.0, "elo2": 985.0}, {"label": "REB", "elo1": 951.0, "elo2": 1004.0}, {"label": "AST", "elo1": 1053.0, "elo2": 971.0}, {"label": "STL", "elo1": 1036.0, "elo2": 1004.0}, {"label": "BLK", "elo1": 912.0, "elo2": 980.0}, {"label": "FG%", "elo1": 966.0, "elo2": 1033.0}, {"label": "FT%", "elo1": 1065.0, "elo2": 994.0}, {"label": "TO", "elo1": 932.0, "elo2": 967.0}]}, {"team1": "Scottie does know", "team2": "Champagnie Showers", "seed1": 4, "seed2": 5, "categories": [{"label": "PTS", "elo1": 969.0, "elo2": 960.0}, {"label": "3PM", "elo1": 1070.0, "elo2": 1108.0}, {"label": "REB", "elo1": 1044.0, "elo2": 995.0}, {"label": "AST", "elo1": 963.0, "elo2": 910.0}, {"label": "STL", "elo1": 994.0, "elo2": 1013.0}, {"label": "BLK", "elo1": 1090.0, "elo2": 1005.0}, {"label": "FG%", "elo1": 996.0, "elo2": 1001.0}, {"label": "FT%", "elo1": 968.0, "elo2": 1053.0}, {"label": "TO", "elo1": 1071.0, "elo2": 1064.0}]}], "season_awards": [{"category": "FG%", "team": "Amen to That", "record": "16-2", "pct": 88.9}, {"category": "FT%", "team": "Slim Twins Wins", "record": "15-3", "pct": 83.3}, {"category": "3PTM", "team": "Champagnie Showers", "record": "16-2", "pct": 88.9}, {"category": "PTS", "team": "ADK(H)D", "record": "13-5", "pct": 72.2}, {"category": "REB", "team": "Amen to That", "record": "18-0", "pct": 100.0}, {"category": "AST", "team": "DomiNiko LaJokic", "record": "15-3", "pct": 83.3}, {"category": "ST", "team": "Amen to That", "record": "13-5", "pct": 72.2}, {"category": "BLK", "team": "Amen to That", "record": "15-3", "pct": 83.3}, {"category": "TO", "team": "Scottie does know", "record": "14-4", "pct": 77.8}], "superlatives": [{"team": "Amen to That", "award": "The Extremist", "reason": "18-0 in REB, 0-18 in 3PM. The only team to go undefeated AND winless in a category. Also 16-2 FG% but 1-17 FT%. Perfectly imbalanced."}, {"team": "Hard'n'Braun", "award": "Jack of All Trades", "reason": "Positive record in 6 of 9 categories. FT%, 3PM, PTS, REB, STL, BLK all above .500 \u2014 just relentless consistency to a #2 seed."}, {"team": "Dydis nesvarbu", "award": "The Frontrunner", "reason": "Held #1 from Week 9 to Week 17 \u2014 the longest reign atop the standings. Then lost the final week and dropped to #3. Peaked too early."}, {"team": "Scottie does know", "award": "The Wall", "reason": "15-3 BLK and 14-4 TO \u2014 league's best defensive duo. Led the league through Week 8 at 7-1, but faded from 1st to 4th down the stretch."}, {"team": "Champagnie Showers", "award": "The Sniper's Dilemma", "reason": "16-2 in 3PM (league's best) but 3-15 in AST. Can't miss from three, can't find an open teammate."}, {"team": "Lazdavotojai", "award": "The Comeback Kid", "reason": "Started 0-4 \u2014 dead last through four weeks. Went 9-4-1 the rest of the way to climb from 14th to the 6th seed. Best redemption arc in the league."}, {"team": "Jaunas tiltas ir kamuolys.", "award": "Mr. Clean", "reason": "13-4-1 in TO (league's tidiest). Takes care of the ball like it's a newborn, but 3-15 in FG% says the shots aren't falling."}, {"team": "DomiNiko LaJokic", "award": "The Floor General", "reason": "15-3 AST from the 8-seed. The model's #1 projected team \u2014 the most dangerous low seed in the bracket."}, {"team": "Hart attack", "award": "The Collapse", "reason": "12-3-3 BLK and 12-6 AST are elite. Held a playoff spot through Week 14 at 7-7, then went 1-3 down the stretch to miss the cut by one game."}, {"team": "Jackson brothers", "award": "The FG% Trap", "reason": "13-5 in FG% looks great until you see 2-16 in FT%. Efficient from the field, allergic to the charity stripe."}, {"team": "SkinnyHeadLuka", "award": "The Walking Contradiction", "reason": "13-5 in FG% and 11-7 in PTS are top-tier, but 5-13 FT% and 6-12 TO drag it all down. Elite shooting, zero discipline."}, {"team": "Slim Twins Wins", "award": "The One-Trick Pony", "reason": "15-3 FT% is league-best, but 1-17 in both AST and STL. Nobody's passing and nobody's stealing \u2014 just shooting free throws alone."}, {"team": "ADK(H)D", "award": "The Scoring Paradox", "reason": "13-5 in PTS is the league's best \u2014 but 6-12 overall. Proof that scoring alone doesn't win H2H matchups."}, {"team": "Beaves and Butthead", "award": "Tanking with Dignity", "reason": "4-13-1 record but 10-8 in REB. They lost nearly everything, but at least they crashed the boards while doing it."}], "num_sims": 50000};
+
+// Seed lookup: team name -> original seed number
+const SEED_OF = {};
+DATA.bracket.seeds.forEach((t, i) => { SEED_OF[t] = i + 1; });
+
+// H2H lookup: returns team1 win% (0-100)
+function getH2H(t1, t2) {
+  const key1 = t1 + ' vs ' + t2;
+  const key2 = t2 + ' vs ' + t1;
+  if (DATA.h2h_matrix[key1] !== undefined) return DATA.h2h_matrix[key1];
+  if (DATA.h2h_matrix[key2] !== undefined) return 100 - DATA.h2h_matrix[key2];
+  return 50;
+}
+
+// 1. Final Standings table
+(function() {
+  const table = document.getElementById('standings-table');
+  let html = '<thead><tr><th>#</th><th>Team</th><th>Record</th><th>Eff W</th></tr></thead><tbody>';
+  DATA.standings.forEach((t, i) => {
+    const seed = i + 1;
+    const playoffLine = seed === 8 ? ' playoff-line' : '';
+    const dimStyle = seed > 8 ? ' style="color:#aaa"' : '';
+    html += `<tr class="${playoffLine}">
+      <td class="seed-col">${seed}</td>
+      <td class="team-name"${dimStyle}>${t.team}</td>
+      <td${dimStyle}>${t.record}</td>
+      <td class="eff-wins"${dimStyle}>${t.eff_wins.toFixed(1)}</td>
+    </tr>`;
+  });
+  html += '</tbody>';
+  table.innerHTML = html;
+})();
+
+// 2. Interactive bracket with reseeding — seeds shown in every round
+const bracketState = { qf: [null,null,null,null], sf: [null,null] };
+let currentBracketSeeds = null;
+
+function resetBracketState() {
+  bracketState.qf = [null,null,null,null];
+  bracketState.sf = [null,null];
+}
+
+function bracketClickQF(matchIdx, team) {
+  if (bracketState.qf[matchIdx] === team) {
+    bracketState.qf[matchIdx] = null;
+    bracketState.sf = [null, null];
+  } else {
+    if (bracketState.qf[matchIdx] !== null) bracketState.sf = [null, null];
+    bracketState.qf[matchIdx] = team;
+  }
+  renderBracket(currentBracketSeeds);
+}
+
+function bracketClickSF(sfIdx, team) {
+  bracketState.sf[sfIdx] = bracketState.sf[sfIdx] === team ? null : team;
+  renderBracket(currentBracketSeeds);
+}
+
+function renderBracket(seeds) {
+  currentBracketSeeds = seeds;
+  const s = seeds;
+  const qfPairs = [[0,7],[1,6],[2,5],[3,4]];
+
+  function teamHtml(name, pct, isFav, cls, round, matchIdx) {
+    const seed = SEED_OF[name];
+    const seedLabel = seed ? `<span class="seed">#${seed}</span>` : '';
+    return `<div class="bracket-team ${cls} ${isFav ? 'favorite' : ''}" data-round="${round}" data-match="${matchIdx}" data-team="${name.replace(/"/g, '&quot;')}">
+      ${seedLabel}${name}<span class="pct">${pct.toFixed(0)}%</span>
+    </div>`;
+  }
+
+  function placeholderTeam(text) {
+    return `<div class="bracket-team" style="border-radius:4px;border:1px dashed #ccc;background:transparent;color:#aaa;justify-content:center;font-style:italic;font-size:0.75rem">${text}</div>`;
+  }
+
+  // QF round
+  let qfHtml = '<div class="bracket-label">Quarterfinals</div>';
+  qfPairs.forEach(([hi, lo], mi) => {
+    const p = getH2H(s[hi], s[lo]);
+    const picked = bracketState.qf[mi];
+    const render = (seedIdx, pct) => {
+      const team = s[seedIdx];
+      const fav = pct >= 50;
+      const cls = picked === team ? 'clickable selected' : 'clickable';
+      return teamHtml(team, pct, fav, cls, 'qf', mi);
+    };
+    qfHtml += `<div class="bracket-matchup">
+      ${render(hi, p)}
+      ${render(lo, 100 - p)}
+    </div>`;
+  });
+
+  // Reseed QF winners for SF
+  const qfWinners = bracketState.qf.filter(w => w !== null);
+  let sfPairs = [];
+  if (qfWinners.length === 4) {
+    const sorted = [...qfWinners].sort((a, b) => SEED_OF[a] - SEED_OF[b]);
+    sfPairs = [[sorted[0], sorted[3]], [sorted[1], sorted[2]]];
+  }
+
+  // SF round
+  let sfHtml = '<div class="bracket-label">Semifinals</div>';
+  if (sfPairs.length === 2) {
+    sfPairs.forEach(([w1, w2], si) => {
+      const p = getH2H(w1, w2);
+      const picked = bracketState.sf[si];
+      const renderSF = (team, pct) => {
+        const fav = pct >= 50;
+        const cls = picked === team ? 'clickable selected' : 'clickable';
+        return teamHtml(team, pct, fav, cls, 'sf', si);
+      };
+      sfHtml += `<div class="bracket-matchup" style="flex:1">
+        ${renderSF(w1, p)}
+        ${renderSF(w2, 100 - p)}
+      </div>`;
+    });
+  } else {
+    for (let si = 0; si < 2; si++) {
+      sfHtml += `<div class="bracket-matchup" style="flex:1">
+        ${placeholderTeam('Pick all QF winners')}
+      </div>`;
+    }
+  }
+
+  // Finals
+  let finalsHtml = '<div class="bracket-label">Finals</div>';
+  const f1 = bracketState.sf[0];
+  const f2 = bracketState.sf[1];
+  if (f1 && f2) {
+    const p = getH2H(f1, f2);
+    finalsHtml += `<div class="bracket-matchup" style="flex:1">
+      ${teamHtml(f1, p, p >= 50, '', 'fin', 0)}
+      ${teamHtml(f2, 100 - p, 100 - p >= 50, '', 'fin', 0)}
+    </div>`;
+  } else {
+    finalsHtml += `<div class="bracket-matchup" style="flex:1">
+      ${placeholderTeam('Pick SF winners')}
+    </div>`;
+  }
+
+  const container = document.getElementById('bracket-visual');
+  container.innerHTML = `<div class="bracket-grid">
+    <div class="bracket-round">${qfHtml}</div>
+    <div class="bracket-round">${sfHtml}</div>
+    <div class="bracket-round">${finalsHtml}</div>
+  </div>`;
+
+  container.onclick = function(e) {
+    const el = e.target.closest('.bracket-team.clickable');
+    if (!el) return;
+    const round = el.dataset.round;
+    const matchIdx = parseInt(el.dataset.match);
+    const team = el.dataset.team;
+    if (round === 'qf') bracketClickQF(matchIdx, team);
+    else if (round === 'sf') bracketClickSF(matchIdx, team);
+  };
+}
+
+renderBracket(DATA.bracket.seeds);
+
+// Sortable advancement table
+(function() {
+  const table = document.getElementById('advancement-table');
+  const seeds = DATA.bracket.seeds;
+  const rows = seeds.map((team, i) => ({
+    seed: i + 1,
+    team,
+    semi: DATA.bracket.advancement[team].semi,
+    finals: DATA.bracket.advancement[team].finals,
+    champ: DATA.bracket.advancement[team].champ,
+  }));
+
+  const columns = [
+    { key: 'seed', label: 'Seed', asc: true },
+    { key: 'team', label: 'Team', asc: true },
+    { key: 'semi', label: 'Make SF', asc: false },
+    { key: 'finals', label: 'Make Finals', asc: false },
+    { key: 'champ', label: 'Win Title', asc: false },
+  ];
+  let sortCol = 'seed';
+  let sortAsc = true;
+
+  function render() {
+    const sorted = [...rows].sort((a, b) => {
+      let va = a[sortCol], vb = b[sortCol];
+      if (typeof va === 'string') { va = va.toLowerCase(); vb = vb.toLowerCase(); }
+      if (va < vb) return sortAsc ? -1 : 1;
+      if (va > vb) return sortAsc ? 1 : -1;
+      return 0;
+    });
+
+    let html = '<thead><tr>';
+    columns.forEach(col => {
+      const active = sortCol === col.key;
+      const arrow = active ? (sortAsc ? '▲' : '▼') : '';
+      html += `<th class="${active ? 'sort-active' : ''}" data-col="${col.key}">${col.label}<span class="sort-arrow">${arrow}</span></th>`;
+    });
+    html += '</tr></thead><tbody>';
+
+    sorted.forEach(r => {
+      html += `<tr>
+        <td style="color:#d64541;font-weight:700">#${r.seed}</td>
+        <td class="team-name">${r.team}</td>
+        <td>${r.semi.toFixed(1)}%</td>
+        <td>${r.finals.toFixed(1)}%</td>
+        <td style="font-weight:700">${r.champ.toFixed(1)}%</td>
+      </tr>`;
+    });
+    html += '</tbody>';
+    table.innerHTML = html;
+  }
+
+  table.addEventListener('click', function(e) {
+    const th = e.target.closest('th[data-col]');
+    if (!th) return;
+    const col = th.dataset.col;
+    const colDef = columns.find(c => c.key === col);
+    if (sortCol === col) {
+      sortAsc = !sortAsc;
+    } else {
+      sortCol = col;
+      sortAsc = colDef.asc;
+    }
+    render();
+  });
+
+  render();
+})();
+
+// 4. Radar charts — playoff teams first
+(function() {
+  const grid = document.getElementById('radar-grid');
+  const labels = DATA.cat_labels;
+  const playoffTeams = DATA.bracket.seeds;
+
+  const teamBlurbs = {
+    "Hard'n'Braun": "Elite in six cats — FTs, steals, blocks, threes, boards, scoring. Only the TO hole keeps them honest.",
+    "Amen to That": "Punt FT/3PM to its logical extreme. League-best in four cats, league-worst in two.",
+    "Scottie does know": "Punt-scoring build with league-best blocks and TOs. Locks up three cats.",
+    "DomiNiko LaJokic": "Punt-blocks done right — league-best AST, elite FTs, solid scoring.",
+    "Champagnie Showers": "Punt-assists extreme — league-best 3PM and solid FTs/TOs.",
+    "Dydis nesvarbu": "Well-rounded punt-blocks — elite 3PM, STL, FT, AST.",
+    "Jaunas tiltas ir kamuolys.": "Elite AST, STL, TO discipline with solid threes.",
+    "Lazdavotojai": "League-best scoring with elite FG%. Quiet two-cat lock.",
+    "SkinnyHeadLuka": "Elite FG% with solid scoring and blocks.",
+    "Jackson brothers": "Solid FG%, AST, STL, but FT and 3PM are backbreaking.",
+    "Hart attack": "Elite AST and BLK, but scoring and FG% are punted.",
+    "Slim Twins Wins": "League-best FTs and TOs with solid blocks.",
+    "ADK(H)D": "Scores and shoots threes, but BLK and AST are massive holes.",
+    "Beaves and Butthead": "Slight edges in boards and assists, negative everywhere else.",
+  };
+
+  const allTeams = DATA.standings.map(s => s.team);
+  const nonPlayoff = allTeams.filter(t => !playoffTeams.includes(t));
+  const ordered = [...playoffTeams, ...nonPlayoff];
+
+  ordered.forEach(team => {
+    const values = DATA.radar_data[team];
+    if (!values) return;
+    const isPlayoff = playoffTeams.includes(team);
+    const blurb = teamBlurbs[team] || '';
+    const card = document.createElement('div');
+    card.className = isPlayoff ? 'radar-card playoff' : 'radar-card';
+    card.innerHTML = `<h3>${team}</h3><p class="radar-blurb">${blurb}</p><canvas></canvas>`;
+    grid.appendChild(card);
+
+    const ctx = card.querySelector('canvas').getContext('2d');
+    const shifted = values.map(v => v + 150);
+    const color = isPlayoff ? '#d64541' : '#999';
+    new Chart(ctx, {
+      type: 'radar',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: shifted,
+          backgroundColor: isPlayoff ? 'rgba(214, 69, 65, 0.15)' : 'rgba(150, 150, 150, 0.1)',
+          borderColor: color,
+          borderWidth: 2,
+          pointBackgroundColor: color,
+          pointRadius: 3,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(ctx) { return (ctx.raw - 150 >= 0 ? '+' : '') + (ctx.raw - 150); }
+            }
+          }
+        },
+        scales: {
+          r: {
+            min: 0,
+            max: 300,
+            ticks: {
+              stepSize: 75,
+              color: '#aaa',
+              backdropColor: 'transparent',
+              font: { size: 8 },
+              callback: v => { const d = v - 150; return d === 0 ? '0' : (d > 0 ? '+' + d : d); }
+            },
+            grid: { color: '#e0e0e0' },
+            angleLines: { color: '#e0e0e0' },
+            pointLabels: {
+              color: '#666',
+              font: { size: 10, weight: '600' }
+            }
+          }
+        }
+      }
+    });
+  });
+})();
+
+// 6. Season Awards
+(function() {
+  const table = document.getElementById('awards-table');
+  let html = '<thead><tr><th>Category</th><th>King</th><th>Record</th><th>Win%</th></tr></thead><tbody>';
+  DATA.season_awards.forEach(a => {
+    html += `<tr>
+      <td class="cat-name">${a.category}</td>
+      <td class="team-name">${a.team}</td>
+      <td>${a.record}</td>
+      <td style="font-weight:700">${a.pct.toFixed(1)}%</td>
+    </tr>`;
+  });
+  html += '</tbody>';
+  table.innerHTML = html;
+})();
+
+// 7. Superlatives
+(function() {
+  const grid = document.getElementById('superlatives-grid');
+  DATA.superlatives.forEach(s => {
+    const card = document.createElement('div');
+    card.className = 'superlative-card';
+    card.innerHTML = `
+      <div class="superlative-team">${s.team}</div>
+      <div class="superlative-award">${s.award}</div>
+      <div class="superlative-reason">${s.reason}</div>
+    `;
+    grid.appendChild(card);
+  });
+})();
+
+// Section collapse/expand
+document.querySelectorAll('.section > h2').forEach(h2 => {
+  h2.addEventListener('click', () => {
+    h2.parentElement.classList.toggle('collapsed');
+  });
+});
+</script>
+
+</body>
+</html>
