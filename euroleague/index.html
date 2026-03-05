@@ -1155,7 +1155,15 @@ tr.team-highlighted td {
   margin-top: 0.25rem;
   pointer-events: none;
 }
-.whatif-limit-hint.visible { opacity: 1; }
+.whatif-limit-hint.visible { opacity: 1; animation: wif-hint-shake 0.4s ease; }
+@keyframes wif-hint-shake {
+  0%, 100% { transform: translateX(0); }
+  15% { transform: translateX(-3px); }
+  30% { transform: translateX(3px); }
+  45% { transform: translateX(-2px); }
+  60% { transform: translateX(2px); }
+  75% { transform: translateX(-1px); }
+}
 @keyframes wif-nudge {
   0%, 100% { transform: translateX(0); }
   20% { transform: translateX(-2px); }
@@ -1701,7 +1709,7 @@ function toggleWif(idx, side, teamCode) {
     if (count >= 2) {
       // Flash hint + nudge the clicked button
       const hint = document.getElementById('wif-limit-hint');
-      if (hint) { hint.classList.add('visible'); clearTimeout(hint._t); hint._t = setTimeout(() => hint.classList.remove('visible'), 2000); }
+      if (hint) { hint.classList.remove('visible'); void hint.offsetWidth; hint.classList.add('visible'); clearTimeout(hint._t); hint._t = setTimeout(() => hint.classList.remove('visible'), 2000); }
       const btn = document.querySelector(`[data-wif-idx="${idx}"][data-wif-side="${side}"]`);
       if (btn) { btn.classList.remove('wif-nudge'); void btn.offsetWidth; btn.classList.add('wif-nudge'); }
       return;
