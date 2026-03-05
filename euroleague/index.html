@@ -907,12 +907,12 @@ tr.team-highlighted td {
     left: 0;
     right: 0;
     z-index: 100;
-    max-height: 70vh;
+    max-height: 80vh;
     overflow-y: auto;
     border-radius: 12px 12px 0 0;
     border-bottom: none;
     margin: 0;
-    padding-top: 0.5rem;
+    padding: 0.5rem 1rem 1rem;
     transform: translateY(0);
     animation: sheetSlideUp 0.3s ease-out;
   }
@@ -921,8 +921,48 @@ tr.team-highlighted td {
     height: 4px;
     background: var(--text-dim);
     border-radius: 2px;
-    margin: 0.4rem auto 0.5rem;
+    margin: 0.4rem auto 0.3rem;
     opacity: 0.4;
+  }
+  .team-focus-header {
+    gap: 0.6rem;
+    margin-bottom: 0.5rem;
+  }
+  .team-focus-logo {
+    width: 36px;
+    height: 36px;
+  }
+  .team-focus-name {
+    font-size: 1.1rem;
+  }
+  .team-focus-meta {
+    font-size: 0.72rem;
+  }
+  .team-focus-stats {
+    gap: 0.8rem;
+    margin-bottom: 0.5rem;
+  }
+  .team-focus-stat .value {
+    font-size: 1.15rem;
+  }
+  .team-focus-share {
+    margin-top: 0.4rem;
+    margin-bottom: 0.15rem;
+  }
+  .share-card-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
+  }
+  .team-focus-schedule {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+  }
+  .schedule-game {
+    padding: 0.2rem 0;
+    font-size: 0.72rem;
+  }
+  .whatif-projection.active {
+    max-height: 8rem;
   }
 }
 @media (min-width: 701px) {
@@ -972,10 +1012,11 @@ tr.team-highlighted td {
   font-size: 0.72rem;
   font-weight: 800;
   color: var(--text);
-  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   line-height: 1;
   letter-spacing: 0.5px;
   position: relative;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 .whatif-btn:first-child {
   border-radius: 4px 0 0 4px;
@@ -985,34 +1026,32 @@ tr.team-highlighted td {
   border-radius: 0 4px 4px 0;
   border-left: none;
 }
-.whatif-btn:hover {
-  z-index: 1;
-}
-.whatif-btn:first-child:hover {
-  background: rgba(46, 139, 87, 0.12);
-  border-color: var(--green);
-  color: var(--green);
-}
-.whatif-btn:last-child:hover {
-  background: rgba(214, 69, 65, 0.1);
-  border-color: var(--red);
-  color: var(--red);
+@media (hover: hover) {
+  .whatif-btn:hover {
+    z-index: 1;
+  }
+  .whatif-btn:first-child:hover {
+    background: rgba(46, 139, 87, 0.12);
+    border-color: var(--green);
+    color: var(--green);
+  }
+  .whatif-btn:last-child:hover {
+    background: rgba(214, 69, 65, 0.1);
+    border-color: var(--red);
+    color: var(--red);
+  }
 }
 .whatif-btn.wif-win {
   background: var(--green);
   color: #fff;
   border-color: var(--green);
-  box-shadow: 0 0 0 1px var(--green), 0 2px 6px rgba(46, 139, 87, 0.35);
   z-index: 1;
-  transform: scale(1.08);
 }
 .whatif-btn.wif-loss {
   background: var(--red);
   color: #fff;
   border-color: var(--red);
-  box-shadow: 0 0 0 1px var(--red), 0 2px 6px rgba(214, 69, 65, 0.3);
   z-index: 1;
-  transform: scale(1.08);
 }
 .schedule-game:has(.wif-win) {
   background: rgba(46, 139, 87, 0.06);
@@ -1025,12 +1064,15 @@ tr.team-highlighted td {
 .whatif-projection {
   border: 2px solid var(--border-strong);
   border-radius: 6px;
-  padding: 0.6rem 0.85rem;
+  padding: 0 0.85rem;
   margin-top: 0.75rem;
-  display: none;
   background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
   position: relative;
   overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.25s ease-out, opacity 0.2s ease-out, padding 0.25s ease-out;
+  border-color: transparent;
 }
 .whatif-projection::before {
   content: '';
@@ -1042,12 +1084,10 @@ tr.team-highlighted td {
   background: var(--accent);
 }
 .whatif-projection.active {
-  display: block;
-  animation: wifSlideIn 0.2s ease-out;
-}
-@keyframes wifSlideIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
+  max-height: 10rem;
+  opacity: 1;
+  padding: 0.6rem 0.85rem;
+  border-color: var(--border-strong);
 }
 .whatif-projection-header {
   display: flex;
