@@ -1277,8 +1277,7 @@ tr.team-highlighted td {
   border: 1px solid rgba(34, 34, 34, 0.06);
   text-align: center;
 }
-.team-focus-matchup-logo,
-.team-focus-pairing-logo {
+.team-focus-matchup-logo {
   width: 30px;
   height: 30px;
   object-fit: contain;
@@ -1309,84 +1308,6 @@ tr.team-highlighted td {
 .team-focus-matchup-pct.neutral {
   background: rgba(34, 34, 34, 0.08);
   color: var(--text-bright);
-}
-.team-focus-pairing-wrap {
-  padding: 0.8rem;
-  border-radius: 12px;
-  background: rgba(34, 34, 34, 0.03);
-  border: 1px solid rgba(34, 34, 34, 0.08);
-}
-.team-focus-pairing {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 0.9rem;
-}
-.team-focus-pairing-main {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-width: 0;
-  gap: 0.8rem;
-}
-.team-focus-pairing-teams {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  align-items: center;
-  gap: 0.7rem;
-  min-width: 0;
-  width: 100%;
-}
-.team-focus-pairing-side {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  min-width: 0;
-}
-.team-focus-pairing-side.left {
-  justify-self: start;
-}
-.team-focus-pairing-side.right {
-  justify-self: end;
-}
-.team-focus-pairing-name {
-  color: var(--text-bright);
-  font-size: 0.88rem;
-  font-weight: 700;
-  white-space: nowrap;
-}
-.team-focus-seed {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 1.55rem;
-  height: 1.55rem;
-  padding: 0 0.35rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(34, 34, 34, 0.08);
-  color: var(--text-dim);
-  font-size: 0.7rem;
-  font-weight: 800;
-}
-.team-focus-pairing-vs {
-  color: var(--text-dim);
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-.team-focus-pairing-pct {
-  justify-self: end;
-  min-width: 4.25rem;
-  text-align: center;
-  padding: 0.42rem 0.6rem;
-  border-radius: 999px;
-  background: rgba(34, 34, 34, 0.92);
-  color: #fff;
-  font-size: 0.84rem;
-  font-weight: 800;
 }
 
 .schedule-game.pivotal-game {
@@ -1503,52 +1424,19 @@ tr.team-highlighted td {
   .team-focus-matchup-card {
     padding: 0.68rem 0.3rem 0.6rem;
   }
-  .team-focus-matchup-logo,
-  .team-focus-pairing-logo {
+  .team-focus-matchup-logo {
     width: 24px;
     height: 24px;
   }
   .team-focus-matchup-name {
     font-size: 0.76rem;
   }
-  .team-focus-pairing-name {
-    font-size: 0.82rem;
-  }
   .team-focus-matchup-meta {
     font-size: 0.54rem;
   }
-  .team-focus-matchup-pct,
-  .team-focus-pairing-pct {
+  .team-focus-matchup-pct {
     min-width: 3.45rem;
     font-size: 0.76rem;
-  }
-  .team-focus-pairing {
-    grid-template-columns: 1fr;
-    gap: 0.55rem;
-  }
-  .team-focus-pairing-main {
-    gap: 0;
-  }
-  .team-focus-pairing-teams {
-    width: 100%;
-    gap: 0.55rem;
-  }
-  .team-focus-pairing-side {
-    min-width: 0;
-  }
-  .team-focus-pairing-side.left {
-    justify-content: flex-start;
-  }
-  .team-focus-pairing-side.right {
-    justify-content: flex-end;
-  }
-  .team-focus-pairing-name {
-    white-space: normal;
-    line-height: 1.05;
-  }
-  .team-focus-pairing-pct {
-    justify-self: center;
-    width: auto;
   }
   .team-name {
     border-bottom: 1px solid rgba(214, 69, 65, 0.24);
@@ -2210,8 +2098,8 @@ function showTeamFocus(code) {
       .sort((a, b) => a.pos - b.pos);
     if (playinTeams.length === 4) {
       const [seed7, seed8, seed9, seed10] = playinTeams;
-      const openerOpponent = team.pos === 7 ? seed8 : team.pos === 8 ? seed7 : team.pos === 9 ? seed10 : seed9;
-      const openerHost = team.pos === 10 ? openerOpponent : team;
+      const openerHost = team.pos === 10 ? seed9 : team;
+      const openerOpponent = team.pos === 7 ? seed8 : team.pos === 8 ? seed7 : team.pos === 9 ? seed10 : team;
       const openerLabel = team.pos <= 8 ? 'Projected opener' : 'Projected elimination game';
       const openerOutcome = team.pos <= 8
         ? 'Higher seed hosts. Winner goes to QF as #7 seed.'
@@ -2244,7 +2132,7 @@ function showTeamFocus(code) {
   }
 
   let matchupsHtml = '';
-  if (matchups && matchups.top_opponents && matchups.top_opponents.length && matchups.most_likely_pairing) {
+  if (matchups && matchups.top_opponents && matchups.top_opponents.length) {
     const opponentsHtml = matchups.top_opponents.map(opp => `
       <div class="team-focus-matchup-card">
         <div class="team-focus-matchup-main">
@@ -2257,33 +2145,11 @@ function showTeamFocus(code) {
         <span class="team-focus-matchup-pct neutral">${opp.pct.toFixed(1)}%</span>
       </div>
     `).join('');
-    const pairing = matchups.most_likely_pairing;
     matchupsHtml = `
       <div class="team-focus-matchups">
         <div class="team-focus-matchups-title">Quarterfinal Outlook</div>
         <div class="team-focus-matchups-subtitle">Most likely opponents</div>
         <div class="team-focus-matchups-grid">${opponentsHtml}</div>
-        <div class="team-focus-matchups-subtitle">Most likely pairing</div>
-        <div class="team-focus-pairing-wrap">
-          <div class="team-focus-pairing">
-            <div class="team-focus-pairing-main">
-              <div class="team-focus-pairing-teams">
-                <div class="team-focus-pairing-side left">
-                  <img class="team-focus-pairing-logo" src="${team.logo}" alt="">
-                  <span class="team-focus-pairing-name">${team.name}</span>
-                  <span class="team-focus-seed">#${pairing.team_seed}</span>
-                </div>
-                <span class="team-focus-pairing-vs">vs</span>
-                <div class="team-focus-pairing-side right">
-                  <img class="team-focus-pairing-logo" src="logos/${pairing.opp_code}.png" alt="">
-                  <span class="team-focus-pairing-name">${pairing.opp_name}</span>
-                  <span class="team-focus-seed">#${pairing.opp_seed}</span>
-                </div>
-              </div>
-            </div>
-            <span class="team-focus-pairing-pct">${pairing.pct.toFixed(1)}%</span>
-          </div>
-        </div>
       </div>
     `;
   }
