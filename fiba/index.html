@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FIBA Five — EuroBasket Draft</title>
+<meta name="description" content="Draft an all-time FIBA five and see whether it becomes an S-tier EuroBasket favorite.">
+<style>
+:root {
+  --bg: #f7f5f0;
+  --ink: #171717;
+  --muted: #6e6a61;
+  --line: #d8d2c5;
+  --panel: #fffdfa;
+  --panel-2: #ece7dc;
+  --red: #c7352f;
+  --blue: #1e64a5;
+  --green: #237052;
+  --gold: #b98923;
+  --shadow: 0 18px 50px rgba(40, 36, 28, 0.12);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  background:
+    linear-gradient(135deg, rgba(199, 53, 47, 0.08), transparent 28%),
+    linear-gradient(225deg, rgba(30, 100, 165, 0.10), transparent 32%),
+    var(--bg);
+}
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+.shell { max-width: 1220px; margin: 0 auto; padding: 20px; }
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 0 18px;
+  border-bottom: 2px solid var(--ink);
+}
+.brand { display: flex; flex-direction: column; gap: 2px; }
+.brand h1 { margin: 0; font-size: clamp(1.8rem, 4vw, 3rem); letter-spacing: 0; line-height: 0.95; }
+.brand span { color: var(--muted); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.12em; }
+.top-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.icon-button, .primary, .secondary {
+  border: 1px solid var(--ink);
+  background: var(--panel);
+  color: var(--ink);
+  min-height: 42px;
+  border-radius: 6px;
+  padding: 0 14px;
+  font-weight: 800;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.primary { background: var(--red); color: white; }
+.secondary.active { background: var(--ink); color: white; }
+.primary:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
+.grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 350px) 1fr;
+  gap: 20px;
+  padding-top: 22px;
+  align-items: start;
+}
+.panel {
+  background: rgba(255, 253, 250, 0.92);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+.side { position: sticky; top: 14px; overflow: hidden; }
+.side-head { padding: 16px; border-bottom: 1px solid var(--line); }
+.mode-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+.mode-row button { min-height: 42px; border-radius: 6px; border: 1px solid var(--line); background: var(--panel-2); font-weight: 800; }
+.mode-row button.active { background: var(--blue); color: white; border-color: var(--blue); }
+.rounds { display: flex; gap: 6px; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+.dot { height: 9px; flex: 1; background: var(--panel-2); border-radius: 99px; }
+.dot.done { background: var(--green); }
+.dot.current { background: var(--red); }
+.lineup { padding: 16px; display: grid; gap: 10px; }
+.slot {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 10px;
+  align-items: center;
+  min-height: 64px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 10px;
+  background: white;
+}
+.slot-code { font-weight: 950; font-size: 0.86rem; color: var(--red); }
+.slot-name { font-weight: 850; }
+.slot-meta { color: var(--muted); font-size: 0.78rem; margin-top: 2px; }
+.spin-panel { padding: 18px; margin-bottom: 18px; }
+.spin-display {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 10px;
+  align-items: stretch;
+}
+.spin-card {
+  min-height: 88px;
+  border: 1px solid var(--ink);
+  border-radius: 8px;
+  padding: 12px;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.label { color: var(--muted); font-size: 0.72rem; font-weight: 850; text-transform: uppercase; letter-spacing: 0.13em; }
+.spin-value { font-size: clamp(1.25rem, 3vw, 2rem); font-weight: 950; line-height: 1; }
+.spin-action { min-width: 112px; }
+.filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-top: 14px;
+}
+.filters input, .filters select {
+  min-height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: white;
+  padding: 0 10px;
+}
+.players { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.player-card {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  min-height: 184px;
+  display: grid;
+  gap: 10px;
+}
+.player-card.hidden-stats .stat-value { filter: blur(6px); }
+.player-top { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; }
+.player-name { font-size: 1.04rem; font-weight: 950; line-height: 1.1; }
+.badge { font-size: 0.7rem; font-weight: 950; text-transform: uppercase; padding: 3px 7px; border-radius: 999px; background: var(--panel-2); white-space: nowrap; }
+.badge.legend { background: #271814; color: #ffcf69; }
+.badge.star { background: #e4eef8; color: #174d82; }
+.badge.rotation { background: #e8e4db; color: #59544b; }
+.player-meta { color: var(--muted); font-size: 0.82rem; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.stat { background: var(--panel-2); border-radius: 6px; padding: 7px; min-width: 0; }
+.stat-value { font-weight: 950; display: block; }
+.stat-label { font-size: 0.66rem; color: var(--muted); text-transform: uppercase; font-weight: 850; }
+.pick-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.pick-row button {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel);
+  min-width: 42px;
+  min-height: 34px;
+  font-weight: 900;
+}
+.pick-row button:hover { background: var(--ink); color: white; }
+.empty {
+  padding: 34px;
+  text-align: center;
+  color: var(--muted);
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  background: rgba(255, 253, 250, 0.7);
+}
+.result { display: none; padding: 18px; margin-top: 18px; }
+.result.visible { display: block; }
+.result-hero {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 18px;
+  align-items: center;
+}
+.tier {
+  aspect-ratio: 1;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-size: 4rem;
+  font-weight: 950;
+  background: var(--gold);
+  color: #1b1405;
+  box-shadow: 5px 5px 0 var(--ink);
+}
+.result h2 { margin: 0; font-size: clamp(1.4rem, 3vw, 2.4rem); line-height: 1.05; }
+.result p { color: var(--muted); margin: 8px 0 0; }
+.metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 16px; }
+.metric { background: white; border: 1px solid var(--line); border-radius: 7px; padding: 12px; }
+.metric strong { display: block; font-size: 1.45rem; }
+.bars { margin-top: 16px; display: grid; gap: 8px; }
+.bar-row { display: grid; grid-template-columns: 100px 1fr 48px; gap: 10px; align-items: center; font-size: 0.84rem; }
+.bar { height: 10px; background: var(--panel-2); border-radius: 999px; overflow: hidden; }
+.bar span { display: block; height: 100%; background: var(--blue); }
+.sources { color: var(--muted); font-size: 0.76rem; padding: 16px 0 24px; }
+.sources a { color: var(--blue); }
+@media (max-width: 860px) {
+  .grid { grid-template-columns: 1fr; }
+  .side { position: static; }
+  .spin-display { grid-template-columns: 1fr; }
+  .players { grid-template-columns: 1fr; }
+  .result-hero { grid-template-columns: 1fr; }
+  .tier { width: 132px; }
+  .metric-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <div class="brand">
+      <h1>FIBA Five</h1>
+      <span>Build an all-time EuroBasket monster</span>
+    </div>
+    <div class="top-actions">
+      <button class="secondary" id="shareButton">Share</button>
+      <button class="primary" id="resetButton">New draft</button>
+    </div>
+  </header>
+
+  <main class="grid">
+    <aside class="panel side">
+      <div class="side-head">
+        <div class="label">Mode</div>
+        <div class="mode-row">
+          <button data-mode="classic" class="active">Classic</button>
+          <button data-mode="memory">Memory</button>
+          <button data-mode="chaos">Chaos</button>
+        </div>
+      </div>
+      <div class="rounds" id="rounds"></div>
+      <div class="lineup" id="lineup"></div>
+    </aside>
+
+    <section>
+      <div class="panel spin-panel">
+        <div class="spin-display">
+          <div class="spin-card">
+            <span class="label">Country pool</span>
+            <strong class="spin-value" id="spinCountry">?</strong>
+          </div>
+          <div class="spin-card">
+            <span class="label">Era</span>
+            <strong class="spin-value" id="spinEra">?</strong>
+          </div>
+          <button class="primary spin-action" id="spinButton">Spin</button>
+        </div>
+        <div class="filters">
+          <input id="searchInput" placeholder="Search player">
+          <select id="sortSelect">
+            <option value="score">FIBA score</option>
+            <option value="scoring">Scoring</option>
+            <option value="creation">Creation</option>
+            <option value="defense">Defense</option>
+            <option value="spacing">Spacing</option>
+            <option value="resume">Resume</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="players" id="players"></div>
+
+      <div class="panel result" id="result"></div>
+    </section>
+  </main>
+
+  <footer class="sources" id="sources"></footer>
+</div>
+
+<script>
+const DATA = {"players": [{"code": "oscar_schmidt", "name": "Oscar Schmidt", "country": "Brazil", "countryGroup": "Brazil", "era": "1980s", "positions": ["SF", "PF"], "tier": "legend", "scoring": 99, "creation": 72, "rebounding": 70, "defense": 50, "spacing": 92, "resume": 98, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "arvydas_sabonis", "name": "Arvydas Sabonis", "country": "Lithuania", "countryGroup": "Lithuania", "era": "1980s", "positions": ["C"], "tier": "legend", "scoring": 88, "creation": 84, "rebounding": 96, "defense": 92, "spacing": 76, "resume": 98, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "drazen_petrovic", "name": "Drazen Petrovic", "country": "Croatia", "countryGroup": "Yugoslavia", "era": "1980s", "positions": ["SG"], "tier": "legend", "scoring": 98, "creation": 78, "rebounding": 48, "defense": 58, "spacing": 98, "resume": 96, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "nikos_galis", "name": "Nikos Galis", "country": "Greece", "countryGroup": "Greece", "era": "1980s", "positions": ["PG", "SG"], "tier": "legend", "scoring": 99, "creation": 82, "rebounding": 42, "defense": 54, "spacing": 92, "resume": 94, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "sergei_belov", "name": "Sergei Belov", "country": "Russia", "countryGroup": "Soviet Union", "era": "1970s", "positions": ["SG"], "tier": "legend", "scoring": 92, "creation": 74, "rebounding": 46, "defense": 72, "spacing": 88, "resume": 97, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "dino_meneghin", "name": "Dino Meneghin", "country": "Italy", "countryGroup": "Italy", "era": "1970s", "positions": ["C"], "tier": "legend", "scoring": 78, "creation": 52, "rebounding": 93, "defense": 88, "spacing": 42, "resume": 96, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "dragan_kicanovic", "name": "Dragan Kicanovic", "country": "Serbia", "countryGroup": "Yugoslavia", "era": "1970s", "positions": ["PG", "SG"], "tier": "legend", "scoring": 91, "creation": 88, "rebounding": 45, "defense": 66, "spacing": 86, "resume": 94, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "kresimir_cosic", "name": "Kresimir Cosic", "country": "Croatia", "countryGroup": "Yugoslavia", "era": "1970s", "positions": ["C", "PF"], "tier": "legend", "scoring": 84, "creation": 82, "rebounding": 92, "defense": 86, "spacing": 58, "resume": 97, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "modestas_paulauskas", "name": "Modestas Paulauskas", "country": "Lithuania", "countryGroup": "Soviet Union", "era": "1970s", "positions": ["SF"], "tier": "star", "scoring": 82, "creation": 72, "rebounding": 72, "defense": 82, "spacing": 62, "resume": 92, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "ivo_daneu", "name": "Ivo Daneu", "country": "Slovenia", "countryGroup": "Yugoslavia", "era": "1960s", "positions": ["SG", "SF"], "tier": "star", "scoring": 84, "creation": 78, "rebounding": 56, "defense": 70, "spacing": 58, "resume": 91, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "radivoj_korac", "name": "Radivoj Korac", "country": "Serbia", "countryGroup": "Yugoslavia", "era": "1960s", "positions": ["PF", "C"], "tier": "legend", "scoring": 96, "creation": 56, "rebounding": 86, "defense": 62, "spacing": 46, "resume": 94, "confidence": "B", "source": "FIBA Hall of Fame"}, {"code": "wlamiq_marques", "name": "Wlamir Marques", "country": "Brazil", "countryGroup": "Brazil", "era": "1960s", "positions": ["SG", "SF"], "tier": "star", "scoring": 88, "creation": 70, "rebounding": 58, "defense": 68, "spacing": 66, "resume": 92, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "amaury_pasos", "name": "Amaury Pasos", "country": "Brazil", "countryGroup": "Brazil", "era": "1960s", "positions": ["PF", "C"], "tier": "star", "scoring": 82, "creation": 62, "rebounding": 90, "defense": 78, "spacing": 42, "resume": 91, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "carlos_loyzaga", "name": "Carlos Loyzaga", "country": "Philippines", "countryGroup": "Philippines", "era": "1950s", "positions": ["C", "PF"], "tier": "star", "scoring": 88, "creation": 52, "rebounding": 86, "defense": 72, "spacing": 38, "resume": 90, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "manuel_raga", "name": "Manuel Raga", "country": "Mexico", "countryGroup": "Mexico", "era": "1960s", "positions": ["SG", "SF"], "tier": "star", "scoring": 86, "creation": 62, "rebounding": 50, "defense": 60, "spacing": 78, "resume": 88, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "juan_antonio_san_epifanio", "name": "Juan Antonio San Epifanio", "country": "Spain", "countryGroup": "Spain", "era": "1980s", "positions": ["SF"], "tier": "star", "scoring": 88, "creation": 70, "rebounding": 58, "defense": 62, "spacing": 88, "resume": 90, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "sarunas_marciulionis", "name": "Sarunas Marciulionis", "country": "Lithuania", "countryGroup": "Lithuania", "era": "1990s", "positions": ["SG"], "tier": "legend", "scoring": 91, "creation": 78, "rebounding": 58, "defense": 72, "spacing": 78, "resume": 95, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "vlade_divac", "name": "Vlade Divac", "country": "Serbia", "countryGroup": "Yugoslavia", "era": "1990s", "positions": ["C"], "tier": "star", "scoring": 82, "creation": 82, "rebounding": 88, "defense": 78, "spacing": 58, "resume": 93, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "toni_kukoc", "name": "Toni Kukoc", "country": "Croatia", "countryGroup": "Yugoslavia", "era": "1990s", "positions": ["SF", "PF"], "tier": "legend", "scoring": 88, "creation": 90, "rebounding": 70, "defense": 70, "spacing": 84, "resume": 96, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "dino_radja", "name": "Dino Radja", "country": "Croatia", "countryGroup": "Yugoslavia", "era": "1990s", "positions": ["C", "PF"], "tier": "star", "scoring": 86, "creation": 60, "rebounding": 88, "defense": 74, "spacing": 48, "resume": 91, "confidence": "B", "source": "FIBA Hall of Fame"}, {"code": "predrag_danilovic", "name": "Predrag Danilovic", "country": "Serbia", "countryGroup": "Yugoslavia", "era": "1990s", "positions": ["SG", "SF"], "tier": "star", "scoring": 88, "creation": 66, "rebounding": 56, "defense": 66, "spacing": 84, "resume": 91, "confidence": "B", "source": "Curated international resume"}, {"code": "dejan_bodiroga", "name": "Dejan Bodiroga", "country": "Serbia", "countryGroup": "Yugoslavia", "era": "2000s", "positions": ["SF", "PF"], "tier": "legend", "scoring": 90, "creation": 88, "rebounding": 70, "defense": 76, "spacing": 76, "resume": 97, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "predrag_stojakovic", "name": "Predrag Stojakovic", "country": "Serbia", "countryGroup": "Serbia", "era": "2000s", "positions": ["SF", "PF"], "tier": "legend", "scoring": 91, "creation": 68, "rebounding": 62, "defense": 58, "spacing": 99, "resume": 93, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "dirk_nowitzki", "name": "Dirk Nowitzki", "country": "Germany", "countryGroup": "Germany", "era": "2000s", "positions": ["PF", "C"], "tier": "legend", "scoring": 99, "creation": 70, "rebounding": 88, "defense": 66, "spacing": 96, "resume": 96, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "pau_gasol", "name": "Pau Gasol", "country": "Spain", "countryGroup": "Spain", "era": "2000s", "positions": ["C", "PF"], "tier": "legend", "scoring": 96, "creation": 78, "rebounding": 94, "defense": 88, "spacing": 72, "resume": 99, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "manu_ginobili", "name": "Manu Ginobili", "country": "Argentina", "countryGroup": "Argentina", "era": "2000s", "positions": ["SG"], "tier": "legend", "scoring": 92, "creation": 90, "rebounding": 58, "defense": 78, "spacing": 88, "resume": 98, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "luis_scola", "name": "Luis Scola", "country": "Argentina", "countryGroup": "Argentina", "era": "2000s", "positions": ["PF", "C"], "tier": "legend", "scoring": 92, "creation": 66, "rebounding": 90, "defense": 66, "spacing": 70, "resume": 97, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "andrei_kirilenko", "name": "Andrei Kirilenko", "country": "Russia", "countryGroup": "Russia", "era": "2000s", "positions": ["SF", "PF"], "tier": "legend", "scoring": 82, "creation": 74, "rebounding": 76, "defense": 98, "spacing": 72, "resume": 94, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "theodoros_papaloukas", "name": "Theodoros Papaloukas", "country": "Greece", "countryGroup": "Greece", "era": "2000s", "positions": ["PG"], "tier": "star", "scoring": 78, "creation": 96, "rebounding": 54, "defense": 78, "spacing": 72, "resume": 93, "confidence": "B", "source": "Curated international resume"}, {"code": "dimitris_diamantidis", "name": "Dimitris Diamantidis", "country": "Greece", "countryGroup": "Greece", "era": "2000s", "positions": ["PG", "SG"], "tier": "star", "scoring": 74, "creation": 88, "rebounding": 56, "defense": 96, "spacing": 82, "resume": 92, "confidence": "B", "source": "Curated international resume"}, {"code": "vassilis_spanoulis", "name": "Vassilis Spanoulis", "country": "Greece", "countryGroup": "Greece", "era": "2010s", "positions": ["PG", "SG"], "tier": "legend", "scoring": 88, "creation": 94, "rebounding": 42, "defense": 62, "spacing": 84, "resume": 94, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "juan_carlos_navarro", "name": "Juan Carlos Navarro", "country": "Spain", "countryGroup": "Spain", "era": "2000s", "positions": ["SG"], "tier": "legend", "scoring": 90, "creation": 76, "rebounding": 40, "defense": 56, "spacing": 96, "resume": 96, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "rudy_fernandez", "name": "Rudy Fernandez", "country": "Spain", "countryGroup": "Spain", "era": "2010s", "positions": ["SG", "SF"], "tier": "star", "scoring": 80, "creation": 72, "rebounding": 58, "defense": 84, "spacing": 88, "resume": 94, "confidence": "B", "source": "Curated international resume"}, {"code": "sergio_rodriguez", "name": "Sergio Rodriguez", "country": "Spain", "countryGroup": "Spain", "era": "2010s", "positions": ["PG"], "tier": "star", "scoring": 78, "creation": 92, "rebounding": 40, "defense": 54, "spacing": 84, "resume": 88, "confidence": "B", "source": "Curated international resume"}, {"code": "marc_gasol", "name": "Marc Gasol", "country": "Spain", "countryGroup": "Spain", "era": "2010s", "positions": ["C"], "tier": "legend", "scoring": 84, "creation": 82, "rebounding": 90, "defense": 94, "spacing": 74, "resume": 96, "confidence": "B", "source": "Curated international resume"}, {"code": "andrei_vatutin", "name": "Alexey Shved", "country": "Russia", "countryGroup": "Russia", "era": "2010s", "positions": ["PG", "SG"], "tier": "star", "scoring": 90, "creation": 84, "rebounding": 42, "defense": 44, "spacing": 88, "resume": 84, "confidence": "C", "source": "Curated international resume"}, {"code": "milos_teodosic", "name": "Milos Teodosic", "country": "Serbia", "countryGroup": "Serbia", "era": "2010s", "positions": ["PG"], "tier": "legend", "scoring": 84, "creation": 98, "rebounding": 42, "defense": 46, "spacing": 90, "resume": 92, "confidence": "B", "source": "Curated international resume"}, {"code": "bogdan_bogdanovic", "name": "Bogdan Bogdanovic", "country": "Serbia", "countryGroup": "Serbia", "era": "2010s", "positions": ["SG", "SF"], "tier": "star", "scoring": 88, "creation": 80, "rebounding": 50, "defense": 66, "spacing": 92, "resume": 92, "confidence": "B", "source": "Curated international resume"}, {"code": "nikola_jokic", "name": "Nikola Jokic", "country": "Serbia", "countryGroup": "Serbia", "era": "2020s", "positions": ["C"], "tier": "legend", "scoring": 94, "creation": 99, "rebounding": 96, "defense": 70, "spacing": 88, "resume": 92, "confidence": "B", "source": "Curated international resume"}, {"code": "nikola_mirotic", "name": "Nikola Mirotic", "country": "Spain", "countryGroup": "Spain", "era": "2010s", "positions": ["PF"], "tier": "star", "scoring": 86, "creation": 58, "rebounding": 78, "defense": 62, "spacing": 92, "resume": 84, "confidence": "C", "source": "Curated international resume"}, {"code": "luka_doncic", "name": "Luka Doncic", "country": "Slovenia", "countryGroup": "Slovenia", "era": "2020s", "positions": ["PG", "SG", "SF"], "tier": "legend", "scoring": 99, "creation": 99, "rebounding": 84, "defense": 62, "spacing": 88, "resume": 94, "confidence": "B", "source": "Curated international resume"}, {"code": "goran_dragic", "name": "Goran Dragic", "country": "Slovenia", "countryGroup": "Slovenia", "era": "2010s", "positions": ["PG"], "tier": "legend", "scoring": 90, "creation": 88, "rebounding": 48, "defense": 62, "spacing": 82, "resume": 94, "confidence": "B", "source": "Curated international resume"}, {"code": "klemen_prepelic", "name": "Klemen Prepelic", "country": "Slovenia", "countryGroup": "Slovenia", "era": "2020s", "positions": ["SG"], "tier": "rotation", "scoring": 80, "creation": 72, "rebounding": 34, "defense": 42, "spacing": 90, "resume": 78, "confidence": "C", "source": "Curated international resume"}, {"code": "giannis_antetokounmpo", "name": "Giannis Antetokounmpo", "country": "Greece", "countryGroup": "Greece", "era": "2020s", "positions": ["PF", "C"], "tier": "legend", "scoring": 94, "creation": 82, "rebounding": 94, "defense": 96, "spacing": 48, "resume": 86, "confidence": "B", "source": "Curated international resume"}, {"code": "nikola_vucevic", "name": "Nikola Vucevic", "country": "Montenegro", "countryGroup": "Montenegro", "era": "2010s", "positions": ["C"], "tier": "star", "scoring": 84, "creation": 64, "rebounding": 90, "defense": 62, "spacing": 76, "resume": 78, "confidence": "C", "source": "Curated international resume"}, {"code": "bojan_bogdanovic", "name": "Bojan Bogdanovic", "country": "Croatia", "countryGroup": "Croatia", "era": "2010s", "positions": ["SF", "PF"], "tier": "star", "scoring": 90, "creation": 52, "rebounding": 54, "defense": 46, "spacing": 92, "resume": 84, "confidence": "C", "source": "Curated international resume"}, {"code": "lauri_markkanen", "name": "Lauri Markkanen", "country": "Finland", "countryGroup": "Finland", "era": "2020s", "positions": ["PF", "SF"], "tier": "star", "scoring": 91, "creation": 58, "rebounding": 82, "defense": 58, "spacing": 94, "resume": 86, "confidence": "C", "source": "Curated international resume"}, {"code": "domantas_sabonis", "name": "Domantas Sabonis", "country": "Lithuania", "countryGroup": "Lithuania", "era": "2020s", "positions": ["C", "PF"], "tier": "star", "scoring": 86, "creation": 84, "rebounding": 96, "defense": 64, "spacing": 62, "resume": 86, "confidence": "C", "source": "Curated international resume"}, {"code": "jonas_valanciunas", "name": "Jonas Valanciunas", "country": "Lithuania", "countryGroup": "Lithuania", "era": "2010s", "positions": ["C"], "tier": "star", "scoring": 86, "creation": 52, "rebounding": 94, "defense": 66, "spacing": 54, "resume": 88, "confidence": "C", "source": "Curated international resume"}, {"code": "linas_kleiza", "name": "Linas Kleiza", "country": "Lithuania", "countryGroup": "Lithuania", "era": "2010s", "positions": ["SF", "PF"], "tier": "star", "scoring": 86, "creation": 56, "rebounding": 72, "defense": 62, "spacing": 78, "resume": 88, "confidence": "C", "source": "Curated international resume"}, {"code": "sarunas_jasikevicius", "name": "Sarunas Jasikevicius", "country": "Lithuania", "countryGroup": "Lithuania", "era": "2000s", "positions": ["PG"], "tier": "legend", "scoring": 82, "creation": 96, "rebounding": 38, "defense": 54, "spacing": 90, "resume": 94, "confidence": "B", "source": "Curated international resume"}, {"code": "ramunas_siskauskas", "name": "Ramunas Siskauskas", "country": "Lithuania", "countryGroup": "Lithuania", "era": "2000s", "positions": ["SG", "SF"], "tier": "star", "scoring": 84, "creation": 76, "rebounding": 58, "defense": 78, "spacing": 88, "resume": 90, "confidence": "B", "source": "Curated international resume"}, {"code": "andrei_macijauskas", "name": "Arvydas Macijauskas", "country": "Lithuania", "countryGroup": "Lithuania", "era": "2000s", "positions": ["SG"], "tier": "star", "scoring": 86, "creation": 58, "rebounding": 34, "defense": 46, "spacing": 94, "resume": 84, "confidence": "C", "source": "Curated international resume"}, {"code": "yao_ming", "name": "Yao Ming", "country": "China", "countryGroup": "China", "era": "2000s", "positions": ["C"], "tier": "legend", "scoring": 94, "creation": 56, "rebounding": 94, "defense": 86, "spacing": 48, "resume": 93, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "wang_zhizhi", "name": "Wang Zhizhi", "country": "China", "countryGroup": "China", "era": "2000s", "positions": ["C", "PF"], "tier": "star", "scoring": 84, "creation": 54, "rebounding": 78, "defense": 60, "spacing": 82, "resume": 88, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "yi_jianlian", "name": "Yi Jianlian", "country": "China", "countryGroup": "China", "era": "2010s", "positions": ["PF", "C"], "tier": "star", "scoring": 86, "creation": 50, "rebounding": 86, "defense": 70, "spacing": 72, "resume": 86, "confidence": "C", "source": "Curated international resume"}, {"code": "andrew_gaze", "name": "Andrew Gaze", "country": "Australia", "countryGroup": "Australia", "era": "1990s", "positions": ["SG", "SF"], "tier": "legend", "scoring": 96, "creation": 78, "rebounding": 48, "defense": 52, "spacing": 92, "resume": 95, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "andrew_bogut", "name": "Andrew Bogut", "country": "Australia", "countryGroup": "Australia", "era": "2010s", "positions": ["C"], "tier": "star", "scoring": 76, "creation": 70, "rebounding": 92, "defense": 90, "spacing": 42, "resume": 88, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "patty_mills", "name": "Patty Mills", "country": "Australia", "countryGroup": "Australia", "era": "2010s", "positions": ["PG", "SG"], "tier": "legend", "scoring": 91, "creation": 82, "rebounding": 36, "defense": 58, "spacing": 94, "resume": 93, "confidence": "B", "source": "Curated international resume"}, {"code": "joe_ingles", "name": "Joe Ingles", "country": "Australia", "countryGroup": "Australia", "era": "2010s", "positions": ["SF", "SG"], "tier": "star", "scoring": 76, "creation": 82, "rebounding": 58, "defense": 68, "spacing": 90, "resume": 86, "confidence": "C", "source": "Curated international resume"}, {"code": "kirk_penney", "name": "Kirk Penney", "country": "New Zealand", "countryGroup": "New Zealand", "era": "2000s", "positions": ["SG", "SF"], "tier": "star", "scoring": 90, "creation": 58, "rebounding": 46, "defense": 50, "spacing": 92, "resume": 88, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "pero_cameron", "name": "Perry Cameron", "country": "New Zealand", "countryGroup": "New Zealand", "era": "2000s", "positions": ["PF", "C"], "tier": "star", "scoring": 78, "creation": 66, "rebounding": 82, "defense": 68, "spacing": 70, "resume": 86, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "steve_nash", "name": "Steve Nash", "country": "Canada", "countryGroup": "Canada", "era": "2000s", "positions": ["PG"], "tier": "legend", "scoring": 84, "creation": 99, "rebounding": 40, "defense": 44, "spacing": 94, "resume": 90, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "shai_gilgeous_alexander", "name": "Shai Gilgeous-Alexander", "country": "Canada", "countryGroup": "Canada", "era": "2020s", "positions": ["PG", "SG"], "tier": "legend", "scoring": 96, "creation": 88, "rebounding": 58, "defense": 78, "spacing": 78, "resume": 88, "confidence": "B", "source": "Curated international resume"}, {"code": "jamal_murray", "name": "Jamal Murray", "country": "Canada", "countryGroup": "Canada", "era": "2020s", "positions": ["PG", "SG"], "tier": "star", "scoring": 88, "creation": 80, "rebounding": 44, "defense": 52, "spacing": 92, "resume": 78, "confidence": "C", "source": "Curated international resume"}, {"code": "rj_barrett", "name": "RJ Barrett", "country": "Canada", "countryGroup": "Canada", "era": "2020s", "positions": ["SF", "SG"], "tier": "star", "scoring": 84, "creation": 62, "rebounding": 62, "defense": 58, "spacing": 72, "resume": 80, "confidence": "C", "source": "Curated international resume"}, {"code": "carmelo_anthony", "name": "Carmelo Anthony", "country": "USA", "countryGroup": "USA", "era": "2010s", "positions": ["SF", "PF"], "tier": "legend", "scoring": 96, "creation": 58, "rebounding": 72, "defense": 54, "spacing": 92, "resume": 98, "confidence": "B", "source": "Curated Olympic/FIBA resume"}, {"code": "kevin_durant", "name": "Kevin Durant", "country": "USA", "countryGroup": "USA", "era": "2010s", "positions": ["SF", "PF"], "tier": "legend", "scoring": 99, "creation": 76, "rebounding": 78, "defense": 76, "spacing": 98, "resume": 99, "confidence": "B", "source": "Curated Olympic/FIBA resume"}, {"code": "lebron_james", "name": "LeBron James", "country": "USA", "countryGroup": "USA", "era": "2010s", "positions": ["SF", "PF", "PG"], "tier": "legend", "scoring": 96, "creation": 98, "rebounding": 84, "defense": 90, "spacing": 78, "resume": 97, "confidence": "B", "source": "Curated Olympic/FIBA resume"}, {"code": "kobe_bryant", "name": "Kobe Bryant", "country": "USA", "countryGroup": "USA", "era": "2000s", "positions": ["SG"], "tier": "legend", "scoring": 94, "creation": 80, "rebounding": 58, "defense": 90, "spacing": 88, "resume": 94, "confidence": "B", "source": "Curated Olympic/FIBA resume"}, {"code": "michael_jordan", "name": "Michael Jordan", "country": "USA", "countryGroup": "USA", "era": "1990s", "positions": ["SG", "SF"], "tier": "legend", "scoring": 99, "creation": 82, "rebounding": 72, "defense": 98, "spacing": 78, "resume": 99, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "charles_barkley", "name": "Charles Barkley", "country": "USA", "countryGroup": "USA", "era": "1990s", "positions": ["PF", "SF"], "tier": "legend", "scoring": 96, "creation": 72, "rebounding": 92, "defense": 72, "spacing": 70, "resume": 96, "confidence": "A", "source": "Dream Team/FIBA Hall of Fame"}, {"code": "david_robinson", "name": "David Robinson", "country": "USA", "countryGroup": "USA", "era": "1990s", "positions": ["C"], "tier": "legend", "scoring": 90, "creation": 58, "rebounding": 92, "defense": 98, "spacing": 48, "resume": 96, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "shaquille_oneal", "name": "Shaquille O'Neal", "country": "USA", "countryGroup": "USA", "era": "1990s", "positions": ["C"], "tier": "legend", "scoring": 96, "creation": 52, "rebounding": 94, "defense": 88, "spacing": 20, "resume": 92, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "hakeem_olajuwon", "name": "Hakeem Olajuwon", "country": "USA", "countryGroup": "USA", "era": "1990s", "positions": ["C"], "tier": "legend", "scoring": 94, "creation": 62, "rebounding": 94, "defense": 99, "spacing": 44, "resume": 88, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "kevin_garnett", "name": "Kevin Garnett", "country": "USA", "countryGroup": "USA", "era": "2000s", "positions": ["PF", "C"], "tier": "legend", "scoring": 88, "creation": 78, "rebounding": 94, "defense": 98, "spacing": 58, "resume": 88, "confidence": "C", "source": "Curated Olympic resume"}, {"code": "anthony_davis", "name": "Anthony Davis", "country": "USA", "countryGroup": "USA", "era": "2010s", "positions": ["C", "PF"], "tier": "legend", "scoring": 90, "creation": 58, "rebounding": 90, "defense": 98, "spacing": 62, "resume": 90, "confidence": "C", "source": "Curated Olympic/FIBA resume"}, {"code": "stephen_curry", "name": "Stephen Curry", "country": "USA", "countryGroup": "USA", "era": "2010s", "positions": ["PG"], "tier": "legend", "scoring": 98, "creation": 92, "rebounding": 48, "defense": 58, "spacing": 100, "resume": 86, "confidence": "C", "source": "Curated national-team resume"}, {"code": "dwyane_wade", "name": "Dwyane Wade", "country": "USA", "countryGroup": "USA", "era": "2000s", "positions": ["SG", "PG"], "tier": "legend", "scoring": 92, "creation": 82, "rebounding": 52, "defense": 84, "spacing": 70, "resume": 90, "confidence": "C", "source": "Curated Olympic resume"}, {"code": "kevin_love", "name": "Kevin Love", "country": "USA", "countryGroup": "USA", "era": "2010s", "positions": ["PF", "C"], "tier": "star", "scoring": 82, "creation": 64, "rebounding": 92, "defense": 50, "spacing": 88, "resume": 86, "confidence": "C", "source": "Curated international resume"}, {"code": "fabricio_oberto", "name": "Fabricio Oberto", "country": "Argentina", "countryGroup": "Argentina", "era": "2000s", "positions": ["C"], "tier": "star", "scoring": 74, "creation": 66, "rebounding": 84, "defense": 78, "spacing": 48, "resume": 92, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "andres_nocioni", "name": "Andres Nocioni", "country": "Argentina", "countryGroup": "Argentina", "era": "2000s", "positions": ["SF", "PF"], "tier": "star", "scoring": 82, "creation": 62, "rebounding": 72, "defense": 84, "spacing": 78, "resume": 90, "confidence": "B", "source": "Curated international resume"}, {"code": "carlos_delfino", "name": "Carlos Delfino", "country": "Argentina", "countryGroup": "Argentina", "era": "2000s", "positions": ["SG", "SF"], "tier": "star", "scoring": 78, "creation": 68, "rebounding": 58, "defense": 72, "spacing": 84, "resume": 86, "confidence": "C", "source": "Curated international resume"}, {"code": "facundo_campazzo", "name": "Facundo Campazzo", "country": "Argentina", "countryGroup": "Argentina", "era": "2010s", "positions": ["PG"], "tier": "star", "scoring": 76, "creation": 94, "rebounding": 44, "defense": 84, "spacing": 78, "resume": 88, "confidence": "C", "source": "Curated international resume"}, {"code": "marcelinho_huertas", "name": "Marcelinho Huertas", "country": "Brazil", "countryGroup": "Brazil", "era": "2010s", "positions": ["PG"], "tier": "star", "scoring": 78, "creation": 94, "rebounding": 38, "defense": 48, "spacing": 82, "resume": 86, "confidence": "C", "source": "Curated international resume"}, {"code": "leandro_barbosa", "name": "Leandro Barbosa", "country": "Brazil", "countryGroup": "Brazil", "era": "2000s", "positions": ["SG", "PG"], "tier": "star", "scoring": 88, "creation": 72, "rebounding": 38, "defense": 56, "spacing": 84, "resume": 84, "confidence": "C", "source": "Curated international resume"}, {"code": "nene_hilario", "name": "Nene Hilario", "country": "Brazil", "countryGroup": "Brazil", "era": "2000s", "positions": ["C", "PF"], "tier": "star", "scoring": 78, "creation": 52, "rebounding": 82, "defense": 76, "spacing": 38, "resume": 80, "confidence": "C", "source": "Curated international resume"}, {"code": "jose_ortiz", "name": "Jose Ortiz", "country": "Puerto Rico", "countryGroup": "Puerto Rico", "era": "1990s", "positions": ["C", "PF"], "tier": "star", "scoring": 84, "creation": 54, "rebounding": 88, "defense": 70, "spacing": 48, "resume": 88, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "carlos_arroyo", "name": "Carlos Arroyo", "country": "Puerto Rico", "countryGroup": "Puerto Rico", "era": "2000s", "positions": ["PG"], "tier": "star", "scoring": 82, "creation": 88, "rebounding": 36, "defense": 52, "spacing": 82, "resume": 86, "confidence": "C", "source": "Curated international resume"}, {"code": "jj_barea", "name": "JJ Barea", "country": "Puerto Rico", "countryGroup": "Puerto Rico", "era": "2010s", "positions": ["PG"], "tier": "star", "scoring": 78, "creation": 88, "rebounding": 32, "defense": 48, "spacing": 84, "resume": 82, "confidence": "C", "source": "Curated international resume"}, {"code": "hamed_haddadi", "name": "Hamed Haddadi", "country": "Iran", "countryGroup": "Iran", "era": "2010s", "positions": ["C"], "tier": "star", "scoring": 84, "creation": 58, "rebounding": 96, "defense": 82, "spacing": 50, "resume": 86, "confidence": "C", "source": "Curated international resume"}, {"code": "andray_blatche", "name": "Andray Blatche", "country": "Philippines", "countryGroup": "Philippines", "era": "2010s", "positions": ["C", "PF"], "tier": "star", "scoring": 86, "creation": 66, "rebounding": 88, "defense": 58, "spacing": 70, "resume": 78, "confidence": "C", "source": "Curated international resume"}, {"code": "omari_spellman", "name": "Rondae Hollis-Jefferson", "country": "Jordan", "countryGroup": "Jordan", "era": "2020s", "positions": ["SF", "PF"], "tier": "star", "scoring": 88, "creation": 64, "rebounding": 76, "defense": 82, "spacing": 54, "resume": 80, "confidence": "C", "source": "Curated international resume"}, {"code": "rui_hachimura", "name": "Rui Hachimura", "country": "Japan", "countryGroup": "Japan", "era": "2020s", "positions": ["SF", "PF"], "tier": "star", "scoring": 86, "creation": 54, "rebounding": 70, "defense": 60, "spacing": 76, "resume": 78, "confidence": "C", "source": "Curated international resume"}, {"code": "yuta_watanabe", "name": "Yuta Watanabe", "country": "Japan", "countryGroup": "Japan", "era": "2020s", "positions": ["SF", "PF"], "tier": "rotation", "scoring": 76, "creation": 56, "rebounding": 64, "defense": 74, "spacing": 82, "resume": 74, "confidence": "C", "source": "Curated international resume"}, {"code": "jordan_clarkson", "name": "Jordan Clarkson", "country": "Philippines", "countryGroup": "Philippines", "era": "2020s", "positions": ["SG", "PG"], "tier": "star", "scoring": 92, "creation": 72, "rebounding": 46, "defense": 48, "spacing": 86, "resume": 78, "confidence": "C", "source": "Curated international resume"}, {"code": "gorgui_dieng", "name": "Gorgui Dieng", "country": "Senegal", "countryGroup": "Senegal", "era": "2010s", "positions": ["C"], "tier": "star", "scoring": 78, "creation": 58, "rebounding": 88, "defense": 82, "spacing": 66, "resume": 80, "confidence": "C", "source": "Curated international resume"}, {"code": "luol_deng", "name": "Luol Deng", "country": "Great Britain", "countryGroup": "Great Britain", "era": "2010s", "positions": ["SF", "PF"], "tier": "star", "scoring": 84, "creation": 62, "rebounding": 70, "defense": 78, "spacing": 76, "resume": 78, "confidence": "C", "source": "Curated international resume"}, {"code": "danilo_gallinari", "name": "Danilo Gallinari", "country": "Italy", "countryGroup": "Italy", "era": "2010s", "positions": ["SF", "PF"], "tier": "star", "scoring": 88, "creation": 58, "rebounding": 66, "defense": 52, "spacing": 92, "resume": 82, "confidence": "C", "source": "Curated international resume"}, {"code": "marco_belinelli", "name": "Marco Belinelli", "country": "Italy", "countryGroup": "Italy", "era": "2010s", "positions": ["SG", "SF"], "tier": "star", "scoring": 82, "creation": 58, "rebounding": 38, "defense": 46, "spacing": 94, "resume": 80, "confidence": "C", "source": "Curated international resume"}, {"code": "gigi_datome", "name": "Luigi Datome", "country": "Italy", "countryGroup": "Italy", "era": "2010s", "positions": ["SF", "PF"], "tier": "star", "scoring": 80, "creation": 58, "rebounding": 60, "defense": 62, "spacing": 88, "resume": 82, "confidence": "C", "source": "Curated international resume"}, {"code": "simone_fontecchio", "name": "Simone Fontecchio", "country": "Italy", "countryGroup": "Italy", "era": "2020s", "positions": ["SF", "SG"], "tier": "star", "scoring": 84, "creation": 56, "rebounding": 58, "defense": 64, "spacing": 90, "resume": 78, "confidence": "C", "source": "Curated international resume"}, {"code": "evan_fournier", "name": "Evan Fournier", "country": "France", "countryGroup": "France", "era": "2010s", "positions": ["SG", "SF"], "tier": "star", "scoring": 88, "creation": 66, "rebounding": 42, "defense": 56, "spacing": 90, "resume": 88, "confidence": "C", "source": "Curated international resume"}, {"code": "tony_parker", "name": "Tony Parker", "country": "France", "countryGroup": "France", "era": "2000s", "positions": ["PG"], "tier": "legend", "scoring": 91, "creation": 92, "rebounding": 38, "defense": 52, "spacing": 72, "resume": 94, "confidence": "B", "source": "Curated international resume"}, {"code": "boris_diaw", "name": "Boris Diaw", "country": "France", "countryGroup": "France", "era": "2000s", "positions": ["PF", "SF", "C"], "tier": "star", "scoring": 76, "creation": 88, "rebounding": 72, "defense": 72, "spacing": 76, "resume": 90, "confidence": "C", "source": "Curated international resume"}, {"code": "rudy_gobert", "name": "Rudy Gobert", "country": "France", "countryGroup": "France", "era": "2010s", "positions": ["C"], "tier": "legend", "scoring": 76, "creation": 46, "rebounding": 96, "defense": 100, "spacing": 20, "resume": 90, "confidence": "C", "source": "Curated international resume"}, {"code": "nicolas_batum", "name": "Nicolas Batum", "country": "France", "countryGroup": "France", "era": "2010s", "positions": ["SF", "PF"], "tier": "star", "scoring": 76, "creation": 78, "rebounding": 72, "defense": 88, "spacing": 84, "resume": 90, "confidence": "C", "source": "Curated international resume"}, {"code": "victor_wembanyama", "name": "Victor Wembanyama", "country": "France", "countryGroup": "France", "era": "2020s", "positions": ["C", "PF"], "tier": "legend", "scoring": 90, "creation": 70, "rebounding": 92, "defense": 100, "spacing": 82, "resume": 84, "confidence": "C", "source": "Curated international resume"}, {"code": "hedo_turkoglu", "name": "Hidayet Turkoglu", "country": "Turkey", "countryGroup": "Turkey", "era": "2000s", "positions": ["SF", "PF"], "tier": "star", "scoring": 84, "creation": 78, "rebounding": 64, "defense": 58, "spacing": 84, "resume": 88, "confidence": "A", "source": "FIBA Hall of Fame"}, {"code": "mehmet_okur", "name": "Mehmet Okur", "country": "Turkey", "countryGroup": "Turkey", "era": "2000s", "positions": ["C", "PF"], "tier": "star", "scoring": 82, "creation": 56, "rebounding": 80, "defense": 58, "spacing": 88, "resume": 82, "confidence": "C", "source": "Curated international resume"}, {"code": "alperen_sengun", "name": "Alperen Sengun", "country": "Turkey", "countryGroup": "Turkey", "era": "2020s", "positions": ["C"], "tier": "star", "scoring": 88, "creation": 88, "rebounding": 90, "defense": 66, "spacing": 58, "resume": 82, "confidence": "C", "source": "Curated international resume"}, {"code": "furkan_korkmaz", "name": "Furkan Korkmaz", "country": "Turkey", "countryGroup": "Turkey", "era": "2020s", "positions": ["SG", "SF"], "tier": "rotation", "scoring": 78, "creation": 56, "rebounding": 42, "defense": 50, "spacing": 88, "resume": 72, "confidence": "C", "source": "Curated international resume"}, {"code": "dennis_schroder", "name": "Dennis Schroder", "country": "Germany", "countryGroup": "Germany", "era": "2020s", "positions": ["PG"], "tier": "legend", "scoring": 90, "creation": 90, "rebounding": 42, "defense": 62, "spacing": 80, "resume": 92, "confidence": "C", "source": "Curated international resume"}, {"code": "franz_wagner", "name": "Franz Wagner", "country": "Germany", "countryGroup": "Germany", "era": "2020s", "positions": ["SF", "PF"], "tier": "star", "scoring": 88, "creation": 72, "rebounding": 68, "defense": 78, "spacing": 84, "resume": 90, "confidence": "C", "source": "Curated international resume"}, {"code": "moritz_wagner", "name": "Moritz Wagner", "country": "Germany", "countryGroup": "Germany", "era": "2020s", "positions": ["C", "PF"], "tier": "rotation", "scoring": 78, "creation": 50, "rebounding": 70, "defense": 54, "spacing": 76, "resume": 82, "confidence": "C", "source": "Curated international resume"}, {"code": "gordian_giricek", "name": "Cedi Osman", "country": "Turkey", "countryGroup": "Turkey", "era": "2010s", "positions": ["SF", "SG"], "tier": "star", "scoring": 80, "creation": 62, "rebounding": 58, "defense": 58, "spacing": 82, "resume": 78, "confidence": "C", "source": "Curated international resume"}], "teams": [{"code": "ESP", "name": "Spain", "rating": 1665, "group": "A"}, {"code": "SRB", "name": "Serbia", "rating": 1655, "group": "A"}, {"code": "FRA", "name": "France", "rating": 1648, "group": "A"}, {"code": "GER", "name": "Germany", "rating": 1642, "group": "A"}, {"code": "GRE", "name": "Greece", "rating": 1618, "group": "A"}, {"code": "SLO", "name": "Slovenia", "rating": 1608, "group": "A"}, {"code": "LTU", "name": "Lithuania", "rating": 1605, "group": "B"}, {"code": "ITA", "name": "Italy", "rating": 1585, "group": "B"}, {"code": "TUR", "name": "Turkey", "rating": 1578, "group": "B"}, {"code": "LAT", "name": "Latvia", "rating": 1574, "group": "B"}, {"code": "CRO", "name": "Croatia", "rating": 1568, "group": "B"}, {"code": "FIN", "name": "Finland", "rating": 1558, "group": "B"}, {"code": "MNE", "name": "Montenegro", "rating": 1548, "group": "C"}, {"code": "POL", "name": "Poland", "rating": 1540, "group": "C"}, {"code": "CZE", "name": "Czechia", "rating": 1532, "group": "C"}, {"code": "ISR", "name": "Israel", "rating": 1528, "group": "C"}, {"code": "GEO", "name": "Georgia", "rating": 1524, "group": "C"}, {"code": "UKR", "name": "Ukraine", "rating": 1518, "group": "C"}, {"code": "BEL", "name": "Belgium", "rating": 1504, "group": "D"}, {"code": "BIH", "name": "Bosnia and Herzegovina", "rating": 1502, "group": "D"}, {"code": "EST", "name": "Estonia", "rating": 1492, "group": "D"}, {"code": "BUL", "name": "Bulgaria", "rating": 1485, "group": "D"}, {"code": "NED", "name": "Netherlands", "rating": 1478, "group": "D"}, {"code": "GBR", "name": "Great Britain", "rating": 1468, "group": "D"}], "spinOptions": [{"country_group": "Argentina", "era": "2000s"}, {"country_group": "Argentina", "era": "2010s"}, {"country_group": "Australia", "era": "1990s"}, {"country_group": "Australia", "era": "2010s"}, {"country_group": "Brazil", "era": "1960s"}, {"country_group": "Brazil", "era": "1980s"}, {"country_group": "Brazil", "era": "2000s"}, {"country_group": "Brazil", "era": "2010s"}, {"country_group": "Canada", "era": "2000s"}, {"country_group": "Canada", "era": "2020s"}, {"country_group": "China", "era": "2000s"}, {"country_group": "China", "era": "2010s"}, {"country_group": "Croatia", "era": "2010s"}, {"country_group": "Finland", "era": "2020s"}, {"country_group": "France", "era": "2000s"}, {"country_group": "France", "era": "2010s"}, {"country_group": "France", "era": "2020s"}, {"country_group": "Germany", "era": "2000s"}, {"country_group": "Germany", "era": "2020s"}, {"country_group": "Great Britain", "era": "2010s"}, {"country_group": "Greece", "era": "1980s"}, {"country_group": "Greece", "era": "2000s"}, {"country_group": "Greece", "era": "2010s"}, {"country_group": "Greece", "era": "2020s"}, {"country_group": "Iran", "era": "2010s"}, {"country_group": "Italy", "era": "1970s"}, {"country_group": "Italy", "era": "2010s"}, {"country_group": "Italy", "era": "2020s"}, {"country_group": "Japan", "era": "2020s"}, {"country_group": "Jordan", "era": "2020s"}, {"country_group": "Lithuania", "era": "1980s"}, {"country_group": "Lithuania", "era": "1990s"}, {"country_group": "Lithuania", "era": "2000s"}, {"country_group": "Lithuania", "era": "2010s"}, {"country_group": "Lithuania", "era": "2020s"}, {"country_group": "Mexico", "era": "1960s"}, {"country_group": "Montenegro", "era": "2010s"}, {"country_group": "New Zealand", "era": "2000s"}, {"country_group": "Philippines", "era": "1950s"}, {"country_group": "Philippines", "era": "2010s"}, {"country_group": "Philippines", "era": "2020s"}, {"country_group": "Puerto Rico", "era": "1990s"}, {"country_group": "Puerto Rico", "era": "2000s"}, {"country_group": "Puerto Rico", "era": "2010s"}, {"country_group": "Russia", "era": "2000s"}, {"country_group": "Russia", "era": "2010s"}, {"country_group": "Senegal", "era": "2010s"}, {"country_group": "Serbia", "era": "2000s"}, {"country_group": "Serbia", "era": "2010s"}, {"country_group": "Serbia", "era": "2020s"}, {"country_group": "Slovenia", "era": "2010s"}, {"country_group": "Slovenia", "era": "2020s"}, {"country_group": "Soviet Union", "era": "1970s"}, {"country_group": "Spain", "era": "1980s"}, {"country_group": "Spain", "era": "2000s"}, {"country_group": "Spain", "era": "2010s"}, {"country_group": "Turkey", "era": "2000s"}, {"country_group": "Turkey", "era": "2010s"}, {"country_group": "Turkey", "era": "2020s"}, {"country_group": "USA", "era": "1990s"}, {"country_group": "USA", "era": "2000s"}, {"country_group": "USA", "era": "2010s"}, {"country_group": "Yugoslavia", "era": "1960s"}, {"country_group": "Yugoslavia", "era": "1970s"}, {"country_group": "Yugoslavia", "era": "1980s"}, {"country_group": "Yugoslavia", "era": "1990s"}, {"country_group": "Yugoslavia", "era": "2000s"}], "generatedAt": "2026-06-08 19:42 UTC", "sources": [{"label": "FIBA Hall of Fame", "url": "https://about.fiba.basketball/en/fiba-hall-of-fame/hall-of-famers"}, {"label": "FIBA GDAP / LiveStats", "url": "https://gdap-portal.fiba.basketball/documentation"}, {"label": "82-0 reference game", "url": "https://www.82-0.com/"}]};
+const POSITIONS = ["PG", "SG", "SF", "PF", "C"];
+const WEIGHTS = { scoring: 0.23, creation: 0.18, rebounding: 0.13, defense: 0.18, spacing: 0.12, resume: 0.16 };
+const TIER_BONUS = { legend: 2.0, star: 0.6, rotation: -1.0 };
+let mode = "classic";
+let picks = [];
+let currentSpin = null;
+let currentPool = [];
+let lastResult = null;
+
+function playerScore(player) {
+  return player.scoring * WEIGHTS.scoring + player.creation * WEIGHTS.creation + player.rebounding * WEIGHTS.rebounding +
+    player.defense * WEIGHTS.defense + player.spacing * WEIGHTS.spacing + player.resume * WEIGHTS.resume +
+    (TIER_BONUS[player.tier] || 0);
+}
+
+function availableSlots(player) {
+  const used = new Set(picks.map(p => p.slot));
+  return player.positions.filter(pos => !used.has(pos));
+}
+
+function seededRandom(seed) {
+  let value = seed % 2147483647;
+  if (value <= 0) value += 2147483646;
+  return () => {
+    value = value * 16807 % 2147483647;
+    return (value - 1) / 2147483646;
+  };
+}
+
+function winProbability(a, b) {
+  return 1 / (1 + Math.pow(10, (b - a) / 400));
+}
+
+function scoreLineup() {
+  const components = {};
+  for (const key of Object.keys(WEIGHTS)) {
+    components[key] = picks.reduce((sum, pick) => sum + pick.player[key], 0) / picks.length;
+  }
+  const base = picks.reduce((sum, pick) => sum + playerScore(pick.player), 0) / picks.length;
+  const notes = [];
+  let bonus = 0;
+  let penalty = 0;
+
+  if (components.creation >= 82) { bonus += 2; notes.push("Elite table-setting"); }
+  else if (components.creation < 64) { penalty += 4; notes.push("Short on creators"); }
+  if (components.spacing >= 82) { bonus += 1.5; notes.push("Tournament-proof spacing"); }
+  else if (components.spacing < 58) { penalty += 3; notes.push("Spacing squeeze"); }
+  if (components.defense >= 80) { bonus += 1.5; notes.push("Switchable defense"); }
+  else if (components.defense < 62) { penalty += 3; notes.push("Defense can be hunted"); }
+
+  const countryCounts = {};
+  for (const pick of picks) countryCounts[pick.player.countryGroup] = (countryCounts[pick.player.countryGroup] || 0) + 1;
+  if (Math.max(...Object.values(countryCounts)) >= 4) { bonus += 1.2; notes.push("Country chemistry"); }
+  const legends = picks.filter(p => p.player.tier === "legend").length;
+  if (legends >= 4) { penalty += (legends - 3) * 2; notes.push("Too many alphas"); }
+
+  const score = Math.max(35, Math.min(101, base + bonus - penalty));
+  const rating = Math.round(1390 + score * 4.65);
+  return { score, rating, bonus, penalty, notes, components };
+}
+
+function tierFromTitle(titlePct, score) {
+  if (titlePct >= 42 || score >= 94) return "S+";
+  if (titlePct >= 25 || score >= 88) return "S";
+  if (titlePct >= 12 || score >= 82) return "A";
+  if (titlePct >= 5 || score >= 75) return "B";
+  if (titlePct >= 1 || score >= 66) return "C";
+  return "D";
+}
+
+function simulateTournament(userRating, sims = 4500) {
+  const rng = seededRandom(82026 + userRating);
+  const groups = ["A", "B", "C", "D"];
+  let title = 0, medal = 0, semi = 0, knockout = 0, winsTotal = 0;
+  const finishes = {};
+  const baseTeams = DATA.teams.map(t => ({...t})).sort((a, b) => a.rating - b.rating);
+
+  function play(a, b) {
+    const probA = winProbability(a.rating, b.rating);
+    const winnerA = rng() < probA;
+    const expectedMargin = (a.rating - b.rating) / 28;
+    let margin = Math.round(expectedMargin + (rng() + rng() + rng() - 1.5) * 18);
+    if (winnerA && margin <= 0) margin = 1 + Math.floor(rng() * 8);
+    if (!winnerA && margin >= 0) margin = -1 - Math.floor(rng() * 8);
+    return { winner: winnerA ? a.code : b.code, margin };
+  }
+
+  function addFinish(name) { finishes[name] = (finishes[name] || 0) + 1; }
+
+  for (let s = 0; s < sims; s++) {
+    const field = baseTeams.map(t => ({...t}));
+    field[0] = { code: "USER", name: "Your Team", rating: userRating, group: "D" };
+    const grouped = Object.fromEntries(groups.map(g => [g, []]));
+    for (const team of field) grouped[team.group].push({...team, wins: 0, diff: 0, points: 0});
+
+    let userWins = 0;
+    for (const rows of Object.values(grouped)) {
+      for (let i = 0; i < rows.length; i++) {
+        for (let j = i + 1; j < rows.length; j++) {
+          const a = rows[i], b = rows[j];
+          const game = play(a, b);
+          if (game.winner === a.code) a.wins++; else b.wins++;
+          a.diff += game.margin; b.diff -= game.margin;
+          a.points += Math.max(55, 80 + Math.round(game.margin / 2));
+          b.points += Math.max(55, 80 - Math.round(game.margin / 2));
+          if ((a.code === "USER" || b.code === "USER") && game.winner === "USER") userWins++;
+        }
+      }
+    }
+
+    const ranked = Object.fromEntries(groups.map(g => [g, grouped[g].sort((a,b) => b.wins - a.wins || b.diff - a.diff || b.points - a.points || b.rating - a.rating)]));
+    const seeds = groups.flatMap(g => ranked[g].slice(0, 4));
+    if (!seeds.some(t => t.code === "USER")) {
+      winsTotal += userWins;
+      addFinish("Group stage");
+      continue;
+    }
+    knockout++;
+    const byCode = Object.fromEntries(seeds.map(t => [t.code, t]));
+    let current = [
+      ranked.A[0].code, ranked.B[3].code, ranked.B[1].code, ranked.A[2].code,
+      ranked.C[0].code, ranked.D[3].code, ranked.D[1].code, ranked.C[2].code,
+      ranked.B[0].code, ranked.A[3].code, ranked.A[1].code, ranked.B[2].code,
+      ranked.D[0].code, ranked.C[3].code, ranked.C[1].code, ranked.D[2].code,
+    ].map(code => byCode[code]);
+
+    const names = ["Round of 16", "Quarterfinal", "Semifinal", "Final"];
+    let userAlive = true;
+    for (let r = 0; r < names.length; r++) {
+      const winners = [];
+      for (let i = 0; i < current.length; i += 2) {
+        const a = current[i], b = current[i + 1];
+        const game = play(a, b);
+        winners.push(game.winner === a.code ? a : b);
+        if ((a.code === "USER" || b.code === "USER")) {
+          if (game.winner === "USER") userWins++;
+          else if (userAlive) { userAlive = false; addFinish(names[r]); }
+        }
+      }
+      current = winners;
+      if (r === 1 && current.some(t => t.code === "USER")) semi++;
+      if (r === 2 && current.some(t => t.code === "USER")) medal++;
+    }
+    if (current[0].code === "USER") { title++; addFinish("Champion"); }
+    winsTotal += userWins;
+  }
+  const topFinish = Object.entries(finishes).sort((a,b) => b[1] - a[1])[0]?.[0] || "Group stage";
+  return {
+    titlePct: +(title / sims * 100).toFixed(1),
+    medalPct: +(medal / sims * 100).toFixed(1),
+    semifinalPct: +(semi / sims * 100).toFixed(1),
+    knockoutPct: +(knockout / sims * 100).toFixed(1),
+    avgWins: +(winsTotal / sims).toFixed(1),
+    finish: topFinish
+  };
+}
+
+function renderRounds() {
+  document.getElementById("rounds").innerHTML = POSITIONS.map((_, i) => `<span class="dot ${i < picks.length ? "done" : i === picks.length ? "current" : ""}"></span>`).join("");
+}
+
+function renderLineup() {
+  document.getElementById("lineup").innerHTML = POSITIONS.map(pos => {
+    const pick = picks.find(p => p.slot === pos);
+    return `<div class="slot">
+      <div class="slot-code">${pos}</div>
+      <div>${pick ? `<div class="slot-name">${pick.player.name}</div><div class="slot-meta">${pick.player.country} · ${pick.player.era}</div>` : `<div class="slot-name">Open</div><div class="slot-meta">Need a ${pos}</div>`}</div>
+    </div>`;
+  }).join("");
+}
+
+function renderPlayers() {
+  const container = document.getElementById("players");
+  if (!currentSpin) {
+    container.innerHTML = `<div class="empty">Spin a country and era to open the draft pool.</div>`;
+    return;
+  }
+  const q = document.getElementById("searchInput").value.trim().toLowerCase();
+  const sort = document.getElementById("sortSelect").value;
+  let rows = currentPool.filter(p => !picks.some(pick => pick.player.code === p.code));
+  if (mode === "chaos") rows = rows.filter(p => p.tier !== "legend" || picks.length >= 3);
+  if (q) rows = rows.filter(p => p.name.toLowerCase().includes(q) || p.country.toLowerCase().includes(q));
+  rows.sort((a, b) => (sort === "score" ? playerScore(b) - playerScore(a) : b[sort] - a[sort]));
+  if (!rows.length) {
+    container.innerHTML = `<div class="empty">No eligible players left for this spin. Spin again.</div>`;
+    return;
+  }
+  container.innerHTML = rows.map(player => {
+    const slots = availableSlots(player);
+    const hidden = mode === "memory" ? " hidden-stats" : "";
+    return `<article class="player-card${hidden}">
+      <div class="player-top">
+        <div>
+          <div class="player-name">${player.name}</div>
+          <div class="player-meta">${player.country} · ${player.era} · ${player.positions.join("/")} · confidence ${player.confidence}</div>
+        </div>
+        <span class="badge ${player.tier}">${player.tier}</span>
+      </div>
+      <div class="stats">
+        ${["scoring","creation","defense","spacing","rebounding","resume"].map(key => `<div class="stat"><span class="stat-value">${player[key]}</span><span class="stat-label">${key}</span></div>`).join("")}
+      </div>
+      <div class="pick-row">
+        ${slots.length ? slots.map(slot => `<button onclick="pickPlayer('${player.code}','${slot}')" title="Draft as ${slot}">${slot}</button>`).join("") : `<span class="player-meta">No open legal slot</span>`}
+      </div>
+    </article>`;
+  }).join("");
+}
+
+function spin() {
+  if (picks.length >= 5) return;
+  const options = DATA.spinOptions.filter(opt => {
+    let pool = DATA.players.filter(p => p.countryGroup === opt.country_group && p.era === opt.era);
+    if (mode === "chaos") pool = pool.filter(p => p.tier !== "legend" || picks.length >= 3);
+    return pool.some(p => availableSlots(p).length);
+  });
+  const idx = Math.floor(Math.random() * options.length);
+  currentSpin = options[idx];
+  currentPool = DATA.players.filter(p => p.countryGroup === currentSpin.country_group && p.era === currentSpin.era);
+  document.getElementById("spinCountry").textContent = currentSpin.country_group;
+  document.getElementById("spinEra").textContent = currentSpin.era;
+  renderPlayers();
+}
+
+function pickPlayer(code, slot) {
+  const player = DATA.players.find(p => p.code === code);
+  if (!player || picks.length >= 5 || picks.some(p => p.slot === slot)) return;
+  picks.push({ player, slot });
+  currentSpin = null;
+  currentPool = [];
+  document.getElementById("spinCountry").textContent = "?";
+  document.getElementById("spinEra").textContent = "?";
+  renderAll();
+  if (picks.length === 5) showResult();
+}
+
+function showResult() {
+  const lineup = scoreLineup();
+  const sim = simulateTournament(lineup.rating);
+  const tier = tierFromTitle(sim.titlePct, lineup.score);
+  lastResult = { lineup, sim, tier };
+  const result = document.getElementById("result");
+  const blurb = {
+    "S+": "Gold favorite. This roster makes the bracket feel unfair.",
+    "S": "Real title favorite. Anything short of a medal would sting.",
+    "A": "Title contender. Not perfect, dangerous enough to beat anyone once.",
+    "B": "Medal threat. The ceiling is real, but the bracket has to cooperate.",
+    "C": "Knockout team. Fun, flawed, and probably one superstar short.",
+    "D": "Group-stage chaos. Great names, awkward fit."
+  }[tier];
+  result.classList.add("visible");
+  result.innerHTML = `<div class="result-hero">
+    <div class="tier">${tier}</div>
+    <div>
+      <h2>${blurb}</h2>
+      <p>${picks.map(p => p.player.name).join(" · ")}</p>
+    </div>
+  </div>
+  <div class="metric-grid">
+    <div class="metric"><strong>${sim.titlePct}%</strong><span class="label">Win title</span></div>
+    <div class="metric"><strong>${sim.medalPct}%</strong><span class="label">Reach final</span></div>
+    <div class="metric"><strong>${sim.knockoutPct}%</strong><span class="label">Make knockouts</span></div>
+    <div class="metric"><strong>${sim.avgWins}</strong><span class="label">Expected wins</span></div>
+  </div>
+  <div class="bars">
+    ${Object.entries(lineup.components).map(([key, value]) => `<div class="bar-row"><strong>${key}</strong><div class="bar"><span style="width:${Math.min(100, value)}%"></span></div><span>${value.toFixed(1)}</span></div>`).join("")}
+  </div>
+  <p>${lineup.notes.length ? lineup.notes.join(" · ") : "No major fit flags."} Most common finish: ${sim.finish}. Rating: ${lineup.rating}.</p>`;
+  result.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function resetDraft() {
+  picks = [];
+  currentSpin = null;
+  currentPool = [];
+  lastResult = null;
+  document.getElementById("spinCountry").textContent = "?";
+  document.getElementById("spinEra").textContent = "?";
+  document.getElementById("result").classList.remove("visible");
+  document.getElementById("result").innerHTML = "";
+  renderAll();
+}
+
+function share() {
+  const text = lastResult
+    ? `My FIBA Five graded ${lastResult.tier} with ${lastResult.sim.titlePct}% EuroBasket title odds: ${picks.map(p => p.player.name).join(", ")}`
+    : "FIBA Five: draft an all-time national-team lineup and chase S-tier EuroBasket odds.";
+  navigator.clipboard?.writeText(text);
+  document.getElementById("shareButton").textContent = "Copied";
+  setTimeout(() => document.getElementById("shareButton").textContent = "Share", 1200);
+}
+
+function renderAll() {
+  renderRounds();
+  renderLineup();
+  renderPlayers();
+  document.getElementById("spinButton").disabled = picks.length >= 5;
+}
+
+document.getElementById("spinButton").addEventListener("click", spin);
+document.getElementById("resetButton").addEventListener("click", resetDraft);
+document.getElementById("shareButton").addEventListener("click", share);
+document.getElementById("searchInput").addEventListener("input", renderPlayers);
+document.getElementById("sortSelect").addEventListener("change", renderPlayers);
+document.querySelectorAll("[data-mode]").forEach(button => button.addEventListener("click", () => {
+  mode = button.dataset.mode;
+  document.querySelectorAll("[data-mode]").forEach(b => b.classList.toggle("active", b === button));
+  renderPlayers();
+}));
+document.getElementById("sources").innerHTML = `Data model generated ${DATA.generatedAt}. Sources: ${DATA.sources.map(s => `<a href="${s.url}">${s.label}</a>`).join(" · ")}.`;
+renderAll();
+</script>
+</body>
+</html>
