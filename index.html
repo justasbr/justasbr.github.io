@@ -1,10 +1,50 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta http-equiv="refresh" content="0; url=euroleague/">
-<link rel="canonical" href="euroleague/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>justasbr — sports projections</title>
+<meta name="description" content="Monte Carlo projections for the EuroLeague and a fantasy basketball league.">
+<link rel="icon" href="euroleague/favicon.ico" sizes="32x32">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #f0f0f0;
+    color: #222;
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.5;
+    padding: 3rem 1.25rem;
+  }
+  main { max-width: 640px; margin: 0 auto; }
+  h1 { font-size: 1.6rem; letter-spacing: 0.04em; text-transform: uppercase; border-bottom: 2px solid #222; padding-bottom: 0.75rem; margin-bottom: 1.5rem; }
+  a.card {
+    display: block;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-left: 4px solid #d64541;
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  a.card:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,0.08); }
+  .card h2 { font-size: 1.1rem; margin-bottom: 0.25rem; }
+  .card p { font-size: 0.9rem; color: #666; }
+</style>
 </head>
 <body>
-<a href="euroleague/">Redirecting to EuroLeague predictions…</a>
+<main>
+  <h1>Sports projections</h1>
+  <a class="card" href="euroleague/">
+    <h2>EuroLeague 2026-27</h2>
+    <p>Playoff, Final Four and title odds for all 20 teams. ELO ratings and Monte Carlo simulation, updated after every game night.</p>
+  </a>
+  <a class="card" href="nba/">
+    <h2>Fantasy basketball playoffs</h2>
+    <p>Bracket odds, head-to-head matchups and season awards for our Yahoo fantasy league.</p>
+  </a>
+</main>
 </body>
 </html>
