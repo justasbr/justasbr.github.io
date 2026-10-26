@@ -102,11 +102,6 @@ padding:1px 6px;background:var(--accent);color:#fff;vertical-align:1px}
 .notes{list-style:none;font-size:.8rem;color:#444}.notes li{padding:5px 0;border-top:1px solid var(--rule-2)}
 .notes b{color:var(--ink);text-transform:uppercase;font-size:.64rem;letter-spacing:.6px}
 
-/* method */
-.method ol{list-style:none;counter-reset:m;max-width:760px;font-size:.88rem;color:#333}
-.method li{counter-increment:m;padding:8px 0 8px 34px;position:relative;border-top:1px solid var(--rule)}
-.method li::before{content:counter(m);position:absolute;left:0;top:7px;font-family:var(--mono);font-weight:500;color:var(--accent)}
-
 /* draft archive */
 details.archive{background:var(--card);padding:0 14px}
 details.archive summary{cursor:pointer;padding:12px 0;font-weight:700;font-size:.86rem;color:var(--ink)}
@@ -151,7 +146,7 @@ h1{font-size:2.1rem}h2{font-size:1.3rem}.dek{font-size:.98rem}
 <p class="dek">Who makes the playoffs, who wins this week, and how last week's forecast did.</p>
 <div class="byline">Updated Oct 26, 2026 · after week 1 of 17</div>
 </header>
-<nav><a href="#forecast">Forecast</a><a href="#matchups">Week 2</a><a href="#results">Week 1 results</a><a href="#categories">Categories</a><a href="#teams">Teams</a><a href="#method">Method</a><a href="#draft-review">Draft</a></nav>
+<nav><a href="#forecast">Forecast</a><a href="#matchups">Week 2</a><a href="#results">Week 1 results</a><a href="#categories">Categories</a><a href="#teams">Teams</a><a href="#draft-review">Draft</a></nav>
 <section id="forecast"><div class="kicker">Who makes the playoffs</div><h2>Standings forecast</h2><p class="intro">Records count the 1 final week; the other 16 weeks are simulated 20,000 times on the Yahoo schedule. The top 8 make the playoffs (dashed line). <b>Rating</b> is the chance to win a week against an average team in this league.</p><div class="scroll"><table class="grid forecast">
 <thead><tr><th class="num">#</th><th>Team</th><th class="num">Record</th>
 <th class="num hide-sm" title="Chance to win a week against an average opponent">Rating</th>
@@ -530,18 +525,7 @@ h1{font-size:2.1rem}h2{font-size:1.3rem}.dek{font-size:.98rem}
 <div class="chips"><span class="chip" style="background:rgba(47,143,94,0.33)">FG%</span><span class="chip" style="background:rgba(232,116,59,0.36)">FT%</span><span class="chip" style="background:rgba(232,116,59,0.11)">3PM</span><span class="chip" style="background:rgba(232,116,59,0.34)">PTS</span><span class="chip" style="background:rgba(232,116,59,0.06)">REB</span><span class="chip" style="background:rgba(232,116,59,0.56)">AST</span><span class="chip" style="background:rgba(47,143,94,0.08)">STL</span><span class="chip" style="background:rgba(232,116,59,0.16)">BLK</span><span class="chip" style="background:rgba(47,143,94,0.33)">TO</span></div>
 <p class="text">Led by Anthony Edwards. Wins TO, FG% most weeks and punts AST, FT%, PTS. Swing categories: BLK.</p>
 <ul class="notes"><li><b>Stars first.</b> Anthony Edwards, Alperen Şengün, Stephen Curry took $130 of the $200. The season rides on the top three.</li><li><b>Fair prices.</b> Draft surplus -$6. Best buy Day&#x27;Ron Sharpe ($8, fair $19); paid up for Alperen Şengün ($36, fair $22).</li><li><b>Infirmary.</b> $56 of roster value is waiting to return (Stephen Curry, Jalen Duren).</li><li><b>Room to climb.</b> 19% to make the playoffs. The quickest lift is 3PM: it sits at 47%, so a small upgrade there flips the most weeks.</li><li><b>Matchups.</b> Easiest week: Overpayed (47%). Hardest: Black Zeus (28%).</li></ul>
-</div></div></section><section id="method" class="method"><div class="kicker">Methodology</div><h2>How the forecast works</h2>
-<ol>
-<li><b>Players.</b> Per-game projections are a blend of Basketball Monster (60%) and Hashtag Basketball (40%),
-scaled by projected games played.</li>
-<li><b>Teams.</b> A lineup model plays each roster on the real NBA schedule and counts only the games a player can start
-in the 10 starting slots. Team strength is the sum, per category, of those started games.</li>
-<li><b>Weeks.</b> Weekly category totals vary like real 2025-26 weeks did: the noise model is fitted on
-last season's game logs. A matchup is won by winning more of the 9 categories.</li>
-<li><b>Season.</b> Final weeks count as played. The other weeks are simulated 20,000 times on the Yahoo schedule.
-Ties count as half a win. The top 8 by record make the playoffs; categories won break ties.</li>
-<li><b>Updates.</b> Each update uses that day's rosters and projections, so trades, waiver moves and injuries move the odds.</li>
-</ol></section><section id="draft-review"><div class="kicker">Archive</div><h2>Draft review</h2><p class="intro">The October auction: who found value and who paid for certainty. The draft is final, so this does not change.</p><details class="archive"><summary>Show the auction review and all 182 picks</summary><section id="auction"><h2>Auction Review</h2><p class="intro">Each team had $200. The <b>fair price</b> comes from this room's own market: rank all 182 drafted players by H2H value (consensus of two projection sets, adjusted for projected games, with each player's worst category dropped because a team can punt it). The k-th most valuable player is worth the k-th highest price paid. This keeps the normal star premium, so a steal means cheap compared with players of the same value in this draft. ✓ = each projection set alone gives the same result (same direction, at least $2). Grades rank teams by total surplus.</p><div class="scroll"><table class="grid">
+</div></div></section><section id="draft-review"><div class="kicker">Archive</div><h2>Draft review</h2><p class="intro">The October auction: who found value and who paid for certainty. The draft is final, so this does not change.</p><details class="archive"><summary>Show the auction review and all 182 picks</summary><section id="auction"><h2>Auction Review</h2><p class="intro">Each team had $200. The <b>fair price</b> comes from this room's own market: rank all 182 drafted players by H2H value (consensus of two projection sets, adjusted for projected games, with each player's worst category dropped because a team can punt it). The k-th most valuable player is worth the k-th highest price paid. This keeps the normal star premium, so a steal means cheap compared with players of the same value in this draft. ✓ = each projection set alone gives the same result (same direction, at least $2). Grades rank teams by total surplus.</p><div class="scroll"><table class="grid">
 <thead><tr><th class="num">Grade</th><th>Team</th><th class="num">Spent</th><th class="num">Fair value</th>
 <th class="num">+/-</th><th>Best buy</th><th>Worst buy</th></tr></thead><tbody><tr><td class="num rank">A+</td><td class="team">Black Zeus</td>
 <td class="num">$200</td><td class="num">$237</td>
