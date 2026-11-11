@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Basketbolistai 2026-27 Forecast</title>
+<meta name="description" content="Playoff odds, weekly matchup forecasts, results and power rankings for the Basketbolistai fantasy basketball league.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap">
+<style>:root{
+--bg:#f0f0f0;--card:#fff;--ink:#222;--ink-2:#555;--muted:#8a8a8a;--rule:#d9d9d9;--rule-2:#ececec;
+--accent:#e8743b;--good:#2f8f5e;--good-soft:rgba(47,143,94,.14);--weak:#e8743b;--weak-soft:rgba(232,116,59,.16);
+--sans:"Inter",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+--mono:"DM Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.45;
+padding:28px 16px 56px;max-width:1080px;margin:0 auto;-webkit-font-smoothing:antialiased}
+.nowrap{white-space:nowrap}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* masthead */
+.mast{padding-bottom:14px;border-bottom:3px solid var(--ink);margin-bottom:0}
+.kicker{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.6px;color:var(--accent);margin-bottom:4px}
+h1{font-size:2.9rem;font-weight:900;letter-spacing:-1.2px;line-height:1.02;margin:2px 0 8px}
+.dek{font-size:1.08rem;color:var(--ink-2);max-width:680px;margin-bottom:8px}
+.byline{font-family:var(--mono);font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+
+/* nav */
+nav{display:flex;flex-wrap:wrap;gap:0 22px;border-bottom:1px solid var(--rule);margin:0 0 34px;padding:10px 0 0}
+nav a{font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--ink-2);
+text-decoration:none;padding:6px 0 9px;border-bottom:3px solid transparent}
+nav a:hover{color:var(--ink);border-bottom-color:var(--accent)}
+
+/* sections */
+section{margin-bottom:52px;scroll-margin-top:12px}
+h2{font-size:1.6rem;font-weight:800;letter-spacing:-.4px;line-height:1.15;margin-bottom:8px}
+h3{font-size:.74rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--ink-2);margin-bottom:8px}
+.intro{color:var(--ink-2);font-size:.9rem;margin-bottom:16px;max-width:760px}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+/* tables */
+table.grid{width:100%;border-collapse:collapse;font-size:.86rem;background:var(--card)}
+.grid th{text-align:left;padding:10px 8px 8px;border-bottom:2px solid var(--ink);color:var(--ink);font-size:.64rem;
+font-weight:700;text-transform:uppercase;letter-spacing:1px;white-space:nowrap;vertical-align:bottom}
+.grid td{padding:7px 8px;border-bottom:1px solid var(--rule-2);vertical-align:middle}
+.grid tbody tr:hover td{background-color:rgba(0,0,0,.025)}
+.grid tr.cutline td{border-bottom:2px dashed var(--ink)}
+.num{text-align:right;white-space:nowrap}
+.grid th.num{text-align:right}
+.rank{font-family:var(--mono);font-weight:500;color:var(--muted)}
+.team{font-weight:700;color:var(--ink);white-space:nowrap}
+.sub{color:var(--muted);font-size:.74rem;font-weight:400}
+.muted{color:var(--muted)}
+.pos{color:var(--good);font-weight:700}.neg{color:var(--weak);font-weight:700}
+.forecast td.odds,.results td.odds{font-weight:500;min-width:62px}
+.forecast td{padding-top:9px;padding-bottom:9px}
+.chg{font-family:var(--mono);font-size:.78rem;font-weight:500;white-space:nowrap}
+.chg.up{color:var(--good)}.chg.down{color:var(--weak)}.chg.flat{color:var(--muted)}
+.spark{display:block}.spark-mid{stroke:#ddd;stroke-dasharray:2 2}
+
+/* movers */
+.movers{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.mover{background:var(--card);padding:14px 16px;border-top:4px solid var(--good)}
+.mover.falling{border-top-color:var(--weak)}
+.mover-tag{font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--good)}
+.mover.falling .mover-tag{color:var(--weak)}
+.mover-team{font-weight:800;font-size:1.05rem;margin:2px 0 4px}
+.mover-odds{font-size:.9rem;margin-bottom:4px}
+
+/* matchups */
+.games{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px}
+.game{background:var(--card);padding:12px 14px}
+.side{padding:6px 0}.side+.side{border-top:1px solid var(--rule-2)}
+.side-row{display:flex;align-items:baseline;gap:8px}
+.gteam{flex:1;font-weight:600;font-size:.92rem;color:var(--ink-2)}
+.side.fav .gteam{color:var(--ink);font-weight:800}
+.grec{font-size:.74rem;color:var(--muted)}
+.gprob{font-size:1.15rem;font-weight:500;width:56px;text-align:right;color:var(--muted)}
+.side.fav .gprob{color:var(--ink)}
+.gbar{height:6px;background:var(--rule-2);margin:5px 0 6px}
+.gbar span{display:block;height:100%;background:#bdbdbd}
+.side.fav .gbar span{background:var(--good)}
+.cats{display:flex;flex-wrap:wrap;align-items:center;gap:4px}
+.cats-label{font-family:var(--mono);font-size:.64rem;color:var(--muted);text-transform:uppercase;margin-right:2px}
+.cat{font-size:.62rem;font-weight:600;padding:1px 6px;letter-spacing:.4px;background:var(--rule-2);color:var(--ink-2)}
+.side.fav .cat{background:var(--good-soft);color:var(--ink)}
+.cats.toss{padding-top:6px;border-top:1px solid var(--rule-2)}
+
+/* results */
+.results .winner{color:var(--ink)}
+.results .loser{color:var(--muted);font-weight:500}
+.results .score{font-weight:500;font-size:.95rem}
+.badge{display:inline-block;margin-left:8px;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;
+padding:1px 6px;background:var(--accent);color:#fff;vertical-align:1px}
+
+/* power rankings */
+.ranks{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,430px),1fr));gap:14px}
+.rk-row{display:flex;gap:12px;background:var(--card);border-top:4px solid var(--ink);padding:14px}
+.rk{display:flex;flex-direction:column;align-items:center;min-width:34px}
+.rk-num{font-family:var(--mono);font-size:1.5rem;font-weight:700;line-height:1}
+.rk-move{font-family:var(--mono);font-size:.7rem;margin-top:4px}
+.rk-move.up{color:var(--good)}.rk-move.down{color:var(--weak)}.rk-move.flat{color:var(--muted)}
+.rk-body{flex:1;min-width:0}
+.rk-head{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.card-name{font-weight:800;font-size:1.05rem}
+.rk-headline{font-size:.9rem;font-weight:600;margin:4px 0 6px;line-height:1.35}
+.rk-stats{display:flex;flex-wrap:wrap;align-items:center;gap:2px 14px;font-size:.72rem;color:var(--muted);margin-bottom:8px}
+.rk-stats span{white-space:nowrap}.rk-stats .spark{vertical-align:middle;display:inline-block}
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
+.chip{font-size:.62rem;font-weight:600;padding:1px 6px;letter-spacing:.4px}
+.facts{list-style:none;font-size:.82rem;color:var(--ink-2);margin-bottom:6px}
+.facts li{padding:4px 0 4px 14px;position:relative;line-height:1.4}
+.facts li::before{content:"";position:absolute;left:2px;top:.85em;width:5px;height:5px;background:var(--accent)}
+.facts b{color:var(--ink)}
+.rk-body details summary{cursor:pointer;font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);padding:4px 0}
+.notes{list-style:none;font-size:.8rem;color:var(--ink-2)}.notes li{padding:5px 0;border-top:1px solid var(--rule-2)}
+.notes b{color:var(--ink);text-transform:uppercase;font-size:.64rem;letter-spacing:.6px}
+
+/* player top-10 lists */
+.duo{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:18px 22px}
+.topcol h3{font-size:.9rem;letter-spacing:1px;color:var(--ink);padding:8px 10px;margin:0;background:var(--card);border-top:4px solid var(--good)}
+.topcol.cold h3{border-top-color:var(--weak)}
+.toplist thead th{border-top:1px solid var(--rule-2)}
+.toplist td{height:64px}
+.toplist td.rank{width:26px;padding-right:2px;text-align:right}
+.toplist .team{white-space:normal}
+.toplist tbody tr:first-child .team{font-size:1rem}
+.toplist .sub{white-space:nowrap}
+.toplist td.big{font-size:1rem;font-weight:700}
+.emo{font-size:.9rem;letter-spacing:1px;white-space:nowrap}
+.statline{font-size:.7rem;color:var(--ink-2);margin-top:4px;line-height:1.5}
+.statline .counts,.statline .shots{display:grid;justify-content:start}
+.statline .counts{grid-template-columns:repeat(6,7.6ch)}
+.statline .shots{grid-template-columns:repeat(2,10.6ch) 6ch}
+.statline b{color:var(--ink);font-weight:500;display:inline-block;width:2ch;text-align:right}
+.statline span{white-space:nowrap}
+.statline .shots b{width:5ch}
+.statline .shots span:last-child b{width:2ch}
+.statline .zero{opacity:.4}
+.legend{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:.74rem;color:var(--muted);margin-top:10px}
+@media (max-width:640px){.statline .counts{grid-template-columns:repeat(3,7.6ch)}.toplist .sub{white-space:normal}}
+
+/* draft archive */
+details.archive{background:var(--card);padding:0 14px}
+details.archive summary{cursor:pointer;padding:12px 0;font-weight:700;font-size:.86rem;color:var(--ink)}
+details.archive summary:hover{color:var(--accent)}
+details.archive[open]{padding-bottom:14px}
+details.archive section{margin:18px 0 28px}
+details.archive h2{font-size:1.2rem}
+.filter{margin-bottom:8px;font-size:.8rem;color:var(--ink-2)}.filter select{margin-left:6px;padding:2px 4px}
+.board{max-height:640px;overflow-y:auto;border:1px solid var(--rule)}
+.board thead th{position:sticky;top:0;background:var(--card)}
+th.sort{cursor:pointer;user-select:none}th.sort:hover{color:var(--accent)}
+th.sort.asc::after{content:" ▲";font-size:.6rem}th.sort.desc::after{content:" ▼";font-size:.6rem}
+
+/* unused views kept in code */
+.seeds td.seed{font-size:.75rem;padding:5px 4px;min-width:30px}
+.seeds td.seedcut{border-right:2px dashed var(--ink)}
+.h2h td{font-size:.75rem;padding:5px 4px;min-width:34px;text-align:center}
+.h2h td.self{background:#ddd}
+.h2h th.vert{height:120px;vertical-align:bottom;padding:4px}
+.h2h th.vert span{writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap}
+
+footer{border-top:3px solid var(--ink);padding-top:12px;color:var(--muted);font-size:.78rem}
+footer a{color:var(--ink)}
+@media (max-width:640px){
+h1{font-size:2.1rem}h2{font-size:1.3rem}.dek{font-size:.98rem}
+.hide-sm{display:none}
+.grid td,.grid th{padding-left:5px;padding-right:5px}
+.forecast .sub{display:none}.team{white-space:normal}
+}
+</style>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="ba864bae-fc9f-4efc-8781-9fae15694a7e"></script></head>
+<body>
+<header class="mast">
+<div class="kicker">Fantasy basketball forecast · H2H 9-cat · 14 teams</div>
+<h1>Basketbolistai <span class="nowrap">2026-27</span></h1>
+<p class="dek">Who makes the playoffs, who wins this week, and how last week's forecast did.</p>
+<div class="byline">Updated Nov 11, 2026 · after week 3 of 17</div>
+</header>
+<nav><a href="#forecast">Forecast</a><a href="#matchups">Week 4</a><a href="#results">Week 3 results</a><a href="#week-players">Players</a><a href="#statlines">Stat lines</a><a href="#categories">Categories</a><a href="#teams">Power rankings</a><a href="#draft-value">Draft value</a><a href="#draft-review">Draft</a></nav>
+<section id="forecast"><div class="kicker">Who makes the playoffs</div><h2>Standings forecast</h2><p class="intro">Teams are in Yahoo standings order; click a column heading to sort. Records count the 3 final weeks; the other 14 weeks are simulated 20,000 times on the Yahoo schedule. The top 8 make the playoffs (dashed line). <b>Rating</b> is the chance to win a week against an average team in this league.</p><div class="scroll"><table class="grid forecast" id="forecast-table">
+<thead><tr><th class="sort num" data-type="num" data-first="asc" title="Click to sort">#</th><th class="sort" data-type="text" data-first="asc" title="Click to sort">Team</th><th class="sort num asc" data-type="num" data-first="asc" data-cut="1" title="Click to sort">Record</th><th class="sort num hide-sm" data-type="num" data-first="desc" title="Chance to win a week against an average opponent" title="Click to sort">Rating</th><th class="sort num hide-sm" data-type="num" data-first="desc" title="Click to sort">Proj. record</th><th class="sort num" data-type="num" data-first="desc" title="Click to sort">Make playoffs</th><th class="sort num" data-type="num" data-first="desc" title="Click to sort">Since week 2</th><th class="sort hide-sm" data-type="num" data-first="desc" title="Click to sort">Trend</th><th class="sort num" data-type="num" data-first="desc" title="Click to sort">#1 seed</th><th class="sort num hide-sm" data-type="num" data-first="desc" title="Click to sort">Last place</th></tr></thead>
+<tbody><tr class="" data-place="1"><td class="num rank" data-v="1">1</td><td class="" data-v="pizza ball"><span class="team">Pizza ball</span><div class="sub">Jamal Murray · punts TO, STL</div></td><td class="num mono" data-v="1">3–0</td><td class="num mono hide-sm" data-v="0.5146">51</td><td class="num mono hide-sm" data-v="10.079">10.1–6.9</td><td class="num mono odds" data-v="0.8617" style="background:rgba(47,143,94,0.57);color:#fff">86%</td><td class="num mono" data-v="0.0943"><span class="chg up">▲ 9</span></td><td class="hide-sm" data-v="0.2417"><svg class="spark" width="76" height="22" viewBox="-2 0 76 22" aria-hidden="true"><line x1="0" x2="72" y1="11.0" y2="11.0" class="spark-mid"/><polyline points="0.0,8.8 24.0,6.4 48.0,6.2 72.0,4.5" fill="none" stroke="rgb(47,143,94)" stroke-width="2"/><circle cx="72.0" cy="4.5" r="2.5" fill="rgb(47,143,94)"/></svg></td><td class="num mono odds" data-v="0.1247" style="background:rgba(47,143,94,0.12);color:#222">12%</td><td class="num mono hide-sm muted" data-v="0.0018"><1%</td></tr><tr class="" data-place="2"><td class="num rank" data-v="2">2</td><td class="" data-v="2nd cumming of jokic"><span class="team">2nd cumming of Jokic</span><div class="sub">Nikola Jokić · punts 3PM</div></td><td class="num mono" data-v="2">3–0</td><td class="num mono hide-sm" data-v="0.6000">60</td><td class="num mono hide-sm" data-v="11.498">11.5–5.5</td><td class="num mono odds" data-v="0.9741" style="background:rgba(47,143,94,0.64);color:#fff">97%</td><td class="num mono" data-v="0.0106"><span class="chg up">▲ 1</span></td><td class="hide-sm" data-v="0.3141"><svg class="spark" width="76" height="22" viewBox="-2 0 76 22" aria-hidden="true"><line x1="0" x2="72" y1="11.0" y2="11.0" class="spark-mid"/><polyline points="0.0,8.1 24.0,7.4 48.0,2.7 72.0,2.5" fill="none" stroke="rgb(47,143,94)" stroke-width="2"/><circle cx="72.0" cy="2.5" r="2.5" fill="rgb(47,143,94)"/></svg></td><td class="num mono odds" data-v="0.4113" style="background:rgba(47,143,94,0.29);color:#222">41%</td><td class="num mono hide-sm muted" data-v="0.0002"><1%</td></tr><tr class="" data-place="3"><td class="num rank" data-v="3">3</td><td class="" data-v="overpayed"><span class="team">Overpayed</span><div class="sub">Victor Wembanyama · punts 3PM, FT%, PTS</div></td><td class="num mono" data-v="3">2–1</td><td class="num mono hide-sm" data-v="0.6159">62</td><td class="num mono hide-sm" data-v="10.581">10.6–6.4</td><td class="num mono odds" data-v="0.9055" style="background:rgba(47,143,94,0.60);color:#fff">91%</td><td class="num mono" data-v="0.0658"><span class="chg up">▲ 7</span></td><td class="hide-sm" data-v="0.4455"><svg class="spark" width="76" height="22" viewBox="-2 0 76 22" aria-hidden="true"><line x1="0" x2="72" y1="11.0" y2="11.0" class="spark-mid"/><polyline points="0.0,11.7 24.0,13.4 48.0,4.9 72.0,3.7" fill="none" stroke="rgb(47,143,94)" stroke-width="2"/><circle cx="72.0" cy="3.7" r="2.5" fill="rgb(47,143,94)"/></svg></td><td class="num mono odds" data-v="0.1452" style="background:rgba(47,143,94,0.13);color:#222">15%</td><td class="num mono hide-sm muted" data-v="0.0006"><1%</td></tr><tr class="" data-place="4"><td class="num rank" data-v="4">4</td><td class="" data-v="lakštingala negali nečiulbėti"><span class="team">Lakštingala negali nečiulbėti</span><div class="sub">Austin Reaves · punts TO</div></td><td class="num mono" data-v="4">2–1</td><td class="num mono hide-sm" data-v="0.4620">46</td><td class="num mono hide-sm" data-v="8.485">8.5–8.5</td><td class="num mono odds" data-v="0.5890" style="background:rgba(47,143,94,0.41);color:#222">59%</td><td class="num mono" data-v="0.0046"><span class="chg flat">0</span></td><td class="hide-sm" data-v="0.0790"><svg class="spark" width="76" height="22" viewBox="-2 0 76 22" aria-hidden="true"><line x1="0" x2="72" y1="11.0" y2="11.0" class="spark-mid"/><polyline points="0.0,10.8 24.0,10.2 48.0,9.5 72.0,9.4" fill="none" stroke="rgb(47,143,94)" stroke-width="2"/><circle cx="72.0" cy="9.4" r="2.5" fill="rgb(47,143,94)"/></svg></td><td class="num mono odds" data-v="0.0249" style="background:rgba(47,143,94,0.06);color:#222">2%</td><td class="num mono hide-sm muted" data-v="0.0199">2%</td></tr><tr class="" data-place="5"><td class="num rank" data-v="5">5</td><td class="" data-v="sizzlin sons"><span class="team">Sizzlin sons</span><div class="sub">Cade Cunningham · punts FG%</div></td><td class="num mono" data-v="5">2–1</td><td class="num mono hide-sm" data-v="0.5128">51</td><td class="num mono hide-sm" data-v="9.071">9.1–7.9</td><td class="num mono odds" data-v="0.7177" style="background:rgba(47,143,94,0.49);color:#222">72%</td><td class="num mono" data-v="0.0480"><span class="chg up">▲ 5</span></td><td class="hide-sm" data-v="0.2478"><svg class="spark" width="76" height="22" viewBox="-2 0 76 22" aria-hidden="true"><line x1="0" x2="72" y1="11.0" y2="11.0" class="spark-mid"/><polyline points="0.0,11.5 24.0,12.3 48.0,7.9 72.0,7.1" fill="none" stroke="rgb(47,143,94)" stroke-width="2"/><circle cx="72.0" cy="7.1" r="2.5" fill="rgb(47,143,94)"/></svg></td><td class="num mono odds" data-v="0.0512" style="background:rgba(47,143,94,0.07);color:#222">5%</td><td class="num mono hide-sm muted" data-v="0.0091">1%</td></tr><tr class="" data-place="6"><td class="num rank" data-v="6">6</td><td class="" data-v="džesika shai"><span class="team">Džesika Shai</span><div class="sub">Shai Gilgeous-Alexander · punts 3PM</div></td><td class="num mono" data-v="6">2–1</td><td class="num mono hide-sm" data-v="0.5039">50</td><td class="num mono hide-sm" data-v="9.064">9.1–7.9</td><td class="num mono odds" data-v="0.7090" style="background:rgba(47,143,94,0.48);color:#222">71%</td><td class="num mono" data-v="0.0217"><span class="chg up">▲ 2</span></td><td class="hide-sm" data-v="-0.1610"><svg class="spark" width="76" height="22" viewBox="-2 0 76 22" aria-hidden="true"><line x1="0" x2="72" y1="11.0" y2="11.0" class="spark-mid"/><polyline points="0.0,4.3 24.0,3.3 48.0,7.6 72.0,7.2" fill="none" stroke="rgb(232,116,59)" stroke-width="2"/><circle cx="72.0" cy="7.2" r="2.5" fill="rgb(232,116,59)"/></svg></td><td class="num mono odds" data-v="0.0508" style="background:rgba(47,143,94,0.07);color:#222">5%</td><td class="num mono hide-sm muted" data-v="0.0106">1%</td></tr><tr class="" data-place="7"><td class="num rank" data-v="7">7</td><td class="" data-v="giddey up"><span class="team">Giddey up</span><div class="sub">Jayson Tatum · punts FG%, PTS, REB</div></td><td class="num mono" data-v="7">2–1</td><td class="num mono hide-sm" data-v="0.4628">46</td><td class="num mono hide-sm" data-v="8.438">8.4–8.6</td><td class="num mono odds" data-v="0.5395" style="background:rgba(47,143,94,0.37);color:#222">54%</td><td class="num mono" data-v="0.2290"><span class="chg up">▲ 23</span></td><td class="hide-sm" data-v="0.1095"><svg class="spark" width="76" height="22" viewBox="-2 0 76 22" aria-hidden="true"><line x1="0" x2="72" y1="11.0" y2="11.0" class="spark-mid"/><polyline points="0.0,12.3 24.0,12.1 48.0,14.4 72.0,10.3" fill="none" stroke="rgb(47,143,94)" stroke-width="2"/><circle cx="72.0" cy="10.3" r="2.5" fill="rgb(47,143,94)"/></svg></td><td class="num mono odds" data-v="0.0184" style="background:rgba(47,143,94,0.05);color:#222">2%</td><td class="num mono hide-sm muted" data-v="0.0226">2%</td></tr><tr class="cutline" data-place="8"><td class="num rank" data-v="8">8</td><td class="" data-v="mamuko_tequila.mp3"><span class="team">Mamuko_Tequila.mp3</span><div class="sub">Luka Dončić · punts BLK</div></td><td class="num mono" data-v="8">2–1</td><td class="num mono hide-sm" data-v="0.5790">58</td><td class="num mono hide-sm" data-v="10.150">10.1–6.9</td><td class="num mono odds" data-v="0.8606" style="background:rgba(47,143,94,0.57);color:#fff">86%</td><td class="num mono" data-v="0.0187"><span class="chg up">▲ 2</span></td><td class="hide-sm" data-v="0.5206"><svg class="spark" width="76" height="22" viewBox="-2 0 76 22" aria-hidden="true"><line x1="0" x2="72" y1="11.0" y2="11.0" class="spark-mid"/><polyline points="0.0,13.9 24.0,9.7 48.0,4.8 72.0,4.5" fill="none" stroke="rgb(47,143,94)" stroke-width="2"/><circle cx="72.0" cy="4.5" r="2.5" fill="rgb(47,143,94)"/></svg></td><td class="num mono odds" data-v="0.1150" style="background:rgba(47,143,94,0.11);color:#222">12%</td><td class="num mono hide-sm muted" data-v="0.0026"><1%</td></tr><tr class="" data-place="9"><td class="num rank" data-v="9">9</td><td class="" data-v="kyrie me river"><span class="team">Kyrie Me River</span><div class="sub">Kevin Durant · punts STL, AST, REB</div></td><td class="num mono" data-v="9">1–2</td><td class="num mono hide-sm" data-v="0.3647">36</td><td class="num mono hide-sm" data-v="6.229">6.2–10.8</td><td class="num mono odds" data-v="0.1564" style="background:rgba(47,143,94,0.14);color:#222">16%</td><td class="num mono" data-v="-0.2764"><span class="chg down">▼ 28</span></td><td class="hide-sm" data-v="-0.1836"><svg class="spark" width="76" height="22" viewBox="-2 0 76 22" aria-hidden="true"><line x1="0" x2="72" y1="11.0" y2="11.0" class="spark-mid"/><polyline points="0.0,13.9 24.0,13.6 48.0,12.2 72.0,17.2" fill="none" stroke="rgb(232,116,59)" stroke-width="2"/><circle cx="72.0" cy="17.2" r="2.5" fill="rgb(232,116,59)"/></svg></td><td class="num mono odds" data-v="0.0013" style="background:rgba(47,143,94,0.04);color:#222"><1%</td><td class="num mono hide-sm muted" data-v="0.1782">18%</td></tr><tr class="" data-place="10"><td class="num rank" data-v="10">10</td><td class="" data-v="black zeus"><span class="team">Black Zeus</span><div class="sub">Giannis Antetokounmpo · punts FT%, 3PM</div></td><td class="num mono" data-v="10">1–2</td><td class="num mono hide-sm" data-v="0.5925">59</td><td class="num mono hide-sm" data-v="9.294">9.3–7.7</td><td class="num mono odds" data-v="0.7383" style="background:rgba(47,143,94,0.50);color:#fff">74%</td><td class="num mono" data-v="-0.1280"><span class="chg down">▼ 13</span></td><td class="hide-sm" data-v="-0.1817"><svg class="spark" width="76" height="22" viewBox="-2 0 76 22" aria-hidden="true"><line x1="0" x2="72" y1="11.0" y2="11.0" class="spark-mid"/><polyline points="0.0,3.4 24.0,3.2 48.0,4.4 72.0,6.7" fill="none" stroke="rgb(232,116,59)" stroke-width="2"/><circle cx="72.0" cy="6.7" r="2.5" fill="rgb(232,116,59)"/></svg></td><td class="num mono odds" data-v="0.0420" style="background:rgba(47,143,94,0.07);color:#222">4%</td><td class="num mono hide-sm muted" data-v="0.0061">1%</td></tr><tr class="" data-place="11"><td class="num rank" data-v="11">11</td><td class="" data-v="discount liquors"><span class="team">Discount liquors</span><div class="sub">Scottie Barnes · punts FG%</div></td><td class="num mono" data-v="11">1–2</td><td class="num mono hide-sm" data-v="0.4649">46</td><td class="num mono hide-sm" data-v="7.537">7.5–9.5</td><td class="num mono odds" data-v="0.3503" style="background:rgba(47,143,94,0.26);color:#222">35%</td><td class="num mono" data-v="-0.0208"><span class="chg down">▼ 2</span></td><td class="hide-sm" data-v="-0.1797"><svg class="spark" width="76" height="22" viewBox="-2 0 76 22" aria-hidden="true"><line x1="0" x2="72" y1="11.0" y2="11.0" class="spark-mid"/><polyline points="0.0,10.5 24.0,7.3 48.0,13.3 72.0,13.7" fill="none" stroke="rgb(232,116,59)" stroke-width="2"/><circle cx="72.0" cy="13.7" r="2.5" fill="rgb(232,116,59)"/></svg></td><td class="num mono odds" data-v="0.0078" style="background:rgba(47,143,94,0.04);color:#222">1%</td><td class="num mono hide-sm muted" data-v="0.0654">7%</td></tr><tr class="" data-place="12"><td class="num rank" data-v="12">12</td><td class="" data-v="traes comas club"><span class="team">Traes Comas Club</span><div class="sub">Trae Young · punts REB, BLK, FG%</div></td><td class="num mono" data-v="12">0–3</td><td class="num mono hide-sm" data-v="0.5540">55</td><td class="num mono hide-sm" data-v="7.705">7.7–9.3</td><td class="num mono odds" data-v="0.4423" style="background:rgba(47,143,94,0.31);color:#222">44%</td><td class="num mono" data-v="-0.0380"><span class="chg down">▼ 4</span></td><td class="hide-sm" data-v="-0.4477"><svg class="spark" width="76" height="22" viewBox="-2 0 76 22" aria-hidden="true"><line x1="0" x2="72" y1="11.0" y2="11.0" class="spark-mid"/><polyline points="0.0,4.0 24.0,6.6 48.0,11.4 72.0,12.0" fill="none" stroke="rgb(232,116,59)" stroke-width="2"/><circle cx="72.0" cy="12.0" r="2.5" fill="rgb(232,116,59)"/></svg></td><td class="num mono odds" data-v="0.0068" style="background:rgba(47,143,94,0.04);color:#222">1%</td><td class="num mono hide-sm muted" data-v="0.0369">4%</td></tr><tr class="" data-place="13"><td class="num rank" data-v="13">13</td><td class="" data-v="ant&#x27;s kitchen"><span class="team">Ant&#x27;s kitchen</span><div class="sub">Stephen Curry · punts AST, FT%, STL</div></td><td class="num mono" data-v="13">0–3</td><td class="num mono hide-sm" data-v="0.3864">39</td><td class="num mono hide-sm" data-v="5.335">5.3–11.7</td><td class="num mono odds" data-v="0.0697" style="background:rgba(47,143,94,0.08);color:#222">7%</td><td class="num mono" data-v="-0.0301"><span class="chg down">▼ 3</span></td><td class="hide-sm" data-v="-0.3403"><svg class="spark" width="76" height="22" viewBox="-2 0 76 22" aria-hidden="true"><line x1="0" x2="72" y1="11.0" y2="11.0" class="spark-mid"/><polyline points="0.0,12.6 24.0,16.6 48.0,18.2 72.0,18.7" fill="none" stroke="rgb(232,116,59)" stroke-width="2"/><circle cx="72.0" cy="18.7" r="2.5" fill="rgb(232,116,59)"/></svg></td><td class="num mono odds" data-v="0.0003" style="background:rgba(47,143,94,0.04);color:#222"><1%</td><td class="num mono hide-sm muted" data-v="0.3369">34%</td></tr><tr class="" data-place="14"><td class="num rank" data-v="14">14</td><td class="" data-v="tiltai miesteliuose"><span class="team">Tiltai miesteliuose</span><div class="sub">Karl-Anthony Towns · punts REB, BLK, PTS</div></td><td class="num mono" data-v="14">0–3</td><td class="num mono hide-sm" data-v="0.3864">39</td><td class="num mono hide-sm" data-v="5.534">5.5–11.5</td><td class="num mono odds" data-v="0.0858" style="background:rgba(47,143,94,0.09);color:#222">9%</td><td class="num mono" data-v="0.0006"><span class="chg flat">0</span></td><td class="hide-sm" data-v="-0.4742"><svg class="spark" width="76" height="22" viewBox="-2 0 76 22" aria-hidden="true"><line x1="0" x2="72" y1="11.0" y2="11.0" class="spark-mid"/><polyline points="0.0,9.9 24.0,13.9 48.0,18.5 72.0,18.5" fill="none" stroke="rgb(232,116,59)" stroke-width="2"/><circle cx="72.0" cy="18.5" r="2.5" fill="rgb(232,116,59)"/></svg></td><td class="num mono odds" data-v="0.0005" style="background:rgba(47,143,94,0.04);color:#222"><1%</td><td class="num mono hide-sm muted" data-v="0.3089">31%</td></tr></tbody></table></div>
+<script>
+(function () {
+  // Sort the standings forecast by any column. The playoff line shows only in standings order.
+  var table = document.getElementById('forecast-table');
+  var tbody = table.querySelector('tbody');
+  var heads = table.querySelectorAll('th.sort');
+  var current = {col: 2, asc: true};
+  function apply(col, asc) {
+    var th = heads[col];
+    var numeric = th.dataset.type === 'num';
+    var rows = Array.prototype.slice.call(tbody.querySelectorAll('tr'));
+    rows.sort(function (a, b) {
+      var va = a.children[col].dataset.v, vb = b.children[col].dataset.v;
+      var cmp = numeric ? Number(va) - Number(vb) : va.localeCompare(vb);
+      if (cmp === 0) cmp = Number(a.dataset.place) - Number(b.dataset.place);
+      return asc ? cmp : -cmp;
+    });
+    rows.forEach(function (tr, k) {
+      tbody.appendChild(tr);
+      tr.classList.toggle('cutline', th.dataset.cut === '1' && asc && k === 8 - 1);
+    });
+    heads.forEach(function (h) { h.classList.remove('asc', 'desc'); });
+    th.classList.add(asc ? 'asc' : 'desc');
+    current = {col: col, asc: asc};
+  }
+  heads.forEach(function (th, col) {
+    th.addEventListener('click', function () {
+      apply(col, current.col === col ? !current.asc : th.dataset.first === 'asc');
+    });
+  });
+})();
+</script></section><section id="movers"><div class="kicker">Odds on the move</div><h2>What changed</h2><p class="intro">Biggest changes in playoff odds since the week 2 forecast.</p><div class="movers"><div class="mover rising"><div class="mover-tag">Rising</div>
+<div class="mover-team">Giddey up</div>
+<div class="mover-odds mono">31% → <b>54%</b> <span class="chg up">▲ 23</span></div>
+<div class="sub">Week 3: won 6–3 against Traes Comas Club.</div></div><div class="mover rising"><div class="mover-tag">Rising</div>
+<div class="mover-team">Pizza ball</div>
+<div class="mover-odds mono">77% → <b>86%</b> <span class="chg up">▲ 9</span></div>
+<div class="sub">Week 3: won 7–2 against Tiltai miesteliuose.</div></div><div class="mover falling"><div class="mover-tag">Falling</div>
+<div class="mover-team">Kyrie Me River</div>
+<div class="mover-odds mono">43% → <b>16%</b> <span class="chg down">▼ 28</span></div>
+<div class="sub">Week 3: lost 3–6 against Džesika Shai.</div></div><div class="mover falling"><div class="mover-tag">Falling</div>
+<div class="mover-team">Black Zeus</div>
+<div class="mover-odds mono">87% → <b>74%</b> <span class="chg down">▼ 13</span></div>
+<div class="sub">Week 3: lost 4–5 against Overpayed.</div></div></div></section><section id="matchups"><div class="kicker">This week</div><h2>Week 4 matchups</h2><p class="intro">Win chances for week 4 with today's rosters. "Cats" is the expected number of categories won. The chips are the categories a team wins in more than 58% of weeks; toss-ups can go either way.</p><div class="games"><div class="game"><div class="side fav">
+<div class="side-row"><span class="gteam">Džesika Shai</span><span class="grec mono">2–1</span>
+<span class="gprob mono">52%</span></div>
+<div class="gbar"><span style="width:52%"></span></div>
+<div class="cats"><span class="cats-label">4.7 cats</span><span class="cat">TO</span><span class="cat">FT%</span><span class="cat">FG%</span><span class="cat">STL</span></div></div><div class="side">
+<div class="side-row"><span class="gteam">Lakštingala negali nečiulbėti</span><span class="grec mono">2–1</span>
+<span class="gprob mono">48%</span></div>
+<div class="gbar"><span style="width:48%"></span></div>
+<div class="cats"><span class="cats-label">4.3 cats</span><span class="cat">3PM</span></div></div><div class="cats toss"><span class="cats-label">Toss-ups</span><span class=cat>PTS</span><span class=cat>REB</span><span class=cat>AST</span><span class=cat>BLK</span></div></div><div class="game"><div class="side fav">
+<div class="side-row"><span class="gteam">Overpayed</span><span class="grec mono">2–1</span>
+<span class="gprob mono">58%</span></div>
+<div class="gbar"><span style="width:58%"></span></div>
+<div class="cats"><span class="cats-label">4.8 cats</span><span class="cat">FG%</span><span class="cat">REB</span><span class="cat">BLK</span><span class="cat">TO</span></div></div><div class="side">
+<div class="side-row"><span class="gteam">Giddey up</span><span class="grec mono">2–1</span>
+<span class="gprob mono">42%</span></div>
+<div class="gbar"><span style="width:42%"></span></div>
+<div class="cats"><span class="cats-label">4.2 cats</span><span class="cat">3PM</span><span class="cat">FT%</span><span class="cat">AST</span><span class="cat">PTS</span></div></div><div class="cats toss"><span class="cats-label">Toss-ups</span><span class=cat>STL</span></div></div><div class="game"><div class="side">
+<div class="side-row"><span class="gteam">Pizza ball</span><span class="grec mono">3–0</span>
+<span class="gprob mono">40%</span></div>
+<div class="gbar"><span style="width:40%"></span></div>
+<div class="cats"><span class="cats-label">4.1 cats</span><span class="cat">AST</span><span class="cat">BLK</span></div></div><div class="side fav">
+<div class="side-row"><span class="gteam">Mamuko_Tequila.mp3</span><span class="grec mono">2–1</span>
+<span class="gprob mono">60%</span></div>
+<div class="gbar"><span style="width:60%"></span></div>
+<div class="cats"><span class="cats-label">4.9 cats</span><span class="cat">3PM</span><span class="cat">TO</span><span class="cat">REB</span><span class="cat">PTS</span><span class="cat">STL</span></div></div><div class="cats toss"><span class="cats-label">Toss-ups</span><span class=cat>FG%</span><span class=cat>FT%</span></div></div><div class="game"><div class="side">
+<div class="side-row"><span class="gteam">Kyrie Me River</span><span class="grec mono">1–2</span>
+<span class="gprob mono">49%</span></div>
+<div class="gbar"><span style="width:49%"></span></div>
+<div class="cats"><span class="cats-label">4.5 cats</span><span class="cat">BLK</span><span class="cat">FG%</span><span class="cat">PTS</span><span class="cat">REB</span></div></div><div class="side fav">
+<div class="side-row"><span class="gteam">Tiltai miesteliuose</span><span class="grec mono">0–3</span>
+<span class="gprob mono">51%</span></div>
+<div class="gbar"><span style="width:51%"></span></div>
+<div class="cats"><span class="cats-label">4.5 cats</span><span class="cat">3PM</span><span class="cat">AST</span><span class="cat">STL</span></div></div><div class="cats toss"><span class="cats-label">Toss-ups</span><span class=cat>FT%</span><span class=cat>TO</span></div></div><div class="game"><div class="side fav">
+<div class="side-row"><span class="gteam">2nd cumming of Jokic</span><span class="grec mono">3–0</span>
+<span class="gprob mono">69%</span></div>
+<div class="gbar"><span style="width:69%"></span></div>
+<div class="cats"><span class="cats-label">5.4 cats</span><span class="cat">AST</span><span class="cat">FT%</span><span class="cat">FG%</span><span class="cat">REB</span><span class="cat">PTS</span><span class="cat">STL</span></div></div><div class="side">
+<div class="side-row"><span class="gteam">Ant&#x27;s kitchen</span><span class="grec mono">0–3</span>
+<span class="gprob mono">31%</span></div>
+<div class="gbar"><span style="width:31%"></span></div>
+<div class="cats"><span class="cats-label">3.6 cats</span><span class="cat">3PM</span></div></div><div class="cats toss"><span class="cats-label">Toss-ups</span><span class=cat>BLK</span><span class=cat>TO</span></div></div><div class="game"><div class="side fav">
+<div class="side-row"><span class="gteam">Traes Comas Club</span><span class="grec mono">0–3</span>
+<span class="gprob mono">53%</span></div>
+<div class="gbar"><span style="width:53%"></span></div>
+<div class="cats"><span class="cats-label">4.6 cats</span><span class="cat">FT%</span><span class="cat">3PM</span><span class="cat">AST</span><span class="cat">TO</span></div></div><div class="side">
+<div class="side-row"><span class="gteam">Discount liquors</span><span class="grec mono">1–2</span>
+<span class="gprob mono">47%</span></div>
+<div class="gbar"><span style="width:47%"></span></div>
+<div class="cats"><span class="cats-label">4.4 cats</span><span class="cat">REB</span><span class="cat">BLK</span><span class="cat">PTS</span></div></div><div class="cats toss"><span class="cats-label">Toss-ups</span><span class=cat>FG%</span><span class=cat>STL</span></div></div><div class="game"><div class="side">
+<div class="side-row"><span class="gteam">Sizzlin sons</span><span class="grec mono">2–1</span>
+<span class="gprob mono">40%</span></div>
+<div class="gbar"><span style="width:40%"></span></div>
+<div class="cats"><span class="cats-label">4.3 cats</span><span class="cat">3PM</span><span class="cat">FT%</span><span class="cat">PTS</span></div></div><div class="side fav">
+<div class="side-row"><span class="gteam">Black Zeus</span><span class="grec mono">1–2</span>
+<span class="gprob mono">60%</span></div>
+<div class="gbar"><span style="width:60%"></span></div>
+<div class="cats"><span class="cats-label">4.7 cats</span><span class="cat">FG%</span><span class="cat">BLK</span><span class="cat">STL</span><span class="cat">REB</span><span class="cat">AST</span></div></div><div class="cats toss"><span class="cats-label">Toss-ups</span><span class=cat>TO</span></div></div></div></section><section id="results"><div class="kicker">How the forecast did</div><h2>Week 3 results</h2><p class="intro">The favorite won <b>4 of 7</b> games. Upsets: Overpayed (39%), Giddey up (38%), Sizzlin sons (46%). <b>Winner's forecast</b> is the chance the winner had in the forecast made before the week.</p><div class="scroll"><table class="grid results">
+<thead><tr><th>Winner</th><th class="num">Categories</th><th>Loser</th>
+<th class="num" title="The winner's chance in the forecast made before the week">Winner's forecast</th></tr></thead>
+<tbody><tr>
+<td><span class="team winner">Džesika Shai</span></td>
+<td class="num mono score">6–3</td>
+<td><span class="team loser">Kyrie Me River</span></td>
+<td class="num mono odds" style="background:rgba(47,143,94,0.41);color:#222">60%</td>
+</tr><tr>
+<td><span class="team winner">Overpayed</span><span class="badge">Upset</span></td>
+<td class="num mono score">5–4</td>
+<td><span class="team loser">Black Zeus</span></td>
+<td class="num mono odds" style="background:rgba(47,143,94,0.28);color:#222">39%</td>
+</tr><tr>
+<td><span class="team winner">Pizza ball</span></td>
+<td class="num mono score">7–2</td>
+<td><span class="team loser">Tiltai miesteliuose</span></td>
+<td class="num mono odds" style="background:rgba(47,143,94,0.43);color:#222">62%</td>
+</tr><tr>
+<td><span class="team winner">2nd cumming of Jokic</span></td>
+<td class="num mono score">6–3</td>
+<td><span class="team loser">Discount liquors</span></td>
+<td class="num mono odds" style="background:rgba(47,143,94,0.38);color:#222">56%</td>
+</tr><tr>
+<td><span class="team winner">Lakštingala negali nečiulbėti</span></td>
+<td class="num mono score">5–4</td>
+<td><span class="team loser">Ant&#x27;s kitchen</span></td>
+<td class="num mono odds" style="background:rgba(47,143,94,0.45);color:#222">65%</td>
+</tr><tr>
+<td><span class="team winner">Giddey up</span><span class="badge">Upset</span></td>
+<td class="num mono score">6–3</td>
+<td><span class="team loser">Traes Comas Club</span></td>
+<td class="num mono odds" style="background:rgba(47,143,94,0.27);color:#222">38%</td>
+</tr><tr>
+<td><span class="team winner">Sizzlin sons</span><span class="badge">Upset</span></td>
+<td class="num mono score">8–1</td>
+<td><span class="team loser">Mamuko_Tequila.mp3</span></td>
+<td class="num mono odds" style="background:rgba(47,143,94,0.32);color:#222">46%</td>
+</tr></tbody></table></div></section><section id="week-players"><div class="kicker">Players of the week</div><h2>Week 3: who carried, who sank</h2><p class="intro">Total value in week 3 (Nov 2–Nov 8), players with at least 3 games. Value adds the 9-category score of each game; 0 is an average game of a fantasy starter. The cold list shows only players on a fantasy roster now: they cost somebody the week.</p><div class="duo"><div class="topcol hot"><h3>🔥 On fire</h3><div class="scroll"><table class="grid toplist"><thead><tr><th></th><th>Player</th><th class="num">Games</th><th class="num">Value</th></tr></thead><tbody><tr><td class="rank">1</td><td><span class="team">Victor Wembanyama</span> <span class="emo"><span title="the week&#x27;s best">🐐</span><span title="value +3 or more">🔥</span></span><div class="sub">Overpayed</div><div class="sub">30.8 pts, 14.0 reb, 3.0 ast</div></td><td class="num mono">4</td><td class="num mono big pos">+5.3</td></tr><tr><td class="rank">2</td><td><span class="team">Luka Dončić</span> <span class="emo"><span title="value +3 or more">🔥</span></span><div class="sub">Mamuko_Tequila.mp3</div><div class="sub">45.0 pts, 7.0 reb, 8.3 ast</div></td><td class="num mono">3</td><td class="num mono big pos">+4.1</td></tr><tr><td class="rank">3</td><td><span class="team">Nikola Jokić</span> <span class="emo"><span title="value +3 or more">🔥</span></span><div class="sub">2nd cumming of Jokic</div><div class="sub">25.7 pts, 10.7 reb, 9.0 ast</div></td><td class="num mono">3</td><td class="num mono big pos">+3.8</td></tr><tr><td class="rank">4</td><td><span class="team">Stephen Curry</span> <span class="emo"><span title="value +3 or more">🔥</span></span><div class="sub">Ant&#x27;s kitchen</div><div class="sub">34.7 pts, 4.3 reb, 5.7 ast</div></td><td class="num mono">3</td><td class="num mono big pos">+3.4</td></tr><tr><td class="rank">5</td><td><span class="team">Miles Bridges</span> <span class="emo"><span title="value +3 or more">🔥</span></span><div class="sub">Sizzlin sons</div><div class="sub">17.5 pts, 9.0 reb, 5.0 ast</div></td><td class="num mono">4</td><td class="num mono big pos">+3.2</td></tr><tr><td class="rank">6</td><td><span class="team">Shai Gilgeous-Alexander</span><div class="sub">Džesika Shai</div><div class="sub">35.8 pts, 3.0 reb, 7.2 ast</div></td><td class="num mono">4</td><td class="num mono big pos">+2.6</td></tr><tr><td class="rank">7</td><td><span class="team">Onyeka Okongwu</span><div class="sub">Lakštingala negali nečiulbėti</div><div class="sub">16.2 pts, 9.5 reb, 3.2 ast</div></td><td class="num mono">4</td><td class="num mono big pos">+2.4</td></tr><tr><td class="rank">8</td><td><span class="team">Kyshawn George</span><div class="sub">Pizza ball</div><div class="sub">23.5 pts, 4.8 reb, 6.5 ast</div></td><td class="num mono">4</td><td class="num mono big pos">+2.3</td></tr><tr><td class="rank">9</td><td><span class="team">Jayson Tatum</span> <span class="emo"><span title="under 40% shooting (30+ shots)">🧱</span></span><div class="sub">Giddey up</div><div class="sub">24.7 pts, 6.0 reb, 8.0 ast</div></td><td class="num mono">3</td><td class="num mono big pos">+2.2</td></tr><tr><td class="rank">10</td><td><span class="team">Cade Cunningham</span><div class="sub">Sizzlin sons</div><div class="sub">24.3 pts, 5.3 reb, 8.7 ast</div></td><td class="num mono">3</td><td class="num mono big pos">+2.2</td></tr></tbody></table></div></div><div class="topcol cold"><h3>🥶 Ice cold</h3><div class="scroll"><table class="grid toplist"><thead><tr><th></th><th>Player</th><th class="num">Games</th><th class="num">Value</th></tr></thead><tbody><tr><td class="rank">1</td><td><span class="team">Isaiah Collier</span> <span class="emo"><span title="the week&#x27;s worst">💀</span><span title="value −3 or less">🥶</span></span><div class="sub">Black Zeus</div><div class="sub">4.2 pts, 2.5 reb, 1.8 ast</div></td><td class="num mono">4</td><td class="num mono big neg">−3.5</td></tr><tr><td class="rank">2</td><td><span class="team">Herbert Jones</span> <span class="emo"><span title="value −3 or less">🥶</span></span><div class="sub">Traes Comas Club</div><div class="sub">3.8 pts, 3.2 reb, 1.2 ast</div></td><td class="num mono">4</td><td class="num mono big neg">−3.4</td></tr><tr><td class="rank">3</td><td><span class="team">Kel&#x27;el Ware</span> <span class="emo"><span title="value −3 or less">🥶</span></span><div class="sub">Tiltai miesteliuose</div><div class="sub">2.0 pts, 4.2 reb, 0.5 ast</div></td><td class="num mono">4</td><td class="num mono big neg">−3.3</td></tr><tr><td class="rank">4</td><td><span class="team">Coby White</span> <span class="emo"><span title="value −3 or less">🥶</span></span><div class="sub">Lakštingala negali nečiulbėti</div><div class="sub">6.0 pts, 2.0 reb, 2.0 ast</div></td><td class="num mono">3</td><td class="num mono big neg">−3.3</td></tr><tr><td class="rank">5</td><td><span class="team">Toumani Camara</span> <span class="emo"><span title="value −3 or less">🥶</span></span><div class="sub">Ant&#x27;s kitchen</div><div class="sub">10.5 pts, 4.8 reb, 1.0 ast</div></td><td class="num mono">4</td><td class="num mono big neg">−3.2</td></tr><tr><td class="rank">6</td><td><span class="team">Bobby Portis Jr.</span><div class="sub">Kyrie Me River</div><div class="sub">2.5 pts, 4.8 reb, 2.0 ast</div></td><td class="num mono">4</td><td class="num mono big neg">−3.0</td></tr><tr><td class="rank">7</td><td><span class="team">Rudy Gobert</span><div class="sub">Black Zeus</div><div class="sub">9.0 pts, 11.8 reb, 1.2 ast</div></td><td class="num mono">4</td><td class="num mono big neg">−2.9</td></tr><tr><td class="rank">8</td><td><span class="team">Andrew Wiggins</span><div class="sub">Ant&#x27;s kitchen</div><div class="sub">4.5 pts, 3.2 reb, 2.0 ast</div></td><td class="num mono">4</td><td class="num mono big neg">−2.9</td></tr><tr><td class="rank">9</td><td><span class="team">Ja&#x27;Kobe Walter</span><div class="sub">Kyrie Me River</div><div class="sub">8.3 pts, 4.3 reb, 3.0 ast</div></td><td class="num mono">3</td><td class="num mono big neg">−2.8</td></tr><tr><td class="rank">10</td><td><span class="team">Collin Sexton</span><div class="sub">Sizzlin sons</div><div class="sub">8.2 pts, 1.5 reb, 2.2 ast</div></td><td class="num mono">4</td><td class="num mono big neg">−2.7</td></tr></tbody></table></div></div></div><p class="legend"><span>🐐 the week&#x27;s best</span> <span>🔥 value +3 or more</span> <span>💀 the week&#x27;s worst</span> <span>🥶 value −3 or less</span> <span>🧱 under 40% shooting (30+ shots)</span></p></section><section id="statlines"><div class="kicker">Stat lines</div><h2>Week 3: box score heroes and horrors</h2><p class="intro">Single games of week 3 (Nov 2–Nov 8) with at least 20 minutes, by the same 9-category value. The ugly list shows only players on a fantasy roster now.</p><div class="duo"><div class="topcol hot"><h3>🔥 Monster games</h3><div class="scroll"><table class="grid toplist"><thead><tr><th></th><th>Game</th><th class="num">Value</th></tr></thead><tbody><tr><td class="rank">1</td><td><span class="team">Victor Wembanyama</span> <span class="emo"><span title="40+ points">🔥</span><span title="5+ blocks">🚫</span></span><div class="sub">Nov 4 · SAS vs. DAL · Overpayed</div><div class="statline mono"><div class="counts"><span><b>52</b> pts</span><span><b>24</b> reb</span><span><b>2</b> ast</span><span><b>2</b> stl</span><span><b>8</b> blk</span><span><b>1</b> 3pm</span></div><div class="shots"><span><b>16/28</b> FG</span><span><b>19/23</b> FT</span><span><b>1</b> TO</span></div></div></td><td class="num mono big pos">+3.6</td></tr><tr><td class="rank">2</td><td><span class="team">Luka Dončić</span> <span class="emo"><span title="40+ points">🔥</span><span title="5+ threes">🎯</span></span><div class="sub">Nov 2 · LAL vs. MIA · Mamuko_Tequila.mp3</div><div class="statline mono"><div class="counts"><span><b>42</b> pts</span><span><b>7</b> reb</span><span><b>13</b> ast</span><span><b>2</b> stl</span><span class=zero><b>0</b> blk</span><span><b>6</b> 3pm</span></div><div class="shots"><span><b>14/24</b> FG</span><span><b>8/10</b> FT</span><span><b>2</b> TO</span></div></div></td><td class="num mono big pos">+1.9</td></tr><tr><td class="rank">3</td><td><span class="team">Kevin Huerter</span> <span class="emo"><span title="5+ blocks">🚫</span></span><div class="sub">Nov 8 · DET vs. LAL · Free agent</div><div class="statline mono"><div class="counts"><span><b>24</b> pts</span><span><b>5</b> reb</span><span><b>5</b> ast</span><span><b>2</b> stl</span><span><b>5</b> blk</span><span><b>4</b> 3pm</span></div><div class="shots"><span><b>9/14</b> FG</span><span><b>2/3</b> FT</span><span><b>1</b> TO</span></div></div></td><td class="num mono big pos">+1.8</td></tr><tr><td class="rank">4</td><td><span class="team">Jayson Tatum</span> <span class="emo"><span title="5+ threes">🎯</span><span title="perfect free throws (8+)">💯</span></span><div class="sub">Nov 6 · BOS @ CHA · Giddey up</div><div class="statline mono"><div class="counts"><span><b>34</b> pts</span><span><b>8</b> reb</span><span><b>9</b> ast</span><span><b>1</b> stl</span><span><b>1</b> blk</span><span><b>5</b> 3pm</span></div><div class="shots"><span><b>9/16</b> FG</span><span><b>11/11</b> FT</span><span><b>4</b> TO</span></div></div></td><td class="num mono big pos">+1.8</td></tr><tr><td class="rank">5</td><td><span class="team">Cade Cunningham</span> <span class="emo"><span title="4+ steals">🥷</span></span><div class="sub">Nov 2 · DET @ CHA · Sizzlin sons</div><div class="statline mono"><div class="counts"><span><b>33</b> pts</span><span><b>5</b> reb</span><span><b>7</b> ast</span><span><b>5</b> stl</span><span class=zero><b>0</b> blk</span><span><b>4</b> 3pm</span></div><div class="shots"><span><b>13/20</b> FG</span><span><b>3/4</b> FT</span><span><b>3</b> TO</span></div></div></td><td class="num mono big pos">+1.7</td></tr><tr><td class="rank">6</td><td><span class="team">Nikola Jokić</span> <span class="emo"><span title="triple-double">👑</span></span><div class="sub">Nov 4 · DEN vs. TOR · 2nd cumming of Jokic</div><div class="statline mono"><div class="counts"><span><b>32</b> pts</span><span><b>10</b> reb</span><span><b>11</b> ast</span><span><b>3</b> stl</span><span class=zero><b>0</b> blk</span><span class=zero><b>0</b> 3pm</span></div><div class="shots"><span><b>13/19</b> FG</span><span><b>6/7</b> FT</span><span><b>2</b> TO</span></div></div></td><td class="num mono big pos">+1.7</td></tr><tr><td class="rank">7</td><td><span class="team">Stephen Curry</span> <span class="emo"><span title="40+ points">🔥</span><span title="5+ threes">🎯</span><span title="perfect free throws (8+)">💯</span></span><div class="sub">Nov 7 · GSW vs. ORL · Ant&#x27;s kitchen</div><div class="statline mono"><div class="counts"><span><b>41</b> pts</span><span><b>6</b> reb</span><span><b>6</b> ast</span><span class=zero><b>0</b> stl</span><span class=zero><b>0</b> blk</span><span><b>5</b> 3pm</span></div><div class="shots"><span><b>13/19</b> FG</span><span><b>10/10</b> FT</span><span><b>3</b> TO</span></div></div></td><td class="num mono big pos">+1.6</td></tr><tr><td class="rank">8</td><td><span class="team">Alperen Sengun</span><div class="sub">Nov 2 · HOU vs. BOS · Ant&#x27;s kitchen</div><div class="statline mono"><div class="counts"><span><b>26</b> pts</span><span><b>7</b> reb</span><span><b>10</b> ast</span><span><b>2</b> stl</span><span><b>2</b> blk</span><span><b>1</b> 3pm</span></div><div class="shots"><span><b>12/15</b> FG</span><span><b>1/2</b> FT</span><span><b>1</b> TO</span></div></div></td><td class="num mono big pos">+1.6</td></tr><tr><td class="rank">9</td><td><span class="team">Jamal Murray</span> <span class="emo"><span title="perfect free throws (8+)">💯</span></span><div class="sub">Nov 2 · DEN vs. POR · Pizza ball</div><div class="statline mono"><div class="counts"><span><b>35</b> pts</span><span><b>5</b> reb</span><span><b>6</b> ast</span><span><b>1</b> stl</span><span><b>1</b> blk</span><span><b>4</b> 3pm</span></div><div class="shots"><span><b>10/19</b> FG</span><span><b>11/11</b> FT</span><span><b>2</b> TO</span></div></div></td><td class="num mono big pos">+1.5</td></tr><tr><td class="rank">10</td><td><span class="team">Nikola Jokić</span> <span class="emo"><span title="4+ steals">🥷</span></span><div class="sub">Nov 2 · DEN vs. POR · 2nd cumming of Jokic</div><div class="statline mono"><div class="counts"><span><b>26</b> pts</span><span><b>9</b> reb</span><span><b>8</b> ast</span><span><b>4</b> stl</span><span><b>1</b> blk</span><span><b>2</b> 3pm</span></div><div class="shots"><span><b>10/22</b> FG</span><span><b>4/4</b> FT</span><span><b>2</b> TO</span></div></div></td><td class="num mono big pos">+1.5</td></tr></tbody></table></div></div><div class="topcol cold"><h3>💀 Ugly games</h3><div class="scroll"><table class="grid toplist"><thead><tr><th></th><th>Game</th><th class="num">Value</th></tr></thead><tbody><tr><td class="rank">1</td><td><span class="team">Rudy Gobert</span> <span class="emo"><span title="free throws 50% or worse (6+)">🤢</span></span><div class="sub">Nov 2 · MIN vs. MIL · Black Zeus</div><div class="statline mono"><div class="counts"><span><b>10</b> pts</span><span><b>10</b> reb</span><span><b>1</b> ast</span><span class=zero><b>0</b> stl</span><span><b>1</b> blk</span><span class=zero><b>0</b> 3pm</span></div><div class="shots"><span><b>3/6</b> FG</span><span><b>4/12</b> FT</span><span class=zero><b>0</b> TO</span></div></div></td><td class="num mono big neg">−1.7</td></tr><tr><td class="rank">2</td><td><span class="team">Toumani Camara</span> <span class="emo"><span title="free throws 50% or worse (6+)">🤢</span></span><div class="sub">Nov 4 · POR @ PHX · Ant&#x27;s kitchen</div><div class="statline mono"><div class="counts"><span><b>11</b> pts</span><span><b>4</b> reb</span><span><b>2</b> ast</span><span class=zero><b>0</b> stl</span><span class=zero><b>0</b> blk</span><span><b>1</b> 3pm</span></div><div class="shots"><span><b>4/9</b> FG</span><span><b>2/6</b> FT</span><span><b>2</b> TO</span></div></div></td><td class="num mono big neg">−1.5</td></tr><tr><td class="rank">3</td><td><span class="team">Jonathan Kuminga</span> <span class="emo"><span title="5 points or fewer">👻</span></span><div class="sub">Nov 8 · MIN vs. UTA · Overpayed</div><div class="statline mono"><div class="counts"><span><b>4</b> pts</span><span class=zero><b>0</b> reb</span><span class=zero><b>0</b> ast</span><span class=zero><b>0</b> stl</span><span class=zero><b>0</b> blk</span><span class=zero><b>0</b> 3pm</span></div><div class="shots"><span><b>2/5</b> FG</span><span class=zero><b>0/0</b> FT</span><span><b>3</b> TO</span></div></div></td><td class="num mono big neg">−1.3</td></tr><tr><td class="rank">4</td><td><span class="team">AJ Dybantsa</span> <span class="emo"><span title="under 35% shooting (10+ shots)">🧱</span></span><div class="sub">Nov 4 · WAS vs. ATL · Mamuko_Tequila.mp3</div><div class="statline mono"><div class="counts"><span><b>9</b> pts</span><span><b>6</b> reb</span><span><b>3</b> ast</span><span class=zero><b>0</b> stl</span><span class=zero><b>0</b> blk</span><span class=zero><b>0</b> 3pm</span></div><div class="shots"><span><b>4/12</b> FG</span><span><b>1/4</b> FT</span><span class=zero><b>0</b> TO</span></div></div></td><td class="num mono big neg">−1.3</td></tr><tr><td class="rank">5</td><td><span class="team">Brandon Miller</span> <span class="emo"><span title="under 35% shooting (10+ shots)">🧱</span></span><div class="sub">Nov 4 · CHA @ BKN · Lakštingala negali nečiulbėti</div><div class="statline mono"><div class="counts"><span><b>10</b> pts</span><span><b>4</b> reb</span><span><b>1</b> ast</span><span class=zero><b>0</b> stl</span><span class=zero><b>0</b> blk</span><span><b>1</b> 3pm</span></div><div class="shots"><span><b>2/15</b> FG</span><span><b>5/5</b> FT</span><span><b>3</b> TO</span></div></div></td><td class="num mono big neg">−1.3</td></tr><tr><td class="rank">6</td><td><span class="team">Payton Pritchard</span> <span class="emo"><span title="5 points or fewer">👻</span></span><div class="sub">Nov 2 · BOS @ HOU · Traes Comas Club</div><div class="statline mono"><div class="counts"><span><b>4</b> pts</span><span><b>3</b> reb</span><span><b>3</b> ast</span><span><b>1</b> stl</span><span class=zero><b>0</b> blk</span><span class=zero><b>0</b> 3pm</span></div><div class="shots"><span><b>0/7</b> FG</span><span><b>4/6</b> FT</span><span><b>1</b> TO</span></div></div></td><td class="num mono big neg">−1.2</td></tr><tr><td class="rank">7</td><td><span class="team">Caleb Wilson</span> <span class="emo"><span title="under 35% shooting (10+ shots)">🧱</span><span title="5 points or fewer">👻</span></span><div class="sub">Nov 4 · CHI @ NYK · Discount liquors</div><div class="statline mono"><div class="counts"><span><b>5</b> pts</span><span><b>5</b> reb</span><span class=zero><b>0</b> ast</span><span><b>1</b> stl</span><span class=zero><b>0</b> blk</span><span><b>1</b> 3pm</span></div><div class="shots"><span><b>2/12</b> FG</span><span class=zero><b>0/0</b> FT</span><span><b>3</b> TO</span></div></div></td><td class="num mono big neg">−1.2</td></tr><tr><td class="rank">8</td><td><span class="team">Landry Shamet</span><div class="sub">Nov 4 · NYK vs. CHI · Tiltai miesteliuose</div><div class="statline mono"><div class="counts"><span><b>7</b> pts</span><span><b>2</b> reb</span><span><b>2</b> ast</span><span class=zero><b>0</b> stl</span><span class=zero><b>0</b> blk</span><span><b>1</b> 3pm</span></div><div class="shots"><span><b>3/7</b> FG</span><span><b>0/2</b> FT</span><span><b>1</b> TO</span></div></div></td><td class="num mono big neg">−1.2</td></tr><tr><td class="rank">9</td><td><span class="team">Jonathan Kuminga</span> <span class="emo"><span title="free throws 50% or worse (6+)">🤢</span></span><div class="sub">Nov 6 · MIN @ NOP · Overpayed</div><div class="statline mono"><div class="counts"><span><b>17</b> pts</span><span><b>8</b> reb</span><span><b>4</b> ast</span><span><b>1</b> stl</span><span class=zero><b>0</b> blk</span><span><b>1</b> 3pm</span></div><div class="shots"><span><b>5/12</b> FG</span><span><b>6/12</b> FT</span><span><b>2</b> TO</span></div></div></td><td class="num mono big neg">−1.2</td></tr><tr><td class="rank">10</td><td><span class="team">Norman Powell</span> <span class="emo"><span title="under 35% shooting (10+ shots)">🧱</span></span><div class="sub">Nov 4 · CHI @ NYK · Traes Comas Club</div><div class="statline mono"><div class="counts"><span><b>12</b> pts</span><span><b>1</b> reb</span><span><b>1</b> ast</span><span class=zero><b>0</b> stl</span><span class=zero><b>0</b> blk</span><span class=zero><b>0</b> 3pm</span></div><div class="shots"><span><b>3/12</b> FG</span><span><b>6/7</b> FT</span><span><b>2</b> TO</span></div></div></td><td class="num mono big neg">−1.2</td></tr></tbody></table></div></div></div><p class="legend"><span>🔥 40+ points</span> <span>👑 triple-double</span> <span>🎯 5+ threes</span> <span>🚫 5+ blocks</span> <span>🥷 4+ steals</span> <span>💯 perfect free throws (8+)</span> <span>🧱 under 35% shooting (10+ shots)</span> <span>🤢 free throws 50% or worse (6+)</span> <span>🗑️ 5+ turnovers</span> <span>👻 5 points or fewer</span></p></section><section id="categories"><div class="kicker">How each team wins</div><h2>Category strengths</h2><p class="intro">Chance to win each category in an average week against an average opponent. Green is a strength, orange is a weakness.</p><div class="scroll"><table class="grid"><thead><tr><th>Team</th><th class="num">FG%</th><th class="num">FT%</th><th class="num">3PM</th><th class="num">PTS</th><th class="num">REB</th><th class="num">AST</th><th class="num">STL</th><th class="num">BLK</th><th class="num">TO</th></tr></thead><tbody><tr><td><span class="team">Pizza ball</span><div class="sub">Strong: AST, PTS</div></td><td class="num mono" style="background:rgba(47,143,94,0.09)">52%</td><td class="num mono" style="background:rgba(47,143,94,0.16)">55%</td><td class="num mono" style="background:rgba(47,143,94,0.18)">57%</td><td class="num mono" style="background:rgba(47,143,94,0.28)">62%</td><td class="num mono" style="background:rgba(47,143,94,0.15)">55%</td><td class="num mono" style="background:rgba(47,143,94,0.49)">73%</td><td class="num mono" style="background:rgba(232,116,59,0.41)">31%</td><td class="num mono" style="background:rgba(232,116,59,0.18)">44%</td><td class="num mono" style="background:rgba(232,116,59,0.48)">27%</td></tr><tr><td><span class="team">2nd cumming of Jokic</span><div class="sub">Strong: FG%, BLK, REB</div></td><td class="num mono" style="background:rgba(47,143,94,0.61)">81%</td><td class="num mono" style="background:rgba(232,116,59,0.10)">48%</td><td class="num mono" style="background:rgba(232,116,59,0.38)">33%</td><td class="num mono" style="background:rgba(232,116,59,0.13)">46%</td><td class="num mono" style="background:rgba(47,143,94,0.38)">68%</td><td class="num mono" style="background:rgba(47,143,94,0.12)">53%</td><td class="num mono" style="background:rgba(232,116,59,0.18)">44%</td><td class="num mono" style="background:rgba(47,143,94,0.43)">70%</td><td class="num mono" style="background:rgba(47,143,94,0.23)">59%</td></tr><tr><td><span class="team">Overpayed</span><div class="sub">Strong: BLK, REB, FG%</div></td><td class="num mono" style="background:rgba(47,143,94,0.53)">76%</td><td class="num mono" style="background:rgba(232,116,59,0.61)">16%</td><td class="num mono" style="background:rgba(232,116,59,0.61)">11%</td><td class="num mono" style="background:rgba(232,116,59,0.56)">23%</td><td class="num mono" style="background:rgba(47,143,94,0.61)">86%</td><td class="num mono" style="background:rgba(232,116,59,0.15)">45%</td><td class="num mono" style="background:rgba(47,143,94,0.49)">74%</td><td class="num mono" style="background:rgba(47,143,94,0.61)">90%</td><td class="num mono" style="background:rgba(47,143,94,0.36)">66%</td></tr><tr><td><span class="team">Lakštingala negali nečiulbėti</span><div class="sub">Strong: PTS, 3PM, FT%</div></td><td class="num mono" style="background:rgba(232,116,59,0.24)">40%</td><td class="num mono" style="background:rgba(47,143,94,0.22)">59%</td><td class="num mono" style="background:rgba(47,143,94,0.37)">67%</td><td class="num mono" style="background:rgba(47,143,94,0.40)">69%</td><td class="num mono" style="background:rgba(232,116,59,0.07)">50%</td><td class="num mono" style="background:rgba(232,116,59,0.06)">50%</td><td class="num mono" style="background:rgba(232,116,59,0.31)">36%</td><td class="num mono" style="background:rgba(232,116,59,0.17)">44%</td><td class="num mono" style="background:rgba(232,116,59,0.61)">19%</td></tr><tr><td><span class="team">Sizzlin sons</span><div class="sub">Strong: 3PM, PTS, REB</div></td><td class="num mono" style="background:rgba(232,116,59,0.44)">29%</td><td class="num mono" style="background:rgba(47,143,94,0.10)">52%</td><td class="num mono" style="background:rgba(47,143,94,0.35)">66%</td><td class="num mono" style="background:rgba(47,143,94,0.31)">64%</td><td class="num mono" style="background:rgba(47,143,94,0.30)">63%</td><td class="num mono" style="background:rgba(47,143,94,0.22)">59%</td><td class="num mono" style="background:rgba(232,116,59,0.22)">41%</td><td class="num mono" style="background:rgba(232,116,59,0.24)">40%</td><td class="num mono" style="background:rgba(232,116,59,0.31)">36%</td></tr><tr><td><span class="team">Džesika Shai</span><div class="sub">Strong: FT%, PTS</div></td><td class="num mono" style="background:rgba(47,143,94,0.14)">55%</td><td class="num mono" style="background:rgba(47,143,94,0.50)">74%</td><td class="num mono" style="background:rgba(232,116,59,0.45)">29%</td><td class="num mono" style="background:rgba(47,143,94,0.31)">63%</td><td class="num mono" style="background:rgba(232,116,59,0.08)">49%</td><td class="num mono" style="background:rgba(232,116,59,0.20)">42%</td><td class="num mono" style="background:rgba(232,116,59,0.10)">48%</td><td class="num mono" style="background:rgba(232,116,59,0.18)">43%</td><td class="num mono" style="background:rgba(47,143,94,0.15)">55%</td></tr><tr><td><span class="team">Giddey up</span><div class="sub">Strong: STL, BLK, 3PM</div></td><td class="num mono" style="background:rgba(232,116,59,0.61)">16%</td><td class="num mono" style="background:rgba(47,143,94,0.11)">53%</td><td class="num mono" style="background:rgba(47,143,94,0.33)">65%</td><td class="num mono" style="background:rgba(232,116,59,0.43)">30%</td><td class="num mono" style="background:rgba(232,116,59,0.36)">34%</td><td class="num mono" style="background:rgba(47,143,94,0.12)">53%</td><td class="num mono" style="background:rgba(47,143,94,0.48)">73%</td><td class="num mono" style="background:rgba(47,143,94,0.36)">66%</td><td class="num mono" style="background:rgba(47,143,94,0.06)">50%</td></tr><tr><td><span class="team">Mamuko_Tequila.mp3</span><div class="sub">Strong: 3PM, PTS, REB</div></td><td class="num mono" style="background:rgba(232,116,59,0.08)">49%</td><td class="num mono" style="background:rgba(47,143,94,0.20)">57%</td><td class="num mono" style="background:rgba(47,143,94,0.61)">84%</td><td class="num mono" style="background:rgba(47,143,94,0.46)">72%</td><td class="num mono" style="background:rgba(47,143,94,0.42)">70%</td><td class="num mono" style="background:rgba(232,116,59,0.27)">38%</td><td class="num mono" style="background:rgba(232,116,59,0.23)">41%</td><td class="num mono" style="background:rgba(232,116,59,0.59)">21%</td><td class="num mono" style="background:rgba(47,143,94,0.07)">51%</td></tr><tr><td><span class="team">Kyrie Me River</span><div class="sub">Strong: TO, FT%</div></td><td class="num mono" style="background:rgba(47,143,94,0.20)">58%</td><td class="num mono" style="background:rgba(47,143,94,0.30)">63%</td><td class="num mono" style="background:rgba(232,116,59,0.30)">37%</td><td class="num mono" style="background:rgba(232,116,59,0.10)">48%</td><td class="num mono" style="background:rgba(232,116,59,0.43)">30%</td><td class="num mono" style="background:rgba(232,116,59,0.48)">27%</td><td class="num mono" style="background:rgba(232,116,59,0.48)">27%</td><td class="num mono" style="background:rgba(232,116,59,0.10)">48%</td><td class="num mono" style="background:rgba(47,143,94,0.43)">70%</td></tr><tr><td><span class="team">Black Zeus</span><div class="sub">Strong: FG%, REB, BLK</div></td><td class="num mono" style="background:rgba(47,143,94,0.61)">93%</td><td class="num mono" style="background:rgba(232,116,59,0.61)">2%</td><td class="num mono" style="background:rgba(232,116,59,0.61)">3%</td><td class="num mono" style="background:rgba(232,116,59,0.30)">37%</td><td class="num mono" style="background:rgba(47,143,94,0.58)">78%</td><td class="num mono" style="background:rgba(47,143,94,0.43)">70%</td><td class="num mono" style="background:rgba(47,143,94,0.39)">68%</td><td class="num mono" style="background:rgba(47,143,94,0.48)">73%</td><td class="num mono" style="background:rgba(232,116,59,0.18)">43%</td></tr><tr><td><span class="team">Discount liquors</span><div class="sub">Strong: STL, PTS</div></td><td class="num mono" style="background:rgba(232,116,59,0.44)">29%</td><td class="num mono" style="background:rgba(232,116,59,0.27)">38%</td><td class="num mono" style="background:rgba(232,116,59,0.09)">48%</td><td class="num mono" style="background:rgba(47,143,94,0.34)">65%</td><td class="num mono" style="background:rgba(232,116,59,0.29)">38%</td><td class="num mono" style="background:rgba(232,116,59,0.13)">46%</td><td class="num mono" style="background:rgba(47,143,94,0.47)">72%</td><td class="num mono" style="background:rgba(47,143,94,0.12)">53%</td><td class="num mono" style="background:rgba(232,116,59,0.22)">41%</td></tr><tr><td><span class="team">Traes Comas Club</span><div class="sub">Strong: 3PM, FT%, AST</div></td><td class="num mono" style="background:rgba(232,116,59,0.54)">24%</td><td class="num mono" style="background:rgba(47,143,94,0.61)">87%</td><td class="num mono" style="background:rgba(47,143,94,0.61)">88%</td><td class="num mono" style="background:rgba(47,143,94,0.12)">53%</td><td class="num mono" style="background:rgba(232,116,59,0.61)">6%</td><td class="num mono" style="background:rgba(47,143,94,0.42)">70%</td><td class="num mono" style="background:rgba(47,143,94,0.36)">66%</td><td class="num mono" style="background:rgba(232,116,59,0.61)">15%</td><td class="num mono" style="background:rgba(47,143,94,0.10)">52%</td></tr><tr><td><span class="team">Ant&#x27;s kitchen</span><div class="sub">Strong: BLK, FG%, TO</div></td><td class="num mono" style="background:rgba(47,143,94,0.32)">64%</td><td class="num mono" style="background:rgba(232,116,59,0.45)">29%</td><td class="num mono" style="background:rgba(232,116,59,0.08)">49%</td><td class="num mono" style="background:rgba(232,116,59,0.33)">35%</td><td class="num mono" style="background:rgba(47,143,94,0.08)">51%</td><td class="num mono" style="background:rgba(232,116,59,0.54)">24%</td><td class="num mono" style="background:rgba(232,116,59,0.37)">33%</td><td class="num mono" style="background:rgba(47,143,94,0.38)">68%</td><td class="num mono" style="background:rgba(47,143,94,0.29)">62%</td></tr><tr><td><span class="team">Tiltai miesteliuose</span><div class="sub">Strong: TO, FT%, 3PM</div></td><td class="num mono" style="background:rgba(232,116,59,0.33)">35%</td><td class="num mono" style="background:rgba(47,143,94,0.36)">66%</td><td class="num mono" style="background:rgba(47,143,94,0.32)">64%</td><td class="num mono" style="background:rgba(232,116,59,0.37)">33%</td><td class="num mono" style="background:rgba(232,116,59,0.54)">24%</td><td class="num mono" style="background:rgba(232,116,59,0.09)">49%</td><td class="num mono" style="background:rgba(232,116,59,0.13)">46%</td><td class="num mono" style="background:rgba(232,116,59,0.52)">25%</td><td class="num mono" style="background:rgba(47,143,94,0.37)">67%</td></tr></tbody></table></div></section><section id="teams"><div class="kicker">Team by team</div><h2>Power rankings</h2><p class="intro">Teams in order of projected wins, with the change since last week. Each team gets its most unusual facts this week, compared with the other 13 teams. The chips show how often a team wins each category against the league (green: most weeks).</p><ol class="ranks"><li class="rk-row">
+<div class="rk"><span class="rk-num">1</span><span class="rk-move flat">–</span></div>
+<div class="rk-body">
+<div class="rk-head"><span class="card-name">2nd cumming of Jokic</span><span class="grec mono">3–0</span></div>
+<p class="rk-headline">Still unbeaten. Big favorite this week against Ant&#x27;s kitchen (69%).</p>
+<div class="rk-stats mono"><span>playoffs 97% <span class="chg up">▲ 1</span> <svg class="spark" width="60" height="18" viewBox="-2 0 60 18" aria-hidden="true"><line x1="0" x2="56" y1="9.0" y2="9.0" class="spark-mid"/><polyline points="0.0,6.8 18.7,6.2 37.3,2.5 56.0,2.4" fill="none" stroke="rgb(47,143,94)" stroke-width="2"/><circle cx="56.0" cy="2.4" r="2.5" fill="rgb(47,143,94)"/></svg></span>
+<span>proj. 11.5–5.5</span><span>week 4 vs Ant&#x27;s kitchen 69%</span></div>
+<div class="chips"><span class="chip" style="background:rgba(47,143,94,0.61)">FG%</span><span class="chip" style="background:rgba(232,116,59,0.10)">FT%</span><span class="chip" style="background:rgba(232,116,59,0.38)">3PM</span><span class="chip" style="background:rgba(232,116,59,0.13)">PTS</span><span class="chip" style="background:rgba(47,143,94,0.38)">REB</span><span class="chip" style="background:rgba(47,143,94,0.12)">AST</span><span class="chip" style="background:rgba(232,116,59,0.18)">STL</span><span class="chip" style="background:rgba(47,143,94,0.43)">BLK</span><span class="chip" style="background:rgba(47,143,94,0.23)">TO</span></div>
+<ul class="facts"><li><b>2nd-luckiest record</b>: 1.3 wins more than the forecasts gave it.</li><li><b>2nd-fewest player games this week</b>: 40 games for its healthy players.</li><li><b>Best auction buy</b>: Walker Kessler cost $24 at the auction and is worth $44 now.</li></ul>
+<details><summary>More</summary><ul class="notes"><li><b>Injuries</b> Out: Lauri Markkanen, Morez Johnson Jr.</li><li><b>Best players</b> Nikola Jokić, Walker Kessler, Ty Jerome.</li><li><b>Categories</b> Wins FG%, BLK, REB, TO most weeks. Toss-ups: AST (53%), FT% (48%), PTS (46%), STL (44%). Punts 3PM.</li><li><b>Since the draft</b> Added Cam Spencer, Max Strus, Draymond Green, Morez Johnson Jr. Gone: Aaron Nesmith, Bennedict Mathurin, Reed Sheppard.</li><li><b>Best matchup</b> Kyrie Me River: 71% win chance.</li><li><b>Worst matchup</b> Traes Comas Club: 48% win chance.</li><li><b>Unusually strong vs</b> Overpayed: 57% win chance; the overall strength of the two teams gives 48%. Against them: 3PM 86% (usually 33%), FT% 87% (usually 48%).</li><li><b>Unusually weak vs</b> Sizzlin sons: 55% win chance; the overall strength of the two teams gives 58%. Against them: 3PM 14% (usually 33%), PTS 33% (usually 46%).</li></ul></details>
+</div></li><li class="rk-row">
+<div class="rk"><span class="rk-num">2</span><span class="rk-move up">▲2</span></div>
+<div class="rk-body">
+<div class="rk-head"><span class="card-name">Overpayed</span><span class="grec mono">2–1</span></div>
+<p class="rk-headline">Beat Black Zeus 5–4 with only a 39% chance.</p>
+<div class="rk-stats mono"><span>playoffs 91% <span class="chg up">▲ 7</span> <svg class="spark" width="60" height="18" viewBox="-2 0 60 18" aria-hidden="true"><line x1="0" x2="56" y1="9.0" y2="9.0" class="spark-mid"/><polyline points="0.0,9.6 18.7,10.9 37.3,4.2 56.0,3.3" fill="none" stroke="rgb(47,143,94)" stroke-width="2"/><circle cx="56.0" cy="3.3" r="2.5" fill="rgb(47,143,94)"/></svg></span>
+<span>proj. 10.6–6.4</span><span>week 4 vs Giddey up 58%</span></div>
+<div class="chips"><span class="chip" style="background:rgba(47,143,94,0.53)">FG%</span><span class="chip" style="background:rgba(232,116,59,0.61)">FT%</span><span class="chip" style="background:rgba(232,116,59,0.61)">3PM</span><span class="chip" style="background:rgba(232,116,59,0.56)">PTS</span><span class="chip" style="background:rgba(47,143,94,0.61)">REB</span><span class="chip" style="background:rgba(232,116,59,0.15)">AST</span><span class="chip" style="background:rgba(47,143,94,0.49)">STL</span><span class="chip" style="background:rgba(47,143,94,0.61)">BLK</span><span class="chip" style="background:rgba(47,143,94,0.36)">TO</span></div>
+<ul class="facts"><li><b>Fewest player games this week</b>: 37 games for its healthy players.</li><li><b>3rd-luckiest record</b>: 0.7 wins more than the forecasts gave it.</li><li><b>2nd-tallest roster</b>: 6′8″ on average.</li></ul>
+<details><summary>More</summary><ul class="notes"><li><b>Injuries</b> Out: Josh Hart, Precious Achiuwa.</li><li><b>Best players</b> Victor Wembanyama, Dyson Daniels, Donovan Clingan.</li><li><b>Categories</b> Wins BLK, REB, FG%, STL, TO most weeks. Toss-ups: AST (45%). Punts 3PM, FT%, PTS.</li><li><b>Since the draft</b> Added Dyson Daniels, Donovan Clingan, Kris Dunn, Jonathan Kuminga, Precious Achiuwa. Gone: Cameron Carr, Cooper Flagg, DeMar DeRozan, Jakob Poeltl, Keaton Wagler.</li><li><b>Best matchup</b> Lakštingala negali nečiulbėti: 72% win chance.</li><li><b>Worst matchup</b> 2nd cumming of Jokic: 43% win chance.</li><li><b>Unusually strong vs</b> Black Zeus: 62% win chance; the overall strength of the two teams gives 52%. Against them: FT% 90% (usually 16%), 3PM 76% (usually 11%).</li><li><b>Unusually weak vs</b> Giddey up: 58% win chance; the overall strength of the two teams gives 64%. Against them: STL 51% (usually 74%), 3PM 2% (usually 11%).</li></ul></details>
+</div></li><li class="rk-row">
+<div class="rk"><span class="rk-num">3</span><span class="rk-move flat">–</span></div>
+<div class="rk-body">
+<div class="rk-head"><span class="card-name">Mamuko_Tequila.mp3</span><span class="grec mono">2–1</span></div>
+<p class="rk-headline">Crushed 1–8 by Sizzlin sons.</p>
+<div class="rk-stats mono"><span>playoffs 86% <span class="chg up">▲ 2</span> <svg class="spark" width="60" height="18" viewBox="-2 0 60 18" aria-hidden="true"><line x1="0" x2="56" y1="9.0" y2="9.0" class="spark-mid"/><polyline points="0.0,11.2 18.7,8.0 37.3,4.2 56.0,4.0" fill="none" stroke="rgb(47,143,94)" stroke-width="2"/><circle cx="56.0" cy="4.0" r="2.5" fill="rgb(47,143,94)"/></svg></span>
+<span>proj. 10.1–6.9</span><span>week 4 vs Pizza ball 60%</span></div>
+<div class="chips"><span class="chip" style="background:rgba(232,116,59,0.08)">FG%</span><span class="chip" style="background:rgba(47,143,94,0.20)">FT%</span><span class="chip" style="background:rgba(47,143,94,0.61)">3PM</span><span class="chip" style="background:rgba(47,143,94,0.46)">PTS</span><span class="chip" style="background:rgba(47,143,94,0.42)">REB</span><span class="chip" style="background:rgba(232,116,59,0.27)">AST</span><span class="chip" style="background:rgba(232,116,59,0.23)">STL</span><span class="chip" style="background:rgba(232,116,59,0.59)">BLK</span><span class="chip" style="background:rgba(47,143,94,0.07)">TO</span></div>
+<ul class="facts"><li><b>Quietest on waivers</b>: 3 players added since the draft.</li><li><b>2nd-fewest player games this week</b>: 40 games for its healthy players.</li><li><b>2nd-most top-heavy roster</b>: Dončić and Sabonis are 63% of the team's value.</li></ul>
+<details><summary>More</summary><ul class="notes"><li><b>Injuries</b> Out: Tyler Herro, Moussa Diabaté, Kon Knueppel.</li><li><b>Best players</b> Luka Dončić, Domantas Sabonis, Jaylen Brown.</li><li><b>Categories</b> Wins 3PM, PTS, REB most weeks. Toss-ups: FT% (57%), TO (51%), FG% (49%). Punts BLK.</li><li><b>Since the draft</b> Added Duncan Robinson, Grayson Allen, Jared McCain. Gone: D&#x27;Angelo Russell.</li><li><b>Best matchup</b> Ant&#x27;s kitchen: 72% win chance.</li><li><b>Worst matchup</b> Black Zeus: 39% win chance.</li><li><b>Unusually strong vs</b> Giddey up: 68% win chance; the overall strength of the two teams gives 61%. Against them: FG% 85% (usually 49%), REB 85% (usually 70%).</li><li><b>Unusually weak vs</b> Overpayed: 39% win chance; the overall strength of the two teams gives 47%. Against them: REB 28% (usually 70%), FG% 20% (usually 49%).</li></ul></details>
+</div></li><li class="rk-row">
+<div class="rk"><span class="rk-num">4</span><span class="rk-move up">▲1</span></div>
+<div class="rk-body">
+<div class="rk-head"><span class="card-name">Pizza ball</span><span class="grec mono">3–0</span></div>
+<p class="rk-headline">Crushed Tiltai miesteliuose 7–2. Still unbeaten.</p>
+<div class="rk-stats mono"><span>playoffs 86% <span class="chg up">▲ 9</span> <svg class="spark" width="60" height="18" viewBox="-2 0 60 18" aria-hidden="true"><line x1="0" x2="56" y1="9.0" y2="9.0" class="spark-mid"/><polyline points="0.0,7.3 18.7,5.4 37.3,5.3 56.0,3.9" fill="none" stroke="rgb(47,143,94)" stroke-width="2"/><circle cx="56.0" cy="3.9" r="2.5" fill="rgb(47,143,94)"/></svg></span>
+<span>proj. 10.1–6.9</span><span>week 4 vs Mamuko_Tequila.mp3 40%</span></div>
+<div class="chips"><span class="chip" style="background:rgba(47,143,94,0.09)">FG%</span><span class="chip" style="background:rgba(47,143,94,0.16)">FT%</span><span class="chip" style="background:rgba(47,143,94,0.18)">3PM</span><span class="chip" style="background:rgba(47,143,94,0.28)">PTS</span><span class="chip" style="background:rgba(47,143,94,0.15)">REB</span><span class="chip" style="background:rgba(47,143,94,0.49)">AST</span><span class="chip" style="background:rgba(232,116,59,0.41)">STL</span><span class="chip" style="background:rgba(232,116,59,0.18)">BLK</span><span class="chip" style="background:rgba(232,116,59,0.48)">TO</span></div>
+<ul class="facts"><li><b>Luckiest record</b>: 1.4 wins more than the forecasts gave it.</li><li><b>2nd-quietest on waivers</b>: 4 players added since the draft.</li><li><b>Most even roster</b>: the top two (Murray and Ball) are only 37% of its value.</li></ul>
+<details><summary>More</summary><ul class="notes"><li><b>Injuries</b> Out: Paolo Banchero, Collin Murray-Boyles, Devin Vassell.</li><li><b>Best players</b> Jamal Murray, LaMelo Ball, James Harden.</li><li><b>Categories</b> Wins AST, PTS most weeks. Toss-ups: 3PM (57%), FT% (55%), REB (55%), FG% (52%), BLK (44%). Punts TO, STL.</li><li><b>Since the draft</b> Added Jaxson Hayes, Isaiah Jackson, De&#x27;Andre Hunter, Keaton Wagler. Gone: Gui Santos.</li><li><b>Best matchup</b> Kyrie Me River: 65% win chance.</li><li><b>Worst matchup</b> Overpayed: 38% win chance.</li><li><b>Unusually strong vs</b> Discount liquors: 58% win chance; the overall strength of the two teams gives 55%. Against them: FG% 75% (usually 52%), REB 69% (usually 55%).</li><li><b>Unusually weak vs</b> Mamuko_Tequila.mp3: 40% win chance; the overall strength of the two teams gives 44%. Against them: 3PM 16% (usually 57%), PTS 39% (usually 62%).</li></ul></details>
+</div></li><li class="rk-row">
+<div class="rk"><span class="rk-num">5</span><span class="rk-move down">▼3</span></div>
+<div class="rk-body">
+<div class="rk-head"><span class="card-name">Black Zeus</span><span class="grec mono">1–2</span></div>
+<p class="rk-headline">Lost 4–5 to Overpayed as a 61% favorite.</p>
+<div class="rk-stats mono"><span>playoffs 74% <span class="chg down">▼ 13</span> <svg class="spark" width="60" height="18" viewBox="-2 0 60 18" aria-hidden="true"><line x1="0" x2="56" y1="9.0" y2="9.0" class="spark-mid"/><polyline points="0.0,3.1 18.7,2.9 37.3,3.9 56.0,5.7" fill="none" stroke="rgb(232,116,59)" stroke-width="2"/><circle cx="56.0" cy="5.7" r="2.5" fill="rgb(232,116,59)"/></svg></span>
+<span>proj. 9.3–7.7</span><span>week 4 vs Sizzlin sons 60%</span></div>
+<div class="chips"><span class="chip" style="background:rgba(47,143,94,0.61)">FG%</span><span class="chip" style="background:rgba(232,116,59,0.61)">FT%</span><span class="chip" style="background:rgba(232,116,59,0.61)">3PM</span><span class="chip" style="background:rgba(232,116,59,0.30)">PTS</span><span class="chip" style="background:rgba(47,143,94,0.58)">REB</span><span class="chip" style="background:rgba(47,143,94,0.43)">AST</span><span class="chip" style="background:rgba(47,143,94,0.39)">STL</span><span class="chip" style="background:rgba(47,143,94,0.48)">BLK</span><span class="chip" style="background:rgba(232,116,59,0.18)">TO</span></div>
+<ul class="facts"><li><b>2nd-most player games this week</b>: 46 games for its healthy players.</li><li><b>2nd-quietest on waivers</b>: 4 players added since the draft.</li><li><b>2nd-most players born outside the US</b>: 6 (Canada (2), Greece, France, Cameroon, Austria).</li></ul>
+<details><summary>More</summary><ul class="notes"><li><b>Injuries</b> Out: Zion Williamson, Jalen Suggs, Yves Missi.</li><li><b>Best players</b> Giannis Antetokounmpo, Amen Thompson, Ausar Thompson.</li><li><b>Categories</b> Wins FG%, REB, BLK, AST, STL most weeks. Toss-ups: TO (43%). Punts FT%, 3PM.</li><li><b>Since the draft</b> Added Alex Caruso, Jakob Poeltl, Jamal Shead, Isaiah Collier. Gone: Jonathan Kuminga.</li><li><b>Best matchup</b> Kyrie Me River: 72% win chance.</li><li><b>Worst matchup</b> Overpayed: 38% win chance.</li><li><b>Unusually strong vs</b> Mamuko_Tequila.mp3: 61% win chance; the overall strength of the two teams gives 51%. Against them: BLK 94% (usually 73%), AST 79% (usually 70%).</li><li><b>Unusually weak vs</b> Discount liquors: 54% win chance; the overall strength of the two teams gives 62%. Against them: STL 45% (usually 68%), PTS 23% (usually 37%).</li></ul></details>
+</div></li><li class="rk-row">
+<div class="rk"><span class="rk-num">6</span><span class="rk-move up">▲1</span></div>
+<div class="rk-body">
+<div class="rk-head"><span class="card-name">Sizzlin sons</span><span class="grec mono">2–1</span></div>
+<p class="rk-headline">Crushed Mamuko_Tequila.mp3 8–1.</p>
+<div class="rk-stats mono"><span>playoffs 72% <span class="chg up">▲ 5</span> <svg class="spark" width="60" height="18" viewBox="-2 0 60 18" aria-hidden="true"><line x1="0" x2="56" y1="9.0" y2="9.0" class="spark-mid"/><polyline points="0.0,9.4 18.7,10.0 37.3,6.6 56.0,6.0" fill="none" stroke="rgb(47,143,94)" stroke-width="2"/><circle cx="56.0" cy="6.0" r="2.5" fill="rgb(47,143,94)"/></svg></span>
+<span>proj. 9.1–7.9</span><span>week 4 vs Black Zeus 40%</span></div>
+<div class="chips"><span class="chip" style="background:rgba(232,116,59,0.44)">FG%</span><span class="chip" style="background:rgba(47,143,94,0.10)">FT%</span><span class="chip" style="background:rgba(47,143,94,0.35)">3PM</span><span class="chip" style="background:rgba(47,143,94,0.31)">PTS</span><span class="chip" style="background:rgba(47,143,94,0.30)">REB</span><span class="chip" style="background:rgba(47,143,94,0.22)">AST</span><span class="chip" style="background:rgba(232,116,59,0.22)">STL</span><span class="chip" style="background:rgba(232,116,59,0.24)">BLK</span><span class="chip" style="background:rgba(232,116,59,0.31)">TO</span></div>
+<ul class="facts"><li><b>2nd-busiest on waivers</b>: 8 players added since the draft.</li><li><b>Fewest players born outside the US</b>: every player was born in the US.</li><li><b>4th-shortest roster</b>: 6′7″ on average.</li></ul>
+<details><summary>More</summary><ul class="notes"><li><b>Injuries</b> Out for the season: Donte DiVincenzo. Out: Trey Murphy III.</li><li><b>Best players</b> Cade Cunningham, Jalen Johnson, Bam Adebayo.</li><li><b>Categories</b> Wins 3PM, PTS, REB, AST most weeks. Toss-ups: FT% (52%). Punts FG%.</li><li><b>Since the draft</b> Added Damian Lillard, Trey Murphy III, Michael Porter Jr., Jalen Smith, Mikel Brown Jr., Collin Sexton, Kyle Kuzma, Donte DiVincenzo. Gone: Anfernee Simons, Anthony Black, Fred VanVleet, Jalen Williams, Payton Pritchard, Quentin Grimes.</li><li><b>Best matchup</b> Kyrie Me River: 66% win chance.</li><li><b>Worst matchup</b> Overpayed: 36% win chance.</li><li><b>Unusually strong vs</b> 2nd cumming of Jokic: 45% win chance; the overall strength of the two teams gives 42%. Against them: 3PM 86% (usually 66%).</li><li><b>Unusually weak vs</b> Traes Comas Club: 42% win chance; the overall strength of the two teams gives 46%. Against them: 3PM 20% (usually 66%), FT% 13% (usually 52%).</li></ul></details>
+</div></li><li class="rk-row">
+<div class="rk"><span class="rk-num">7</span><span class="rk-move down">▼1</span></div>
+<div class="rk-body">
+<div class="rk-head"><span class="card-name">Džesika Shai</span><span class="grec mono">2–1</span></div>
+<p class="rk-headline">Wins FT%, PTS most weeks.</p>
+<div class="rk-stats mono"><span>playoffs 71% <span class="chg up">▲ 2</span> <svg class="spark" width="60" height="18" viewBox="-2 0 60 18" aria-hidden="true"><line x1="0" x2="56" y1="9.0" y2="9.0" class="spark-mid"/><polyline points="0.0,3.8 18.7,3.0 37.3,6.4 56.0,6.1" fill="none" stroke="rgb(232,116,59)" stroke-width="2"/><circle cx="56.0" cy="6.1" r="2.5" fill="rgb(232,116,59)"/></svg></span>
+<span>proj. 9.1–7.9</span><span>week 4 vs Lakštingala negali nečiulbėti 52%</span></div>
+<div class="chips"><span class="chip" style="background:rgba(47,143,94,0.14)">FG%</span><span class="chip" style="background:rgba(47,143,94,0.50)">FT%</span><span class="chip" style="background:rgba(232,116,59,0.45)">3PM</span><span class="chip" style="background:rgba(47,143,94,0.31)">PTS</span><span class="chip" style="background:rgba(232,116,59,0.08)">REB</span><span class="chip" style="background:rgba(232,116,59,0.20)">AST</span><span class="chip" style="background:rgba(232,116,59,0.10)">STL</span><span class="chip" style="background:rgba(232,116,59,0.18)">BLK</span><span class="chip" style="background:rgba(47,143,94,0.15)">TO</span></div>
+<ul class="facts"><li><b>Busiest on waivers</b>: 10 players added since the draft.</li><li><b>Tallest roster</b>: 6′8″ on average.</li><li><b>Most players born outside the US</b>: 7 (Canada, Germany, Belgium, Cameroon, Bosnia &amp; Herzegovina, Sweden, South Sudan).</li></ul>
+<details><summary>More</summary><ul class="notes"><li><b>Injuries</b> Out: Jaren Jackson Jr., Jusuf Nurkić, Jimmy Butler III.</li><li><b>Best players</b> Shai Gilgeous-Alexander, Cooper Flagg, Franz Wagner.</li><li><b>Categories</b> Wins FT%, PTS most weeks. Toss-ups: TO (55%), FG% (55%), REB (49%), STL (48%), BLK (43%), AST (42%). Punts 3PM.</li><li><b>Since the draft</b> Added Cooper Flagg, Cameron Boozer, Joel Embiid, Christian Braun, Brayden Burries, Pelle Larsson, Khaman Maluach, Kenrich Williams, Terrence Shannon Jr., Nate Ament. Gone: Donovan Clingan, Draymond Green, Dyson Daniels, Grayson Allen, Matas Buzelis, Mitchell Robinson, Tobias Harris.</li><li><b>Best matchup</b> Tiltai miesteliuose: 64% win chance.</li><li><b>Worst matchup</b> Black Zeus: 39% win chance.</li><li><b>Unusually strong vs</b> Traes Comas Club: 53% win chance; the overall strength of the two teams gives 45%. Against them: REB 95% (usually 49%), BLK 83% (usually 43%).</li><li><b>Unusually weak vs</b> Ant&#x27;s kitchen: 58% win chance; the overall strength of the two teams gives 61%. Against them: BLK 24% (usually 43%), FG% 39% (usually 55%).</li></ul></details>
+</div></li><li class="rk-row">
+<div class="rk"><span class="rk-num">8</span><span class="rk-move flat">–</span></div>
+<div class="rk-body">
+<div class="rk-head"><span class="card-name">Lakštingala negali nečiulbėti</span><span class="grec mono">2–1</span></div>
+<p class="rk-headline">Wins PTS, 3PM, FT% most weeks.</p>
+<div class="rk-stats mono"><span>playoffs 59% <span class="chg flat">0</span> <svg class="spark" width="60" height="18" viewBox="-2 0 60 18" aria-hidden="true"><line x1="0" x2="56" y1="9.0" y2="9.0" class="spark-mid"/><polyline points="0.0,8.9 18.7,8.3 37.3,7.8 56.0,7.8" fill="none" stroke="rgb(47,143,94)" stroke-width="2"/><circle cx="56.0" cy="7.8" r="2.5" fill="rgb(47,143,94)"/></svg></span>
+<span>proj. 8.5–8.5</span><span>week 4 vs Džesika Shai 48%</span></div>
+<div class="chips"><span class="chip" style="background:rgba(232,116,59,0.24)">FG%</span><span class="chip" style="background:rgba(47,143,94,0.22)">FT%</span><span class="chip" style="background:rgba(47,143,94,0.37)">3PM</span><span class="chip" style="background:rgba(47,143,94,0.40)">PTS</span><span class="chip" style="background:rgba(232,116,59,0.07)">REB</span><span class="chip" style="background:rgba(232,116,59,0.06)">AST</span><span class="chip" style="background:rgba(232,116,59,0.31)">STL</span><span class="chip" style="background:rgba(232,116,59,0.17)">BLK</span><span class="chip" style="background:rgba(232,116,59,0.61)">TO</span></div>
+<ul class="facts"><li><b>2nd-fewest player games this week</b>: 40 games for its healthy players.</li><li><b>2nd-youngest roster</b>: 25.9 years on average; Matas Buzelis is 22.</li><li><b>2nd-fewest players born outside the US</b>: 1 (Cameroon).</li></ul>
+<details><summary>More</summary><ul class="notes"><li><b>Injuries</b> Out: Brandon Miller, Keyonte George.</li><li><b>Best players</b> Austin Reaves, Pascal Siakam, Cedric Coward.</li><li><b>Categories</b> Wins PTS, 3PM, FT% most weeks. Toss-ups: AST (50%), REB (50%), BLK (44%). Punts TO.</li><li><b>Since the draft</b> Added Keyonte George, Matas Buzelis, Oso Ighodaro, Obi Toppin, Danny Wolf. Gone: Cameron Boozer, Immanuel Quickley, Paul Reed, Pelle Larsson.</li><li><b>Best matchup</b> Kyrie Me River: 64% win chance.</li><li><b>Worst matchup</b> Overpayed: 28% win chance.</li><li><b>Unusually strong vs</b> Discount liquors: 54% win chance; the overall strength of the two teams gives 50%. Against them: FG% 63% (usually 40%), REB 64% (usually 50%).</li><li><b>Unusually weak vs</b> Black Zeus: 28% win chance; the overall strength of the two teams gives 38%. Against them: FG% 3% (usually 40%), REB 19% (usually 50%).</li></ul></details>
+</div></li><li class="rk-row">
+<div class="rk"><span class="rk-num">9</span><span class="rk-move up">▲3</span></div>
+<div class="rk-body">
+<div class="rk-head"><span class="card-name">Giddey up</span><span class="grec mono">2–1</span></div>
+<p class="rk-headline">Biggest riser of the week: playoff odds 31% → 54%. Beat Traes Comas Club 6–3 with only a 38% chance.</p>
+<div class="rk-stats mono"><span>playoffs 54% <span class="chg up">▲ 23</span> <svg class="spark" width="60" height="18" viewBox="-2 0 60 18" aria-hidden="true"><line x1="0" x2="56" y1="9.0" y2="9.0" class="spark-mid"/><polyline points="0.0,10.0 18.7,9.8 37.3,11.7 56.0,8.4" fill="none" stroke="rgb(47,143,94)" stroke-width="2"/><circle cx="56.0" cy="8.4" r="2.5" fill="rgb(47,143,94)"/></svg></span>
+<span>proj. 8.4–8.6</span><span>week 4 vs Overpayed 42%</span></div>
+<div class="chips"><span class="chip" style="background:rgba(232,116,59,0.61)">FG%</span><span class="chip" style="background:rgba(47,143,94,0.11)">FT%</span><span class="chip" style="background:rgba(47,143,94,0.33)">3PM</span><span class="chip" style="background:rgba(232,116,59,0.43)">PTS</span><span class="chip" style="background:rgba(232,116,59,0.36)">REB</span><span class="chip" style="background:rgba(47,143,94,0.12)">AST</span><span class="chip" style="background:rgba(47,143,94,0.48)">STL</span><span class="chip" style="background:rgba(47,143,94,0.36)">BLK</span><span class="chip" style="background:rgba(47,143,94,0.06)">TO</span></div>
+<ul class="facts"><li><b>4th-luckiest record</b>: 0.7 wins more than the forecasts gave it.</li><li><b>Most NBA experience</b>: 136 NBA seasons combined.</li><li><b>2nd-best auction buy</b>: Paul George cost $16 at the auction and is worth $34 now.</li></ul>
+<details><summary>More</summary><ul class="notes"><li><b>Injuries</b> Out: Kawhi Leonard.</li><li><b>Best players</b> Jayson Tatum, Paul George, Dejounte Murray.</li><li><b>Categories</b> Wins STL, BLK, 3PM most weeks. Toss-ups: AST (53%), FT% (53%), TO (50%). Punts FG%, PTS, REB.</li><li><b>Since the draft</b> Added Fred VanVleet, Anthony Black, Matisse Thybulle, De&#x27;Anthony Melton, Santi Aldama. Gone: Bilal Coulibaly, Jarred Vanderbilt, Royce O&#x27;Neale, Trey Murphy III.</li><li><b>Best matchup</b> Kyrie Me River: 60% win chance.</li><li><b>Worst matchup</b> Mamuko_Tequila.mp3: 32% win chance.</li><li><b>Unusually strong vs</b> Overpayed: 42% win chance; the overall strength of the two teams gives 36%. Against them: FT% 90% (usually 53%), 3PM 98% (usually 65%).</li></ul></details>
+</div></li><li class="rk-row">
+<div class="rk"><span class="rk-num">10</span><span class="rk-move down">▼1</span></div>
+<div class="rk-body">
+<div class="rk-head"><span class="card-name">Traes Comas Club</span><span class="grec mono">0–3</span></div>
+<p class="rk-headline">Lost 3–6 to Giddey up as a 62% favorite. Still looking for a first win.</p>
+<div class="rk-stats mono"><span>playoffs 44% <span class="chg down">▼ 4</span> <svg class="spark" width="60" height="18" viewBox="-2 0 60 18" aria-hidden="true"><line x1="0" x2="56" y1="9.0" y2="9.0" class="spark-mid"/><polyline points="0.0,3.5 18.7,5.6 37.3,9.3 56.0,9.8" fill="none" stroke="rgb(232,116,59)" stroke-width="2"/><circle cx="56.0" cy="9.8" r="2.5" fill="rgb(232,116,59)"/></svg></span>
+<span>proj. 7.7–9.3</span><span>week 4 vs Discount liquors 53%</span></div>
+<div class="chips"><span class="chip" style="background:rgba(232,116,59,0.54)">FG%</span><span class="chip" style="background:rgba(47,143,94,0.61)">FT%</span><span class="chip" style="background:rgba(47,143,94,0.61)">3PM</span><span class="chip" style="background:rgba(47,143,94,0.12)">PTS</span><span class="chip" style="background:rgba(232,116,59,0.61)">REB</span><span class="chip" style="background:rgba(47,143,94,0.42)">AST</span><span class="chip" style="background:rgba(47,143,94,0.36)">STL</span><span class="chip" style="background:rgba(232,116,59,0.61)">BLK</span><span class="chip" style="background:rgba(47,143,94,0.10)">TO</span></div>
+<ul class="facts"><li><b>Unluckiest record</b>: 1.6 wins fewer than the forecasts gave it.</li><li><b>2nd-busiest on waivers</b>: 8 players added since the draft.</li><li><b>Shortest roster</b>: 6′5″ on average.</li></ul>
+<details><summary>More</summary><ul class="notes"><li><b>Injuries</b> Out for the season: Jalen Williams. Out: Immanuel Quickley, Egor Dëmin. Day to day: Norman Powell (Q).</li><li><b>Best players</b> Trae Young, Nickeil Alexander-Walker, Desmond Bane.</li><li><b>Categories</b> Wins 3PM, FT%, AST, STL most weeks. Toss-ups: PTS (53%), TO (52%). Punts REB, BLK, FG%.</li><li><b>Since the draft</b> Added Immanuel Quickley, Paul Reed, Payton Pritchard, Kingston Flemings, Kelly Oubre Jr., Herbert Jones, Jalen Williams, Daniss Jenkins. Gone: Damian Lillard, Joel Embiid, Keyonte George, Kristaps Porziņģis, Michael Porter Jr.</li><li><b>Best matchup</b> Ant&#x27;s kitchen: 72% win chance.</li><li><b>Worst matchup</b> Black Zeus: 45% win chance.</li><li><b>Unusually strong vs</b> 2nd cumming of Jokic: 52% win chance; the overall strength of the two teams gives 46%. Against them: 3PM 97% (usually 88%).</li><li><b>Unusually weak vs</b> Džesika Shai: 47% win chance; the overall strength of the two teams gives 55%. Against them: FT% 69% (usually 87%), PTS 40% (usually 53%).</li></ul></details>
+</div></li><li class="rk-row">
+<div class="rk"><span class="rk-num">11</span><span class="rk-move flat">–</span></div>
+<div class="rk-body">
+<div class="rk-head"><span class="card-name">Discount liquors</span><span class="grec mono">1–2</span></div>
+<p class="rk-headline">Plays without its best player, Scottie Barnes.</p>
+<div class="rk-stats mono"><span>playoffs 35% <span class="chg down">▼ 2</span> <svg class="spark" width="60" height="18" viewBox="-2 0 60 18" aria-hidden="true"><line x1="0" x2="56" y1="9.0" y2="9.0" class="spark-mid"/><polyline points="0.0,8.6 18.7,6.1 37.3,10.8 56.0,11.1" fill="none" stroke="rgb(232,116,59)" stroke-width="2"/><circle cx="56.0" cy="11.1" r="2.5" fill="rgb(232,116,59)"/></svg></span>
+<span>proj. 7.5–9.5</span><span>week 4 vs Traes Comas Club 47%</span></div>
+<div class="chips"><span class="chip" style="background:rgba(232,116,59,0.44)">FG%</span><span class="chip" style="background:rgba(232,116,59,0.27)">FT%</span><span class="chip" style="background:rgba(232,116,59,0.09)">3PM</span><span class="chip" style="background:rgba(47,143,94,0.34)">PTS</span><span class="chip" style="background:rgba(232,116,59,0.29)">REB</span><span class="chip" style="background:rgba(232,116,59,0.13)">AST</span><span class="chip" style="background:rgba(47,143,94,0.47)">STL</span><span class="chip" style="background:rgba(47,143,94,0.12)">BLK</span><span class="chip" style="background:rgba(232,116,59,0.22)">TO</span></div>
+<ul class="facts"><li><b>Most value out injured</b>: 33% of its value is out (Barnes, Ingram and Holmgren).</li><li><b>Youngest roster</b>: 25.2 years on average; Darius Acuff Jr. is 19.</li><li><b>Least NBA experience</b>: 77 NBA seasons combined, with 3 rookies (Lendeborg, Wilson and Acuff Jr.).</li></ul>
+<details><summary>More</summary><ul class="notes"><li><b>Injuries</b> Out: Scottie Barnes, Brandon Ingram, Chet Holmgren.</li><li><b>Best players</b> Tyrese Maxey, Yaxel Lendeborg, VJ Edgecombe.</li><li><b>Categories</b> Wins STL, PTS most weeks. Toss-ups: BLK (53%), 3PM (48%), AST (46%). Punts FG%.</li><li><b>Since the draft</b> Added Aaron Wiggins, Karlo Matković, Jake LaRavia, Ryan Dunn. Gone: Khaman Maluach.</li><li><b>Best matchup</b> Kyrie Me River: 60% win chance.</li><li><b>Worst matchup</b> Mamuko_Tequila.mp3: 35% win chance.</li><li><b>Unusually strong vs</b> Black Zeus: 46% win chance; the overall strength of the two teams gives 38%. Against them: FT% 98% (usually 38%), 3PM 99% (usually 48%).</li><li><b>Unusually weak vs</b> Lakštingala negali nečiulbėti: 46% win chance; the overall strength of the two teams gives 50%. Against them: 3PM 27% (usually 48%), PTS 46% (usually 65%).</li></ul></details>
+</div></li><li class="rk-row">
+<div class="rk"><span class="rk-num">12</span><span class="rk-move down">▼2</span></div>
+<div class="rk-body">
+<div class="rk-head"><span class="card-name">Kyrie Me River</span><span class="grec mono">1–2</span></div>
+<p class="rk-headline">Biggest drop of the week: playoff odds 43% → 16%.</p>
+<div class="rk-stats mono"><span>playoffs 16% <span class="chg down">▼ 28</span> <svg class="spark" width="60" height="18" viewBox="-2 0 60 18" aria-hidden="true"><line x1="0" x2="56" y1="9.0" y2="9.0" class="spark-mid"/><polyline points="0.0,11.2 18.7,11.0 37.3,9.9 56.0,13.8" fill="none" stroke="rgb(232,116,59)" stroke-width="2"/><circle cx="56.0" cy="13.8" r="2.5" fill="rgb(232,116,59)"/></svg></span>
+<span>proj. 6.2–10.8</span><span>week 4 vs Tiltai miesteliuose 49%</span></div>
+<div class="chips"><span class="chip" style="background:rgba(47,143,94,0.20)">FG%</span><span class="chip" style="background:rgba(47,143,94,0.30)">FT%</span><span class="chip" style="background:rgba(232,116,59,0.30)">3PM</span><span class="chip" style="background:rgba(232,116,59,0.10)">PTS</span><span class="chip" style="background:rgba(232,116,59,0.43)">REB</span><span class="chip" style="background:rgba(232,116,59,0.48)">AST</span><span class="chip" style="background:rgba(232,116,59,0.48)">STL</span><span class="chip" style="background:rgba(232,116,59,0.10)">BLK</span><span class="chip" style="background:rgba(47,143,94,0.43)">TO</span></div>
+<ul class="facts"><li><b>4th-busiest on waivers</b>: 6 players added since the draft.</li><li><b>Oldest roster</b>: 29.4 years on average; Kevin Durant is 38.</li><li><b>2nd-most NBA experience</b>: 135 NBA seasons combined.</li></ul>
+<details><summary>More</summary><ul class="notes"><li><b>Injuries</b> Out: Tristan da Silva, Quentin Grimes.</li><li><b>Best players</b> Kevin Durant, Evan Mobley, Devin Booker.</li><li><b>Categories</b> Wins TO, FT% most weeks. Toss-ups: FG% (58%), PTS (48%), BLK (48%). Punts STL, AST, REB.</li><li><b>Since the draft</b> Added Ja&#x27;Kobe Walter, Derrick Jones Jr., Tristan da Silva, DeMar DeRozan, Quentin Grimes, Spencer Jones. Gone: Christian Braun, Jake LaRavia, Kelly Oubre Jr., Kevin Porter Jr., Nikola Vučević.</li><li><b>Best matchup</b> Tiltai miesteliuose: 49% win chance.</li><li><b>Worst matchup</b> Black Zeus: 28% win chance.</li><li><b>Unusually strong vs</b> Traes Comas Club: 38% win chance; the overall strength of the two teams gives 32%. Against them: REB 86% (usually 30%), BLK 86% (usually 48%).</li><li><b>Unusually weak vs</b> Lakštingala negali nečiulbėti: 36% win chance; the overall strength of the two teams gives 41%. Against them: 3PM 16% (usually 37%), PTS 29% (usually 48%).</li></ul></details>
+</div></li><li class="rk-row">
+<div class="rk"><span class="rk-num">13</span><span class="rk-move up">▲1</span></div>
+<div class="rk-body">
+<div class="rk-head"><span class="card-name">Tiltai miesteliuose</span><span class="grec mono">0–3</span></div>
+<p class="rk-headline">Crushed 2–7 by Pizza ball. Still looking for a first win.</p>
+<div class="rk-stats mono"><span>playoffs 9% <span class="chg flat">0</span> <svg class="spark" width="60" height="18" viewBox="-2 0 60 18" aria-hidden="true"><line x1="0" x2="56" y1="9.0" y2="9.0" class="spark-mid"/><polyline points="0.0,8.2 18.7,11.3 37.3,14.8 56.0,14.8" fill="none" stroke="rgb(232,116,59)" stroke-width="2"/><circle cx="56.0" cy="14.8" r="2.5" fill="rgb(232,116,59)"/></svg></span>
+<span>proj. 5.5–11.5</span><span>week 4 vs Kyrie Me River 51%</span></div>
+<div class="chips"><span class="chip" style="background:rgba(232,116,59,0.33)">FG%</span><span class="chip" style="background:rgba(47,143,94,0.36)">FT%</span><span class="chip" style="background:rgba(47,143,94,0.32)">3PM</span><span class="chip" style="background:rgba(232,116,59,0.37)">PTS</span><span class="chip" style="background:rgba(232,116,59,0.54)">REB</span><span class="chip" style="background:rgba(232,116,59,0.09)">AST</span><span class="chip" style="background:rgba(232,116,59,0.13)">STL</span><span class="chip" style="background:rgba(232,116,59,0.52)">BLK</span><span class="chip" style="background:rgba(47,143,94,0.37)">TO</span></div>
+<ul class="facts"><li><b>Most player games this week</b>: 47 games for its healthy players.</li><li><b>2nd-unluckiest record</b>: 1.4 wins fewer than the forecasts gave it.</li><li><b>Most top-heavy roster</b>: Towns and Mitchell are 64% of the team's value.</li></ul>
+<details><summary>More</summary><ul class="notes"><li><b>Injuries</b> Out: Tyrese Haliburton, Ja Morant. Day to day: Nolan Traore (Q).</li><li><b>Best players</b> Karl-Anthony Towns, Donovan Mitchell, Naz Reid.</li><li><b>Categories</b> Wins TO, FT%, 3PM most weeks. Toss-ups: AST (49%), STL (46%). Punts REB, BLK, PTS.</li><li><b>Since the draft</b> Added Meleek Thomas, Nolan Traore, Ziaire Williams, Quenton Jackson, Landry Shamet. Gone: Cam Spencer, Cason Wallace, De&#x27;Anthony Melton.</li><li><b>Best matchup</b> Ant&#x27;s kitchen: 51% win chance.</li><li><b>Worst matchup</b> Black Zeus: 28% win chance.</li><li><b>Unusually strong vs</b> Overpayed: 33% win chance; the overall strength of the two teams gives 29%. Against them: 3PM 98% (usually 64%), PTS 62% (usually 33%).</li></ul></details>
+</div></li><li class="rk-row">
+<div class="rk"><span class="rk-num">14</span><span class="rk-move down">▼1</span></div>
+<div class="rk-body">
+<div class="rk-head"><span class="card-name">Ant&#x27;s kitchen</span><span class="grec mono">0–3</span></div>
+<p class="rk-headline">Still looking for a first win. Big underdog this week against 2nd cumming of Jokic (31%).</p>
+<div class="rk-stats mono"><span>playoffs 7% <span class="chg down">▼ 3</span> <svg class="spark" width="60" height="18" viewBox="-2 0 60 18" aria-hidden="true"><line x1="0" x2="56" y1="9.0" y2="9.0" class="spark-mid"/><polyline points="0.0,10.3 18.7,13.4 37.3,14.6 56.0,15.0" fill="none" stroke="rgb(232,116,59)" stroke-width="2"/><circle cx="56.0" cy="15.0" r="2.5" fill="rgb(232,116,59)"/></svg></span>
+<span>proj. 5.3–11.7</span><span>week 4 vs 2nd cumming of Jokic 31%</span></div>
+<div class="chips"><span class="chip" style="background:rgba(47,143,94,0.32)">FG%</span><span class="chip" style="background:rgba(232,116,59,0.45)">FT%</span><span class="chip" style="background:rgba(232,116,59,0.08)">3PM</span><span class="chip" style="background:rgba(232,116,59,0.33)">PTS</span><span class="chip" style="background:rgba(47,143,94,0.08)">REB</span><span class="chip" style="background:rgba(232,116,59,0.54)">AST</span><span class="chip" style="background:rgba(232,116,59,0.37)">STL</span><span class="chip" style="background:rgba(47,143,94,0.38)">BLK</span><span class="chip" style="background:rgba(47,143,94,0.29)">TO</span></div>
+<ul class="facts"><li><b>2nd-most value out injured</b>: 31% of its value is out (Duren and Edwards).</li><li><b>2nd-quietest on waivers</b>: 4 players added since the draft.</li><li><b>2nd-most players born outside the US</b>: 6 (Türkiye, Belgium, France, Japan, Canada, Spain).</li></ul>
+<details><summary>More</summary><ul class="notes"><li><b>Injuries</b> Out: Jalen Duren, Anthony Edwards.</li><li><b>Best players</b> Stephen Curry, Alperen Şengün, Davion Mitchell.</li><li><b>Categories</b> Wins BLK, FG%, TO most weeks. Toss-ups: REB (51%), 3PM (49%). Punts AST, FT%, STL.</li><li><b>Since the draft</b> Added Joan Beringer, Klay Thompson, Aday Mara, Mo Bamba. Gone: Dylan Cardwell, Herbert Jones.</li><li><b>Best matchup</b> Kyrie Me River: 54% win chance.</li><li><b>Worst matchup</b> Mamuko_Tequila.mp3: 28% win chance.</li><li><b>Unusually strong vs</b> Black Zeus: 35% win chance; the overall strength of the two teams gives 31%. Against them: FT% 96% (usually 29%), 3PM 99% (usually 49%).</li><li><b>Unusually weak vs</b> Traes Comas Club: 28% win chance; the overall strength of the two teams gives 34%. Against them: 3PM 8% (usually 49%), FT% 3% (usually 29%).</li></ul></details>
+</div></li></ol></section><section id="draft-value"><div class="kicker">Who paid off</div><h2>💰 Draft steals and 💸 money pits</h2><p class="intro">Who is paying off and who is burning cash. <b>Earned</b> is the price of his rank: the player with the 10th most value so far earns the 10th highest price of the draft. Value adds his 9-category score in every game he played, so missed games cost him. Games through Nov 10.</p><div class="duo"><div class="topcol hot"><h3>💰 Best value</h3><div class="scroll"><table class="grid toplist"><thead><tr><th></th><th>Player</th><th class="num">Paid</th><th class="num" title="Price of his rank in the draft, for his play so far">Earned</th><th class="num">Gap</th></tr></thead><tbody><tr><td class="rank">1</td><td><span class="team">Stephen Curry</span> <span class="emo"><span title="earned $50+">🤑</span></span><div class="sub">Ant&#x27;s kitchen · 9 of 11 games</div></td><td class="num mono">$34</td><td class="num mono">$78</td><td class="num mono big pos">+$44</td></tr><tr><td class="rank">2</td><td><span class="team">Jabari Smith Jr.</span><div class="sub">Mamuko_Tequila.mp3 · 11 of 11 games</div></td><td class="num mono">$7</td><td class="num mono">$45</td><td class="num mono big pos">+$38</td></tr><tr><td class="rank">3</td><td><span class="team">Walker Kessler</span> <span class="emo"><span title="earned $50+">🤑</span></span><div class="sub">2nd cumming of Jokic · 12 of 12 games</div></td><td class="num mono">$24</td><td class="num mono">$55</td><td class="num mono big pos">+$31</td></tr><tr><td class="rank">4</td><td><span class="team">Paul George</span><div class="sub">Giddey up · 10 of 11 games</div></td><td class="num mono">$16</td><td class="num mono">$46</td><td class="num mono big pos">+$30</td></tr><tr><td class="rank">5</td><td><span class="team">Miles Bridges</span> <span class="emo"><span title="steal: paid $5 or less">💎</span></span><div class="sub">Sizzlin sons · 10 of 10 games</div></td><td class="num mono">$5</td><td class="num mono">$33</td><td class="num mono big pos">+$28</td></tr><tr><td class="rank">6</td><td><span class="team">Ayo Dosunmu</span> <span class="emo"><span title="steal: paid $5 or less">💎</span></span><div class="sub">2nd cumming of Jokic · 11 of 11 games</div></td><td class="num mono">$2</td><td class="num mono">$30</td><td class="num mono big pos">+$28</td></tr><tr><td class="rank">7</td><td><span class="team">Anthony Davis</span> <span class="emo"><span title="earned $50+">🤑</span></span><div class="sub">Kyrie Me River · 9 of 11 games</div></td><td class="num mono">$24</td><td class="num mono">$50</td><td class="num mono big pos">+$26</td></tr><tr><td class="rank">8</td><td><span class="team">Zion Williamson</span><div class="sub">Black Zeus · 10 of 11 games</div></td><td class="num mono">$10</td><td class="num mono">$36</td><td class="num mono big pos">+$26</td></tr><tr><td class="rank">9</td><td><span class="team">Anthony Black</span> <span class="emo"><span title="steal: paid $5 or less">💎</span><span title="missed 3+ games">🚑</span></span><div class="sub">Sizzlin sons · 7 of 10 games</div></td><td class="num mono">$3</td><td class="num mono">$28</td><td class="num mono big pos">+$25</td></tr><tr><td class="rank">10</td><td><span class="team">Wendell Carter Jr.</span> <span class="emo"><span title="steal: paid $5 or less">💎</span></span><div class="sub">Pizza ball · 10 of 10 games</div></td><td class="num mono">$3</td><td class="num mono">$24</td><td class="num mono big pos">+$21</td></tr></tbody></table></div></div><div class="topcol cold"><h3>💸 Waste of money</h3><div class="scroll"><table class="grid toplist"><thead><tr><th></th><th>Player</th><th class="num">Paid</th><th class="num" title="Price of his rank in the draft, for his play so far">Earned</th><th class="num">Gap</th></tr></thead><tbody><tr><td class="rank">1</td><td><span class="team">Giannis Antetokounmpo</span><div class="sub">Black Zeus · 11 of 11 games</div></td><td class="num mono">$60</td><td class="num mono">$25</td><td class="num mono big neg">−$35</td></tr><tr><td class="rank">2</td><td><span class="team">Josh Giddey</span> <span class="emo"><span title="earned $0">🤡</span></span><div class="sub">Giddey up · 9 of 9 games</div></td><td class="num mono">$33</td><td class="num mono">$0</td><td class="num mono big neg">−$33</td></tr><tr><td class="rank">3</td><td><span class="team">Scottie Barnes</span><div class="sub">Discount liquors · 8 of 10 games</div></td><td class="num mono">$45</td><td class="num mono">$13</td><td class="num mono big neg">−$32</td></tr><tr><td class="rank">4</td><td><span class="team">Anthony Edwards</span> <span class="emo"><span title="missed 3+ games">🚑</span></span><div class="sub">Ant&#x27;s kitchen · 4 of 11 games</div></td><td class="num mono">$60</td><td class="num mono">$29</td><td class="num mono big neg">−$31</td></tr><tr><td class="rank">5</td><td><span class="team">Amen Thompson</span><div class="sub">Black Zeus · 11 of 11 games</div></td><td class="num mono">$37</td><td class="num mono">$7</td><td class="num mono big neg">−$30</td></tr><tr><td class="rank">6</td><td><span class="team">Shai Gilgeous-Alexander</span> <span class="emo"><span title="earned $50+">🤑</span></span><div class="sub">Džesika Shai · 11 of 11 games</div></td><td class="num mono">$78</td><td class="num mono">$50</td><td class="num mono big neg">−$28</td></tr><tr><td class="rank">7</td><td><span class="team">Brandon Miller</span><div class="sub">Lakštingala negali nečiulbėti · 10 of 11 games</div></td><td class="num mono">$27</td><td class="num mono">$1</td><td class="num mono big neg">−$26</td></tr><tr><td class="rank">8</td><td><span class="team">Jalen Brunson</span><div class="sub">Kyrie Me River · 10 of 10 games</div></td><td class="num mono">$34</td><td class="num mono">$8</td><td class="num mono big neg">−$26</td></tr><tr><td class="rank">9</td><td><span class="team">Cade Cunningham</span><div class="sub">Sizzlin sons · 10 of 10 games</div></td><td class="num mono">$61</td><td class="num mono">$36</td><td class="num mono big neg">−$25</td></tr><tr><td class="rank">10</td><td><span class="team">Matas Buzelis</span> <span class="emo"><span title="earned $0">🤡</span></span><div class="sub">Džesika Shai · 9 of 9 games</div></td><td class="num mono">$24</td><td class="num mono">$0</td><td class="num mono big neg">−$24</td></tr></tbody></table></div></div></div><p class="legend"><span>💎 steal: paid $5 or less</span> <span>🤑 earned $50+</span> <span>🚑 missed 3+ games</span> <span>🤡 earned $0</span></p></section><section id="draft-review"><div class="kicker">Archive</div><h2>Draft review</h2><p class="intro">The October auction: what each team paid for each player. The draft is final, so this does not change.</p><details class="archive"><summary>Show all 182 picks</summary><section id="draft"><h2>Draft Results</h2><p class="intro">All 182 auction picks. Click a column heading to sort. <b>Rank</b> is the consensus season rank.</p><div class="filter"><label>Team <select id="draft-team">
+<option value="">All teams</option><option value="2nd cumming of Jokic">2nd cumming of Jokic</option><option value="Ant&#x27;s kitchen">Ant&#x27;s kitchen</option><option value="Black Zeus">Black Zeus</option><option value="Discount liquors">Discount liquors</option><option value="Džesika Shai">Džesika Shai</option><option value="Giddey up">Giddey up</option><option value="Kyrie Me River">Kyrie Me River</option><option value="Lakštingala negali nečiulbėti">Lakštingala negali nečiulbėti</option><option value="Mamuko_Tequila.mp3">Mamuko_Tequila.mp3</option><option value="Overpayed">Overpayed</option><option value="Pizza ball">Pizza ball</option><option value="Sizzlin sons">Sizzlin sons</option><option value="Tiltai miesteliuose">Tiltai miesteliuose</option><option value="Traes Comas Club">Traes Comas Club</option></select></label></div>
+<div class="scroll board"><table class="grid" id="draft-board">
+<thead><tr><th class="num sort" data-col="0" title="Click to sort">Nom.</th><th class="sort" data-col="1" title="Click to sort">Player</th><th class="sort" data-col="2" title="Click to sort">Team</th><th class="num sort" data-col="3" title="Click to sort">Paid</th><th class="num sort" data-col="4" title="Click to sort">Fair</th><th class="num sort" data-col="5" title="Click to sort">+/-</th><th class="num sort" data-col="6" title="Click to sort">Rank</th></tr></thead>
+<tbody><tr data-team="Pizza ball"><td class="num muted" data-v="1">1</td>
+<td data-v="Paolo Banchero">Paolo Banchero <span class="sub">ORL · PF</span></td>
+<td class="sub" data-v="Pizza ball">Pizza ball</td><td class="num" data-v="17">$17</td>
+<td class="num" data-v="9.00">$9</td><td class="num neg" data-v="-8.00">-8</td>
+<td class="num muted" data-v="92">92</td></tr><tr data-team="Ant&#x27;s kitchen"><td class="num muted" data-v="2">2</td>
+<td data-v="Stephen Curry">Stephen Curry <span class="sub">GSW · PG</span></td>
+<td class="sub" data-v="Ant&#x27;s kitchen">Ant&#x27;s kitchen</td><td class="num" data-v="34">$34</td>
+<td class="num" data-v="41.00">$41</td><td class="num pos" data-v="7.00">+7</td>
+<td class="num muted" data-v="16">16</td></tr><tr data-team="Black Zeus"><td class="num muted" data-v="3">3</td>
+<td data-v="Giannis Antetokounmpo">Giannis Antetokounmpo <span class="sub">MIA · PF/C</span></td>
+<td class="sub" data-v="Black Zeus">Black Zeus</td><td class="num" data-v="60">$60</td>
+<td class="num" data-v="61.00">$61</td><td class="num muted" data-v="1.00">+1</td>
+<td class="num muted" data-v="5">5</td></tr><tr data-team="Kyrie Me River"><td class="num muted" data-v="4">4</td>
+<td data-v="Anthony Davis">Anthony Davis <span class="sub">WAS · PF/C</span></td>
+<td class="sub" data-v="Kyrie Me River">Kyrie Me River</td><td class="num" data-v="24">$24</td>
+<td class="num" data-v="20.00">$20</td><td class="num neg" data-v="-4.00">-4</td>
+<td class="num muted" data-v="51">51</td></tr><tr data-team="2nd cumming of Jokic"><td class="num muted" data-v="5">5</td>
+<td data-v="Nikola Jokić">Nikola Jokić <span class="sub">DEN · C</span></td>
+<td class="sub" data-v="2nd cumming of Jokic">2nd cumming of Jokic</td><td class="num" data-v="83">$83</td>
+<td class="num" data-v="82.00">$82</td><td class="num muted" data-v="-1.00">-1</td>
+<td class="num muted" data-v="2">2</td></tr><tr data-team="Giddey up"><td class="num muted" data-v="6">6</td>
+<td data-v="Josh Giddey">Josh Giddey <span class="sub">CHI · PG/SG</span></td>
+<td class="sub" data-v="Giddey up">Giddey up</td><td class="num" data-v="33">$33</td>
+<td class="num" data-v="14.00">$14</td><td class="num neg" data-v="-19.00">-19</td>
+<td class="num muted" data-v="73">73</td></tr><tr data-team="Overpayed"><td class="num muted" data-v="7">7</td>
+<td data-v="Victor Wembanyama">Victor Wembanyama <span class="sub">SAS · C</span></td>
+<td class="sub" data-v="Overpayed">Overpayed</td><td class="num" data-v="82">$82</td>
+<td class="num" data-v="83.00">$83</td><td class="num muted" data-v="1.00">+1</td>
+<td class="num muted" data-v="1">1</td></tr><tr data-team="Mamuko_Tequila.mp3"><td class="num muted" data-v="8">8</td>
+<td data-v="Luka Dončić">Luka Dončić <span class="sub">LAL · PG/SG</span></td>
+<td class="sub" data-v="Mamuko_Tequila.mp3">Mamuko_Tequila.mp3</td><td class="num" data-v="75">$75</td>
+<td class="num" data-v="78.00">$78</td><td class="num pos" data-v="3.00">+3</td>
+<td class="num muted" data-v="3">3</td></tr><tr data-team="Giddey up"><td class="num muted" data-v="9">9</td>
+<td data-v="Kawhi Leonard">Kawhi Leonard <span class="sub">TOR · SG/SF/PF</span></td>
+<td class="sub" data-v="Giddey up">Giddey up</td><td class="num" data-v="28">$28</td>
+<td class="num" data-v="27.00">$27</td><td class="num muted" data-v="-1.00">-1</td>
+<td class="num muted" data-v="31">31</td></tr><tr data-team="Mamuko_Tequila.mp3"><td class="num muted" data-v="10">10</td>
+<td data-v="AJ Dybantsa">AJ Dybantsa <span class="sub">WAS · SF</span></td>
+<td class="sub" data-v="Mamuko_Tequila.mp3">Mamuko_Tequila.mp3</td><td class="num" data-v="6">$6</td>
+<td class="num" data-v="2.00">$2</td><td class="num neg" data-v="-4.00">-4</td>
+<td class="num muted" data-v="184">184</td></tr><tr data-team="Džesika Shai"><td class="num muted" data-v="11">11</td>
+<td data-v="Matas Buzelis">Matas Buzelis <span class="sub">CHI · SF/PF</span></td>
+<td class="sub" data-v="Džesika Shai">Džesika Shai</td><td class="num" data-v="24">$24</td>
+<td class="num" data-v="6.00">$6</td><td class="num neg" data-v="-18.00">-18</td>
+<td class="num muted" data-v="116">116</td></tr><tr data-team="Discount liquors"><td class="num muted" data-v="12">12</td>
+<td data-v="Tyrese Maxey">Tyrese Maxey <span class="sub">PHI · PG</span></td>
+<td class="sub" data-v="Discount liquors">Discount liquors</td><td class="num" data-v="55">$55</td>
+<td class="num" data-v="45.00">$45</td><td class="num neg" data-v="-10.00">-10</td>
+<td class="num muted" data-v="12">12</td></tr><tr data-team="2nd cumming of Jokic"><td class="num muted" data-v="13">13</td>
+<td data-v="Lauri Markkanen">Lauri Markkanen <span class="sub">UTA · SF/PF</span></td>
+<td class="sub" data-v="2nd cumming of Jokic">2nd cumming of Jokic</td><td class="num" data-v="31">$31</td>
+<td class="num" data-v="22.00">$22</td><td class="num neg" data-v="-9.00">-9</td>
+<td class="num muted" data-v="45">45</td></tr><tr data-team="Džesika Shai"><td class="num muted" data-v="14">14</td>
+<td data-v="Shai Gilgeous-Alexander">Shai Gilgeous-Alexander <span class="sub">OKC · PG</span></td>
+<td class="sub" data-v="Džesika Shai">Džesika Shai</td><td class="num" data-v="78">$78</td>
+<td class="num" data-v="75.00">$75</td><td class="num neg" data-v="-3.00">-3</td>
+<td class="num muted" data-v="4">4</td></tr><tr data-team="Overpayed"><td class="num muted" data-v="15">15</td>
+<td data-v="Cooper Flagg">Cooper Flagg <span class="sub">DAL · SG/SF/PF</span></td>
+<td class="sub" data-v="Overpayed">Overpayed</td><td class="num" data-v="50">$50</td>
+<td class="num" data-v="50.00">$50</td><td class="num muted" data-v="0.00">+0</td>
+<td class="num muted" data-v="9">9</td></tr><tr data-team="Ant&#x27;s kitchen"><td class="num muted" data-v="16">16</td>
+<td data-v="Jalen Duren">Jalen Duren <span class="sub">DET · C</span></td>
+<td class="sub" data-v="Ant&#x27;s kitchen">Ant&#x27;s kitchen</td><td class="num" data-v="29">$29</td>
+<td class="num" data-v="28.00">$28</td><td class="num muted" data-v="-1.00">-1</td>
+<td class="num muted" data-v="29">29</td></tr><tr data-team="Sizzlin sons"><td class="num muted" data-v="17">17</td>
+<td data-v="Cade Cunningham">Cade Cunningham <span class="sub">DET · PG/SG</span></td>
+<td class="sub" data-v="Sizzlin sons">Sizzlin sons</td><td class="num" data-v="61">$61</td>
+<td class="num" data-v="60.00">$60</td><td class="num muted" data-v="-1.00">-1</td>
+<td class="num muted" data-v="6">6</td></tr><tr data-team="Traes Comas Club"><td class="num muted" data-v="18">18</td>
+<td data-v="Michael Porter Jr.">Michael Porter Jr. <span class="sub">BKN · SF/PF</span></td>
+<td class="sub" data-v="Traes Comas Club">Traes Comas Club</td><td class="num" data-v="20">$20</td>
+<td class="num" data-v="16.00">$16</td><td class="num neg" data-v="-4.00">-4</td>
+<td class="num muted" data-v="69">69</td></tr><tr data-team="Ant&#x27;s kitchen"><td class="num muted" data-v="19">19</td>
+<td data-v="Anthony Edwards">Anthony Edwards <span class="sub">MIN · PG/SG</span></td>
+<td class="sub" data-v="Ant&#x27;s kitchen">Ant&#x27;s kitchen</td><td class="num" data-v="60">$60</td>
+<td class="num" data-v="24.00">$24</td><td class="num neg" data-v="-36.00">-36</td>
+<td class="num muted" data-v="38">38</td></tr><tr data-team="Giddey up"><td class="num muted" data-v="20">20</td>
+<td data-v="Jayson Tatum">Jayson Tatum <span class="sub">BOS · SF/PF</span></td>
+<td class="sub" data-v="Giddey up">Giddey up</td><td class="num" data-v="50">$50</td>
+<td class="num" data-v="60.00">$60</td><td class="num pos" data-v="10.00">+10</td>
+<td class="num muted" data-v="7">7</td></tr><tr data-team="Kyrie Me River"><td class="num muted" data-v="21">21</td>
+<td data-v="Evan Mobley">Evan Mobley <span class="sub">CLE · PF/C</span></td>
+<td class="sub" data-v="Kyrie Me River">Kyrie Me River</td><td class="num" data-v="29">$29</td>
+<td class="num" data-v="31.00">$31</td><td class="num pos" data-v="2.00">+2</td>
+<td class="num muted" data-v="25">25</td></tr><tr data-team="Black Zeus"><td class="num muted" data-v="22">22</td>
+<td data-v="Amen Thompson">Amen Thompson <span class="sub">HOU · PG/SG</span></td>
+<td class="sub" data-v="Black Zeus">Black Zeus</td><td class="num" data-v="37">$37</td>
+<td class="num" data-v="25.00">$25</td><td class="num neg" data-v="-12.00">-12</td>
+<td class="num muted" data-v="34">34</td></tr><tr data-team="Tiltai miesteliuose"><td class="num muted" data-v="23">23</td>
+<td data-v="Ja Morant">Ja Morant <span class="sub">POR · PG</span></td>
+<td class="sub" data-v="Tiltai miesteliuose">Tiltai miesteliuose</td><td class="num" data-v="8">$8</td>
+<td class="num" data-v="2.00">$2</td><td class="num neg" data-v="-6.00">-6</td>
+<td class="num muted" data-v="182">182</td></tr><tr data-team="Tiltai miesteliuose"><td class="num muted" data-v="24">24</td>
+<td data-v="Tyrese Haliburton">Tyrese Haliburton <span class="sub">IND · PG/SG</span></td>
+<td class="sub" data-v="Tiltai miesteliuose">Tiltai miesteliuose</td><td class="num" data-v="41">$41</td>
+<td class="num" data-v="34.00">$34</td><td class="num neg" data-v="-7.00">-7</td>
+<td class="num muted" data-v="22">22</td></tr><tr data-team="Kyrie Me River"><td class="num muted" data-v="25">25</td>
+<td data-v="Jalen Brunson">Jalen Brunson <span class="sub">NYK · PG</span></td>
+<td class="sub" data-v="Kyrie Me River">Kyrie Me River</td><td class="num" data-v="34">$34</td>
+<td class="num" data-v="23.00">$23</td><td class="num neg" data-v="-11.00">-11</td>
+<td class="num muted" data-v="44">44</td></tr><tr data-team="Giddey up"><td class="num muted" data-v="26">26</td>
+<td data-v="Alex Sarr">Alex Sarr <span class="sub">WAS · C</span></td>
+<td class="sub" data-v="Giddey up">Giddey up</td><td class="num" data-v="10">$10</td>
+<td class="num" data-v="3.00">$3</td><td class="num neg" data-v="-7.00">-7</td>
+<td class="num muted" data-v="152">152</td></tr><tr data-team="Kyrie Me River"><td class="num muted" data-v="27">27</td>
+<td data-v="Kevin Durant">Kevin Durant <span class="sub">HOU · SG/SF/PF</span></td>
+<td class="sub" data-v="Kyrie Me River">Kyrie Me River</td><td class="num" data-v="46">$46</td>
+<td class="num" data-v="39.00">$39</td><td class="num neg" data-v="-7.00">-7</td>
+<td class="num muted" data-v="17">17</td></tr><tr data-team="Traes Comas Club"><td class="num muted" data-v="28">28</td>
+<td data-v="Joel Embiid">Joel Embiid <span class="sub">PHI · C</span></td>
+<td class="sub" data-v="Traes Comas Club">Traes Comas Club</td><td class="num" data-v="12">$12</td>
+<td class="num" data-v="12.00">$12</td><td class="num muted" data-v="0.00">+0</td>
+<td class="num muted" data-v="82">82</td></tr><tr data-team="Pizza ball"><td class="num muted" data-v="29">29</td>
+<td data-v="LaMelo Ball">LaMelo Ball <span class="sub">MIN · PG</span></td>
+<td class="sub" data-v="Pizza ball">Pizza ball</td><td class="num" data-v="34">$34</td>
+<td class="num" data-v="34.00">$34</td><td class="num muted" data-v="0.00">+0</td>
+<td class="num muted" data-v="23">23</td></tr><tr data-team="Sizzlin sons"><td class="num muted" data-v="30">30</td>
+<td data-v="Jalen Johnson">Jalen Johnson <span class="sub">ATL · SF/PF</span></td>
+<td class="sub" data-v="Sizzlin sons">Sizzlin sons</td><td class="num" data-v="45">$45</td>
+<td class="num" data-v="46.00">$46</td><td class="num muted" data-v="1.00">+1</td>
+<td class="num muted" data-v="11">11</td></tr><tr data-team="Tiltai miesteliuose"><td class="num muted" data-v="31">31</td>
+<td data-v="Donovan Mitchell">Donovan Mitchell <span class="sub">CLE · PG/SG</span></td>
+<td class="sub" data-v="Tiltai miesteliuose">Tiltai miesteliuose</td><td class="num" data-v="44">$44</td>
+<td class="num" data-v="41.00">$41</td><td class="num neg" data-v="-3.00">-3</td>
+<td class="num muted" data-v="15">15</td></tr><tr data-team="Ant&#x27;s kitchen"><td class="num muted" data-v="32">32</td>
+<td data-v="Alperen Şengün">Alperen Şengün <span class="sub">HOU · PF/C</span></td>
+<td class="sub" data-v="Ant&#x27;s kitchen">Ant&#x27;s kitchen</td><td class="num" data-v="36">$36</td>
+<td class="num" data-v="29.00">$29</td><td class="num neg" data-v="-7.00">-7</td>
+<td class="num muted" data-v="28">28</td></tr><tr data-team="Discount liquors"><td class="num muted" data-v="33">33</td>
+<td data-v="Scottie Barnes">Scottie Barnes <span class="sub">TOR · SF/PF/C</span></td>
+<td class="sub" data-v="Discount liquors">Discount liquors</td><td class="num" data-v="45">$45</td>
+<td class="num" data-v="55.00">$55</td><td class="num pos" data-v="10.00">+10</td>
+<td class="num muted" data-v="8">8</td></tr><tr data-team="Mamuko_Tequila.mp3"><td class="num muted" data-v="34">34</td>
+<td data-v="Tyler Herro">Tyler Herro <span class="sub">MIL · PG/SG</span></td>
+<td class="sub" data-v="Mamuko_Tequila.mp3">Mamuko_Tequila.mp3</td><td class="num" data-v="20">$20</td>
+<td class="num" data-v="18.00">$18</td><td class="num neg" data-v="-2.00">-2</td>
+<td class="num muted" data-v="57">57</td></tr><tr data-team="Pizza ball"><td class="num muted" data-v="35">35</td>
+<td data-v="Jamal Murray">Jamal Murray <span class="sub">DEN · PG</span></td>
+<td class="sub" data-v="Pizza ball">Pizza ball</td><td class="num" data-v="41">$41</td>
+<td class="num" data-v="36.00">$36</td><td class="num neg" data-v="-5.00">-5</td>
+<td class="num muted" data-v="20">20</td></tr><tr data-team="Tiltai miesteliuose"><td class="num muted" data-v="36">36</td>
+<td data-v="Karl-Anthony Towns">Karl-Anthony Towns <span class="sub">NYK · PF/C</span></td>
+<td class="sub" data-v="Tiltai miesteliuose">Tiltai miesteliuose</td><td class="num" data-v="36">$36</td>
+<td class="num" data-v="50.00">$50</td><td class="num pos" data-v="14.00">+14</td>
+<td class="num muted" data-v="10">10</td></tr><tr data-team="Traes Comas Club"><td class="num muted" data-v="37">37</td>
+<td data-v="Trae Young">Trae Young <span class="sub">WAS · PG</span></td>
+<td class="sub" data-v="Traes Comas Club">Traes Comas Club</td><td class="num" data-v="26">$26</td>
+<td class="num" data-v="37.00">$37</td><td class="num pos" data-v="11.00">+11</td>
+<td class="num muted" data-v="18">18</td></tr><tr data-team="Lakštingala negali nečiulbėti"><td class="num muted" data-v="38">38</td>
+<td data-v="Brandon Miller">Brandon Miller <span class="sub">CHA · SF/PF</span></td>
+<td class="sub" data-v="Lakštingala negali nečiulbėti">Lakštingala negali nečiulbėti</td><td class="num" data-v="27">$27</td>
+<td class="num" data-v="30.00">$30</td><td class="num pos" data-v="3.00">+3</td>
+<td class="num muted" data-v="26">26</td></tr><tr data-team="Kyrie Me River"><td class="num muted" data-v="39">39</td>
+<td data-v="Devin Booker">Devin Booker <span class="sub">PHX · PG/SG</span></td>
+<td class="sub" data-v="Kyrie Me River">Kyrie Me River</td><td class="num" data-v="25">$25</td>
+<td class="num" data-v="26.00">$26</td><td class="num muted" data-v="1.00">+1</td>
+<td class="num muted" data-v="33">33</td></tr><tr data-team="Mamuko_Tequila.mp3"><td class="num muted" data-v="40">40</td>
+<td data-v="Jaylen Brown">Jaylen Brown <span class="sub">PHI · SG/SF/PF</span></td>
+<td class="sub" data-v="Mamuko_Tequila.mp3">Mamuko_Tequila.mp3</td><td class="num" data-v="24">$24</td>
+<td class="num" data-v="24.00">$24</td><td class="num muted" data-v="0.00">+0</td>
+<td class="num muted" data-v="37">37</td></tr><tr data-team="Mamuko_Tequila.mp3"><td class="num muted" data-v="41">41</td>
+<td data-v="D&#x27;Angelo Russell">D&#x27;Angelo Russell <span class="sub">MEM · PG/SG</span></td>
+<td class="sub" data-v="Mamuko_Tequila.mp3">Mamuko_Tequila.mp3</td><td class="num" data-v="1">$1</td>
+<td class="num" data-v="1.00">$1</td><td class="num muted" data-v="0.00">+0</td>
+<td class="num muted" data-v="9999">—</td></tr><tr data-team="Black Zeus"><td class="num muted" data-v="42">42</td>
+<td data-v="LeBron James">LeBron James <span class="sub">PHI · SF/PF</span></td>
+<td class="sub" data-v="Black Zeus">Black Zeus</td><td class="num" data-v="19">$19</td>
+<td class="num" data-v="13.00">$13</td><td class="num neg" data-v="-6.00">-6</td>
+<td class="num muted" data-v="75">75</td></tr><tr data-team="Sizzlin sons"><td class="num muted" data-v="43">43</td>
+<td data-v="Bam Adebayo">Bam Adebayo <span class="sub">MIA · PF/C</span></td>
+<td class="sub" data-v="Sizzlin sons">Sizzlin sons</td><td class="num" data-v="22">$22</td>
+<td class="num" data-v="29.00">$29</td><td class="num pos" data-v="7.00">+7</td>
+<td class="num muted" data-v="27">27</td></tr><tr data-team="Lakštingala negali nečiulbėti"><td class="num muted" data-v="44">44</td>
+<td data-v="Austin Reaves">Austin Reaves <span class="sub">LAL · PG/SG/SF</span></td>
+<td class="sub" data-v="Lakštingala negali nečiulbėti">Lakštingala negali nečiulbėti</td><td class="num" data-v="39">$39</td>
+<td class="num" data-v="45.00">$45</td><td class="num pos" data-v="6.00">+6</td>
+<td class="num muted" data-v="13">13</td></tr><tr data-team="Mamuko_Tequila.mp3"><td class="num muted" data-v="45">45</td>
+<td data-v="Domantas Sabonis">Domantas Sabonis <span class="sub">SAC · PF/C</span></td>
+<td class="sub" data-v="Mamuko_Tequila.mp3">Mamuko_Tequila.mp3</td><td class="num" data-v="27">$27</td>
+<td class="num" data-v="36.00">$36</td><td class="num pos" data-v="9.00">+9</td>
+<td class="num muted" data-v="19">19</td></tr><tr data-team="Kyrie Me River"><td class="num muted" data-v="46">46</td>
+<td data-v="Kyrie Irving">Kyrie Irving <span class="sub">DAL · PG/SG</span></td>
+<td class="sub" data-v="Kyrie Me River">Kyrie Me River</td><td class="num" data-v="19">$19</td>
+<td class="num" data-v="24.00">$24</td><td class="num pos" data-v="5.00">+5</td>
+<td class="num muted" data-v="40">40</td></tr><tr data-team="Pizza ball"><td class="num muted" data-v="47">47</td>
+<td data-v="James Harden">James Harden <span class="sub">CLE · PG/SG</span></td>
+<td class="sub" data-v="Pizza ball">Pizza ball</td><td class="num" data-v="23">$23</td>
+<td class="num" data-v="24.00">$24</td><td class="num muted" data-v="1.00">+1</td>
+<td class="num muted" data-v="39">39</td></tr><tr data-team="Lakštingala negali nečiulbėti"><td class="num muted" data-v="48">48</td>
+<td data-v="Onyeka Okongwu">Onyeka Okongwu <span class="sub">ATL · C</span></td>
+<td class="sub" data-v="Lakštingala negali nečiulbėti">Lakštingala negali nečiulbėti</td><td class="num" data-v="17">$17</td>
+<td class="num" data-v="12.00">$12</td><td class="num neg" data-v="-5.00">-5</td>
+<td class="num muted" data-v="79">79</td></tr><tr data-team="Discount liquors"><td class="num muted" data-v="49">49</td>
+<td data-v="Chet Holmgren">Chet Holmgren <span class="sub">OKC · PF/C</span></td>
+<td class="sub" data-v="Discount liquors">Discount liquors</td><td class="num" data-v="25">$25</td>
+<td class="num" data-v="5.00">$5</td><td class="num neg" data-v="-20.00">-20</td>
+<td class="num muted" data-v="136">136</td></tr><tr data-team="2nd cumming of Jokic"><td class="num muted" data-v="50">50</td>
+<td data-v="Walker Kessler">Walker Kessler <span class="sub">LAL · C</span></td>
+<td class="sub" data-v="2nd cumming of Jokic">2nd cumming of Jokic</td><td class="num" data-v="24">$24</td>
+<td class="num" data-v="44.00">$44</td><td class="num pos" data-v="20.00">+20</td>
+<td class="num muted" data-v="14">14</td></tr><tr data-team="Black Zeus"><td class="num muted" data-v="51">51</td>
+<td data-v="RJ Barrett">RJ Barrett <span class="sub">TOR · SG/SF/PF</span></td>
+<td class="sub" data-v="Black Zeus">Black Zeus</td><td class="num" data-v="3">$3</td>
+<td class="num" data-v="5.00">$5</td><td class="num pos" data-v="2.00">+2</td>
+<td class="num muted" data-v="128">128</td></tr><tr data-team="Traes Comas Club"><td class="num muted" data-v="52">52</td>
+<td data-v="Keyonte George">Keyonte George <span class="sub">UTA · PG/SG</span></td>
+<td class="sub" data-v="Traes Comas Club">Traes Comas Club</td><td class="num" data-v="17">$17</td>
+<td class="num" data-v="20.00">$20</td><td class="num pos" data-v="3.00">+3</td>
+<td class="num muted" data-v="48">48</td></tr><tr data-team="Black Zeus"><td class="num muted" data-v="53">53</td>
+<td data-v="Zion Williamson">Zion Williamson <span class="sub">NOP · PF/C</span></td>
+<td class="sub" data-v="Black Zeus">Black Zeus</td><td class="num" data-v="10">$10</td>
+<td class="num" data-v="16.00">$16</td><td class="num pos" data-v="6.00">+6</td>
+<td class="num muted" data-v="70">70</td></tr><tr data-team="Tiltai miesteliuose"><td class="num muted" data-v="54">54</td>
+<td data-v="Mikal Bridges">Mikal Bridges <span class="sub">NYK · SF/PF</span></td>
+<td class="sub" data-v="Tiltai miesteliuose">Tiltai miesteliuose</td><td class="num" data-v="14">$14</td>
+<td class="num" data-v="4.00">$4</td><td class="num neg" data-v="-10.00">-10</td>
+<td class="num muted" data-v="140">140</td></tr><tr data-team="Lakštingala negali nečiulbėti"><td class="num muted" data-v="55">55</td>
+<td data-v="Cameron Boozer">Cameron Boozer <span class="sub">MEM · PF</span></td>
+<td class="sub" data-v="Lakštingala negali nečiulbėti">Lakštingala negali nečiulbėti</td><td class="num" data-v="20">$20</td>
+<td class="num" data-v="14.00">$14</td><td class="num neg" data-v="-6.00">-6</td>
+<td class="num muted" data-v="72">72</td></tr><tr data-team="Traes Comas Club"><td class="num muted" data-v="56">56</td>
+<td data-v="Derrick White">Derrick White <span class="sub">BOS · PG/SG</span></td>
+<td class="sub" data-v="Traes Comas Club">Traes Comas Club</td><td class="num" data-v="24">$24</td>
+<td class="num" data-v="16.00">$16</td><td class="num neg" data-v="-8.00">-8</td>
+<td class="num muted" data-v="66">66</td></tr><tr data-team="Pizza ball"><td class="num muted" data-v="57">57</td>
+<td data-v="Ivica Zubac">Ivica Zubac <span class="sub">IND · C</span></td>
+<td class="sub" data-v="Pizza ball">Pizza ball</td><td class="num" data-v="14">$14</td>
+<td class="num" data-v="19.00">$19</td><td class="num pos" data-v="5.00">+5</td>
+<td class="num muted" data-v="55">55</td></tr><tr data-team="Black Zeus"><td class="num muted" data-v="58">58</td>
+<td data-v="Rudy Gobert">Rudy Gobert <span class="sub">MIN · C</span></td>
+<td class="sub" data-v="Black Zeus">Black Zeus</td><td class="num" data-v="11">$11</td>
+<td class="num" data-v="16.00">$16</td><td class="num pos" data-v="5.00">+5</td>
+<td class="num muted" data-v="67">67</td></tr><tr data-team="Black Zeus"><td class="num muted" data-v="59">59</td>
+<td data-v="Zach Edey">Zach Edey <span class="sub">MEM · C</span></td>
+<td class="sub" data-v="Black Zeus">Black Zeus</td><td class="num" data-v="12">$12</td>
+<td class="num" data-v="8.00">$8</td><td class="num neg" data-v="-4.00">-4</td>
+<td class="num muted" data-v="99">99</td></tr><tr data-team="Traes Comas Club"><td class="num muted" data-v="60">60</td>
+<td data-v="Desmond Bane">Desmond Bane <span class="sub">ORL · SG/SF</span></td>
+<td class="sub" data-v="Traes Comas Club">Traes Comas Club</td><td class="num" data-v="19">$19</td>
+<td class="num" data-v="21.00">$21</td><td class="num pos" data-v="2.00">+2</td>
+<td class="num muted" data-v="47">47</td></tr><tr data-team="Džesika Shai"><td class="num muted" data-v="61">61</td>
+<td data-v="Franz Wagner">Franz Wagner <span class="sub">ORL · SF/PF</span></td>
+<td class="sub" data-v="Džesika Shai">Džesika Shai</td><td class="num" data-v="19">$19</td>
+<td class="num" data-v="20.00">$20</td><td class="num muted" data-v="1.00">+1</td>
+<td class="num muted" data-v="52">52</td></tr><tr data-team="Pizza ball"><td class="num muted" data-v="62">62</td>
+<td data-v="Deni Avdija">Deni Avdija <span class="sub">POR · SG/SF/PF</span></td>
+<td class="sub" data-v="Pizza ball">Pizza ball</td><td class="num" data-v="20">$20</td>
+<td class="num" data-v="20.00">$20</td><td class="num muted" data-v="0.00">+0</td>
+<td class="num muted" data-v="49">49</td></tr><tr data-team="Džesika Shai"><td class="num muted" data-v="63">63</td>
+<td data-v="Jaren Jackson Jr.">Jaren Jackson Jr. <span class="sub">UTA · PF/C</span></td>
+<td class="sub" data-v="Džesika Shai">Džesika Shai</td><td class="num" data-v="22">$22</td>
+<td class="num" data-v="7.00">$7</td><td class="num neg" data-v="-15.00">-15</td>
+<td class="num muted" data-v="101">101</td></tr><tr data-team="Džesika Shai"><td class="num muted" data-v="64">64</td>
+<td data-v="Donovan Clingan">Donovan Clingan <span class="sub">POR · C</span></td>
+<td class="sub" data-v="Džesika Shai">Džesika Shai</td><td class="num" data-v="20">$20</td>
+<td class="num" data-v="25.00">$25</td><td class="num pos" data-v="5.00">+5</td>
+<td class="num muted" data-v="35">35</td></tr><tr data-team="Lakštingala negali nečiulbėti"><td class="num muted" data-v="65">65</td>
+<td data-v="Julius Randle">Julius Randle <span class="sub">BKN · PF</span></td>
+<td class="sub" data-v="Lakštingala negali nečiulbėti">Lakštingala negali nečiulbėti</td><td class="num" data-v="18">$18</td>
+<td class="num" data-v="12.00">$12</td><td class="num neg" data-v="-6.00">-6</td>
+<td class="num muted" data-v="80">80</td></tr><tr data-team="Giddey up"><td class="num muted" data-v="66">66</td>
+<td data-v="Trey Murphy III">Trey Murphy III <span class="sub">NOP · SG/SF</span></td>
+<td class="sub" data-v="Giddey up">Giddey up</td><td class="num" data-v="30">$30</td>
+<td class="num" data-v="19.00">$19</td><td class="num neg" data-v="-11.00">-11</td>
+<td class="num muted" data-v="54">54</td></tr><tr data-team="Black Zeus"><td class="num muted" data-v="67">67</td>
+<td data-v="Ausar Thompson">Ausar Thompson <span class="sub">DET · SG/SF/PF</span></td>
+<td class="sub" data-v="Black Zeus">Black Zeus</td><td class="num" data-v="16">$16</td>
+<td class="num" data-v="18.00">$18</td><td class="num pos" data-v="2.00">+2</td>
+<td class="num muted" data-v="59">59</td></tr><tr data-team="Sizzlin sons"><td class="num muted" data-v="68">68</td>
+<td data-v="Jalen Williams">Jalen Williams <span class="sub">OKC · SF/PF</span></td>
+<td class="sub" data-v="Sizzlin sons">Sizzlin sons</td><td class="num" data-v="26">$26</td>
+<td class="num" data-v="1.00">$1</td><td class="num neg" data-v="-25.00">-25</td>
+<td class="num muted" data-v="225">225</td></tr><tr data-team="Traes Comas Club"><td class="num muted" data-v="69">69</td>
+<td data-v="Zach LaVine">Zach LaVine <span class="sub">SAC · PG/SG/SF</span></td>
+<td class="sub" data-v="Traes Comas Club">Traes Comas Club</td><td class="num" data-v="4">$4</td>
+<td class="num" data-v="9.00">$9</td><td class="num pos" data-v="5.00">+5</td>
+<td class="num muted" data-v="95">95</td></tr><tr data-team="2nd cumming of Jokic"><td class="num muted" data-v="70">70</td>
+<td data-v="Jarrett Allen">Jarrett Allen <span class="sub">CLE · C</span></td>
+<td class="sub" data-v="2nd cumming of Jokic">2nd cumming of Jokic</td><td class="num" data-v="12">$12</td>
+<td class="num" data-v="24.00">$24</td><td class="num pos" data-v="12.00">+12</td>
+<td class="num muted" data-v="41">41</td></tr><tr data-team="Pizza ball"><td class="num muted" data-v="71">71</td>
+<td data-v="Darius Garland">Darius Garland <span class="sub">LAC · PG</span></td>
+<td class="sub" data-v="Pizza ball">Pizza ball</td><td class="num" data-v="23">$23</td>
+<td class="num" data-v="22.00">$22</td><td class="num muted" data-v="-1.00">-1</td>
+<td class="num muted" data-v="46">46</td></tr><tr data-team="Tiltai miesteliuose"><td class="num muted" data-v="72">72</td>
+<td data-v="Naz Reid">Naz Reid <span class="sub">CHA · PF/C</span></td>
+<td class="sub" data-v="Tiltai miesteliuose">Tiltai miesteliuose</td><td class="num" data-v="16">$16</td>
+<td class="num" data-v="16.00">$16</td><td class="num muted" data-v="0.00">+0</td>
+<td class="num muted" data-v="68">68</td></tr><tr data-team="Overpayed"><td class="num muted" data-v="73">73</td>
+<td data-v="Isaiah Hartenstein">Isaiah Hartenstein <span class="sub">OKC · C</span></td>
+<td class="sub" data-v="Overpayed">Overpayed</td><td class="num" data-v="5">$5</td>
+<td class="num" data-v="11.00">$11</td><td class="num pos" data-v="6.00">+6</td>
+<td class="num muted" data-v="83">83</td></tr><tr data-team="Overpayed"><td class="num muted" data-v="74">74</td>
+<td data-v="De&#x27;Aaron Fox">De&#x27;Aaron Fox <span class="sub">SAS · PG</span></td>
+<td class="sub" data-v="Overpayed">Overpayed</td><td class="num" data-v="12">$12</td>
+<td class="num" data-v="11.00">$11</td><td class="num muted" data-v="-1.00">-1</td>
+<td class="num muted" data-v="85">85</td></tr><tr data-team="Giddey up"><td class="num muted" data-v="75">75</td>
+<td data-v="Dejounte Murray">Dejounte Murray <span class="sub">NOP · PG/SG</span></td>
+<td class="sub" data-v="Giddey up">Giddey up</td><td class="num" data-v="23">$23</td>
+<td class="num" data-v="27.00">$27</td><td class="num pos" data-v="4.00">+4</td>
+<td class="num muted" data-v="30">30</td></tr><tr data-team="Traes Comas Club"><td class="num muted" data-v="76">76</td>
+<td data-v="OG Anunoby">OG Anunoby <span class="sub">NYK · SF/PF</span></td>
+<td class="sub" data-v="Traes Comas Club">Traes Comas Club</td><td class="num" data-v="18">$18</td>
+<td class="num" data-v="20.00">$20</td><td class="num pos" data-v="2.00">+2</td>
+<td class="num muted" data-v="50">50</td></tr><tr data-team="Džesika Shai"><td class="num muted" data-v="77">77</td>
+<td data-v="Dyson Daniels">Dyson Daniels <span class="sub">ATL · SG/SF</span></td>
+<td class="sub" data-v="Džesika Shai">Džesika Shai</td><td class="num" data-v="21">$21</td>
+<td class="num" data-v="33.00">$33</td><td class="num pos" data-v="12.00">+12</td>
+<td class="num muted" data-v="24">24</td></tr><tr data-team="Overpayed"><td class="num muted" data-v="78">78</td>
+<td data-v="DeMar DeRozan">DeMar DeRozan <span class="sub">DEN · SF/PF</span></td>
+<td class="sub" data-v="Overpayed">Overpayed</td><td class="num" data-v="7">$7</td>
+<td class="num" data-v="1.00">$1</td><td class="num neg" data-v="-6.00">-6</td>
+<td class="num muted" data-v="209">209</td></tr><tr data-team="Traes Comas Club"><td class="num muted" data-v="79">79</td>
+<td data-v="Nickeil Alexander-Walker">Nickeil Alexander-Walker <span class="sub">ATL · PG/SG</span></td>
+<td class="sub" data-v="Traes Comas Club">Traes Comas Club</td><td class="num" data-v="25">$25</td>
+<td class="num" data-v="25.00">$25</td><td class="num muted" data-v="0.00">+0</td>
+<td class="num muted" data-v="36">36</td></tr><tr data-team="Lakštingala negali nečiulbėti"><td class="num muted" data-v="80">80</td>
+<td data-v="Pascal Siakam">Pascal Siakam <span class="sub">IND · PF/C</span></td>
+<td class="sub" data-v="Lakštingala negali nečiulbėti">Lakštingala negali nečiulbėti</td><td class="num" data-v="16">$16</td>
+<td class="num" data-v="18.00">$18</td><td class="num pos" data-v="2.00">+2</td>
+<td class="num muted" data-v="58">58</td></tr><tr data-team="Traes Comas Club"><td class="num muted" data-v="81">81</td>
+<td data-v="Damian Lillard">Damian Lillard <span class="sub">POR · PG</span></td>
+<td class="sub" data-v="Traes Comas Club">Traes Comas Club</td><td class="num" data-v="16">$16</td>
+<td class="num" data-v="19.00">$19</td><td class="num pos" data-v="3.00">+3</td>
+<td class="num muted" data-v="53">53</td></tr><tr data-team="Mamuko_Tequila.mp3"><td class="num muted" data-v="82">82</td>
+<td data-v="Kon Knueppel">Kon Knueppel <span class="sub">CHA · SG/SF</span></td>
+<td class="sub" data-v="Mamuko_Tequila.mp3">Mamuko_Tequila.mp3</td><td class="num" data-v="18">$18</td>
+<td class="num" data-v="6.00">$6</td><td class="num neg" data-v="-12.00">-12</td>
+<td class="num muted" data-v="110">110</td></tr><tr data-team="Tiltai miesteliuose"><td class="num muted" data-v="83">83</td>
+<td data-v="Kel&#x27;el Ware">Kel&#x27;el Ware <span class="sub">MIL · C</span></td>
+<td class="sub" data-v="Tiltai miesteliuose">Tiltai miesteliuose</td><td class="num" data-v="17">$17</td>
+<td class="num" data-v="12.00">$12</td><td class="num neg" data-v="-5.00">-5</td>
+<td class="num muted" data-v="81">81</td></tr><tr data-team="Lakštingala negali nečiulbėti"><td class="num muted" data-v="84">84</td>
+<td data-v="Coby White">Coby White <span class="sub">CHA · PG/SG</span></td>
+<td class="sub" data-v="Lakštingala negali nečiulbėti">Lakštingala negali nečiulbėti</td><td class="num" data-v="11">$11</td>
+<td class="num" data-v="7.00">$7</td><td class="num neg" data-v="-4.00">-4</td>
+<td class="num muted" data-v="102">102</td></tr><tr data-team="2nd cumming of Jokic"><td class="num muted" data-v="85">85</td>
+<td data-v="Jaden McDaniels">Jaden McDaniels <span class="sub">MIN · SF</span></td>
+<td class="sub" data-v="2nd cumming of Jokic">2nd cumming of Jokic</td><td class="num" data-v="14">$14</td>
+<td class="num" data-v="17.00">$17</td><td class="num pos" data-v="3.00">+3</td>
+<td class="num muted" data-v="61">61</td></tr><tr data-team="Ant&#x27;s kitchen"><td class="num muted" data-v="86">86</td>
+<td data-v="Andrew Wiggins">Andrew Wiggins <span class="sub">MIA · SG/SF/PF</span></td>
+<td class="sub" data-v="Ant&#x27;s kitchen">Ant&#x27;s kitchen</td><td class="num" data-v="7">$7</td>
+<td class="num" data-v="3.00">$3</td><td class="num neg" data-v="-4.00">-4</td>
+<td class="num muted" data-v="176">176</td></tr><tr data-team="Overpayed"><td class="num muted" data-v="87">87</td>
+<td data-v="Neemias Queta">Neemias Queta <span class="sub">BOS · C</span></td>
+<td class="sub" data-v="Overpayed">Overpayed</td><td class="num" data-v="9">$9</td>
+<td class="num" data-v="17.00">$17</td><td class="num pos" data-v="8.00">+8</td>
+<td class="num muted" data-v="63">63</td></tr><tr data-team="Sizzlin sons"><td class="num muted" data-v="88">88</td>
+<td data-v="Miles Bridges">Miles Bridges <span class="sub">PHX · PF</span></td>
+<td class="sub" data-v="Sizzlin sons">Sizzlin sons</td><td class="num" data-v="5">$5</td>
+<td class="num" data-v="16.00">$16</td><td class="num pos" data-v="11.00">+11</td>
+<td class="num muted" data-v="65">65</td></tr><tr data-team="Discount liquors"><td class="num muted" data-v="89">89</td>
+<td data-v="Caleb Wilson">Caleb Wilson <span class="sub">CHI · PF</span></td>
+<td class="sub" data-v="Discount liquors">Discount liquors</td><td class="num" data-v="9">$9</td>
+<td class="num" data-v="12.00">$12</td><td class="num pos" data-v="3.00">+3</td>
+<td class="num muted" data-v="76">76</td></tr><tr data-team="Overpayed"><td class="num muted" data-v="90">90</td>
+<td data-v="Tre Jones">Tre Jones <span class="sub">CHI · PG/SG</span></td>
+<td class="sub" data-v="Overpayed">Overpayed</td><td class="num" data-v="5">$5</td>
+<td class="num" data-v="4.00">$4</td><td class="num muted" data-v="-1.00">-1</td>
+<td class="num muted" data-v="145">145</td></tr><tr data-team="Discount liquors"><td class="num muted" data-v="91">91</td>
+<td data-v="VJ Edgecombe">VJ Edgecombe <span class="sub">PHI · PG/SG</span></td>
+<td class="sub" data-v="Discount liquors">Discount liquors</td><td class="num" data-v="12">$12</td>
+<td class="num" data-v="19.00">$19</td><td class="num pos" data-v="7.00">+7</td>
+<td class="num muted" data-v="56">56</td></tr><tr data-team="Lakštingala negali nečiulbėti"><td class="num muted" data-v="92">92</td>
+<td data-v="Immanuel Quickley">Immanuel Quickley <span class="sub">TOR · PG/SG</span></td>
+<td class="sub" data-v="Lakštingala negali nečiulbėti">Lakštingala negali nečiulbėti</td><td class="num" data-v="12">$12</td>
+<td class="num" data-v="23.00">$23</td><td class="num pos" data-v="11.00">+11</td>
+<td class="num muted" data-v="42">42</td></tr><tr data-team="Traes Comas Club"><td class="num muted" data-v="93">93</td>
+<td data-v="Norman Powell">Norman Powell <span class="sub">CHI · SG/SF</span></td>
+<td class="sub" data-v="Traes Comas Club">Traes Comas Club</td><td class="num" data-v="12">$12</td>
+<td class="num" data-v="6.00">$6</td><td class="num neg" data-v="-6.00">-6</td>
+<td class="num muted" data-v="118">118</td></tr><tr data-team="Lakštingala negali nečiulbėti"><td class="num muted" data-v="94">94</td>
+<td data-v="Ryan Rollins">Ryan Rollins <span class="sub">MIL · PG/SG</span></td>
+<td class="sub" data-v="Lakštingala negali nečiulbėti">Lakštingala negali nečiulbėti</td><td class="num" data-v="16">$16</td>
+<td class="num" data-v="3.00">$3</td><td class="num neg" data-v="-13.00">-13</td>
+<td class="num muted" data-v="151">151</td></tr><tr data-team="Pizza ball"><td class="num muted" data-v="95">95</td>
+<td data-v="Collin Murray-Boyles">Collin Murray-Boyles <span class="sub">TOR · PF/C</span></td>
+<td class="sub" data-v="Pizza ball">Pizza ball</td><td class="num" data-v="11">$11</td>
+<td class="num" data-v="6.00">$6</td><td class="num neg" data-v="-5.00">-5</td>
+<td class="num muted" data-v="114">114</td></tr><tr data-team="Tiltai miesteliuose"><td class="num muted" data-v="96">96</td>
+<td data-v="Andrew Nembhard">Andrew Nembhard <span class="sub">IND · PG/SG</span></td>
+<td class="sub" data-v="Tiltai miesteliuose">Tiltai miesteliuose</td><td class="num" data-v="6">$6</td>
+<td class="num" data-v="5.00">$5</td><td class="num muted" data-v="-1.00">-1</td>
+<td class="num muted" data-v="123">123</td></tr><tr data-team="Giddey up"><td class="num muted" data-v="97">97</td>
+<td data-v="Paul George">Paul George <span class="sub">BOS · SF/PF</span></td>
+<td class="sub" data-v="Giddey up">Giddey up</td><td class="num" data-v="16">$16</td>
+<td class="num" data-v="34.00">$34</td><td class="num pos" data-v="18.00">+18</td>
+<td class="num muted" data-v="21">21</td></tr><tr data-team="Black Zeus"><td class="num muted" data-v="98">98</td>
+<td data-v="Dylan Harper">Dylan Harper <span class="sub">SAS · PG/SG</span></td>
+<td class="sub" data-v="Black Zeus">Black Zeus</td><td class="num" data-v="13">$13</td>
+<td class="num" data-v="17.00">$17</td><td class="num pos" data-v="4.00">+4</td>
+<td class="num muted" data-v="62">62</td></tr><tr data-team="Kyrie Me River"><td class="num muted" data-v="99">99</td>
+<td data-v="Christian Braun">Christian Braun <span class="sub">DEN · SG/SF/PF</span></td>
+<td class="sub" data-v="Kyrie Me River">Kyrie Me River</td><td class="num" data-v="5">$5</td>
+<td class="num" data-v="8.00">$8</td><td class="num pos" data-v="3.00">+3</td>
+<td class="num muted" data-v="96">96</td></tr><tr data-team="Overpayed"><td class="num muted" data-v="100">100</td>
+<td data-v="Stephon Castle">Stephon Castle <span class="sub">SAS · PG/SG</span></td>
+<td class="sub" data-v="Overpayed">Overpayed</td><td class="num" data-v="10">$10</td>
+<td class="num" data-v="8.00">$8</td><td class="num neg" data-v="-2.00">-2</td>
+<td class="num muted" data-v="97">97</td></tr><tr data-team="2nd cumming of Jokic"><td class="num muted" data-v="101">101</td>
+<td data-v="Ty Jerome">Ty Jerome <span class="sub">MEM · PG/SG</span></td>
+<td class="sub" data-v="2nd cumming of Jokic">2nd cumming of Jokic</td><td class="num" data-v="17">$17</td>
+<td class="num" data-v="26.00">$26</td><td class="num pos" data-v="9.00">+9</td>
+<td class="num muted" data-v="32">32</td></tr><tr data-team="2nd cumming of Jokic"><td class="num muted" data-v="102">102</td>
+<td data-v="Darryn Peterson">Darryn Peterson <span class="sub">UTA · SG</span></td>
+<td class="sub" data-v="2nd cumming of Jokic">2nd cumming of Jokic</td><td class="num" data-v="4">$4</td>
+<td class="num" data-v="6.00">$6</td><td class="num pos" data-v="2.00">+2</td>
+<td class="num muted" data-v="112">112</td></tr><tr data-team="Lakštingala negali nečiulbėti"><td class="num muted" data-v="103">103</td>
+<td data-v="Cedric Coward">Cedric Coward <span class="sub">MEM · SG/SF</span></td>
+<td class="sub" data-v="Lakštingala negali nečiulbėti">Lakštingala negali nečiulbėti</td><td class="num" data-v="13">$13</td>
+<td class="num" data-v="13.00">$13</td><td class="num muted" data-v="0.00">+0</td>
+<td class="num muted" data-v="74">74</td></tr><tr data-team="Overpayed"><td class="num muted" data-v="104">104</td>
+<td data-v="Josh Hart">Josh Hart <span class="sub">NYK · SG/SF</span></td>
+<td class="sub" data-v="Overpayed">Overpayed</td><td class="num" data-v="9">$9</td>
+<td class="num" data-v="7.00">$7</td><td class="num neg" data-v="-2.00">-2</td>
+<td class="num muted" data-v="105">105</td></tr><tr data-team="Tiltai miesteliuose"><td class="num muted" data-v="105">105</td>
+<td data-v="Cason Wallace">Cason Wallace <span class="sub">OKC · PG/SG/SF</span></td>
+<td class="sub" data-v="Tiltai miesteliuose">Tiltai miesteliuose</td><td class="num" data-v="10">$10</td>
+<td class="num" data-v="2.00">$2</td><td class="num neg" data-v="-8.00">-8</td>
+<td class="num muted" data-v="190">190</td></tr><tr data-team="Sizzlin sons"><td class="num muted" data-v="106">106</td>
+<td data-v="Payton Pritchard">Payton Pritchard <span class="sub">BOS · PG</span></td>
+<td class="sub" data-v="Sizzlin sons">Sizzlin sons</td><td class="num" data-v="10">$10</td>
+<td class="num" data-v="6.00">$6</td><td class="num neg" data-v="-4.00">-4</td>
+<td class="num muted" data-v="115">115</td></tr><tr data-team="Discount liquors"><td class="num muted" data-v="107">107</td>
+<td data-v="Brandon Ingram">Brandon Ingram <span class="sub">LAC · SG/SF/PF</span></td>
+<td class="sub" data-v="Discount liquors">Discount liquors</td><td class="num" data-v="5">$5</td>
+<td class="num" data-v="7.00">$7</td><td class="num pos" data-v="2.00">+2</td>
+<td class="num muted" data-v="103">103</td></tr><tr data-team="Discount liquors"><td class="num muted" data-v="108">108</td>
+<td data-v="Darius Acuff Jr.">Darius Acuff Jr. <span class="sub">SAC · PG</span></td>
+<td class="sub" data-v="Discount liquors">Discount liquors</td><td class="num" data-v="6">$6</td>
+<td class="num" data-v="10.00">$10</td><td class="num pos" data-v="4.00">+4</td>
+<td class="num muted" data-v="91">91</td></tr><tr data-team="Mamuko_Tequila.mp3"><td class="num muted" data-v="109">109</td>
+<td data-v="Sandro Mamukelashvili">Sandro Mamukelashvili <span class="sub">LAL · PF/C</span></td>
+<td class="sub" data-v="Mamuko_Tequila.mp3">Mamuko_Tequila.mp3</td><td class="num" data-v="7">$7</td>
+<td class="num" data-v="2.00">$2</td><td class="num neg" data-v="-5.00">-5</td>
+<td class="num muted" data-v="187">187</td></tr><tr data-team="Ant&#x27;s kitchen"><td class="num muted" data-v="110">110</td>
+<td data-v="Davion Mitchell">Davion Mitchell <span class="sub">MIA · PG</span></td>
+<td class="sub" data-v="Ant&#x27;s kitchen">Ant&#x27;s kitchen</td><td class="num" data-v="4">$4</td>
+<td class="num" data-v="10.00">$10</td><td class="num pos" data-v="6.00">+6</td>
+<td class="num muted" data-v="88">88</td></tr><tr data-team="2nd cumming of Jokic"><td class="num muted" data-v="111">111</td>
+<td data-v="Ayo Dosunmu">Ayo Dosunmu <span class="sub">MIN · PG/SG</span></td>
+<td class="sub" data-v="2nd cumming of Jokic">2nd cumming of Jokic</td><td class="num" data-v="2">$2</td>
+<td class="num" data-v="11.00">$11</td><td class="num pos" data-v="9.00">+9</td>
+<td class="num muted" data-v="84">84</td></tr><tr data-team="Džesika Shai"><td class="num muted" data-v="112">112</td>
+<td data-v="Ajay Mitchell">Ajay Mitchell <span class="sub">OKC · PG/SG</span></td>
+<td class="sub" data-v="Džesika Shai">Džesika Shai</td><td class="num" data-v="5">$5</td>
+<td class="num" data-v="17.00">$17</td><td class="num pos" data-v="12.00">+12</td>
+<td class="num muted" data-v="60">60</td></tr><tr data-team="Discount liquors"><td class="num muted" data-v="113">113</td>
+<td data-v="Jaime Jaquez Jr.">Jaime Jaquez Jr. <span class="sub">MIL · SG/SF/PF</span></td>
+<td class="sub" data-v="Discount liquors">Discount liquors</td><td class="num" data-v="7">$7</td>
+<td class="num" data-v="3.00">$3</td><td class="num neg" data-v="-4.00">-4</td>
+<td class="num muted" data-v="158">158</td></tr><tr data-team="Mamuko_Tequila.mp3"><td class="num muted" data-v="114">114</td>
+<td data-v="Jabari Smith Jr.">Jabari Smith Jr. <span class="sub">HOU · PF/C</span></td>
+<td class="sub" data-v="Mamuko_Tequila.mp3">Mamuko_Tequila.mp3</td><td class="num" data-v="7">$7</td>
+<td class="num" data-v="10.00">$10</td><td class="num pos" data-v="3.00">+3</td>
+<td class="num muted" data-v="87">87</td></tr><tr data-team="Traes Comas Club"><td class="num muted" data-v="115">115</td>
+<td data-v="Egor Dëmin">Egor Dëmin <span class="sub">BKN · PG/SG</span></td>
+<td class="sub" data-v="Traes Comas Club">Traes Comas Club</td><td class="num" data-v="1">$1</td>
+<td class="num" data-v="2.00">$2</td><td class="num muted" data-v="1.00">+1</td>
+<td class="num muted" data-v="179">179</td></tr><tr data-team="Ant&#x27;s kitchen"><td class="num muted" data-v="116">116</td>
+<td data-v="Day&#x27;Ron Sharpe">Day&#x27;Ron Sharpe <span class="sub">BKN · C</span></td>
+<td class="sub" data-v="Ant&#x27;s kitchen">Ant&#x27;s kitchen</td><td class="num" data-v="8">$8</td>
+<td class="num" data-v="5.00">$5</td><td class="num neg" data-v="-3.00">-3</td>
+<td class="num muted" data-v="125">125</td></tr><tr data-team="Black Zeus"><td class="num muted" data-v="117">117</td>
+<td data-v="Jalen Suggs">Jalen Suggs <span class="sub">ORL · PG/SG</span></td>
+<td class="sub" data-v="Black Zeus">Black Zeus</td><td class="num" data-v="8">$8</td>
+<td class="num" data-v="8.00">$8</td><td class="num muted" data-v="0.00">+0</td>
+<td class="num muted" data-v="98">98</td></tr><tr data-team="Overpayed"><td class="num muted" data-v="118">118</td>
+<td data-v="Jakob Poeltl">Jakob Poeltl <span class="sub">TOR · C</span></td>
+<td class="sub" data-v="Overpayed">Overpayed</td><td class="num" data-v="5">$5</td>
+<td class="num" data-v="4.00">$4</td><td class="num muted" data-v="-1.00">-1</td>
+<td class="num muted" data-v="148">148</td></tr><tr data-team="Discount liquors"><td class="num muted" data-v="119">119</td>
+<td data-v="Jeremiah Fears">Jeremiah Fears <span class="sub">NOP · PG/SG</span></td>
+<td class="sub" data-v="Discount liquors">Discount liquors</td><td class="num" data-v="3">$3</td>
+<td class="num" data-v="8.00">$8</td><td class="num pos" data-v="5.00">+5</td>
+<td class="num muted" data-v="100">100</td></tr><tr data-team="Kyrie Me River"><td class="num muted" data-v="120">120</td>
+<td data-v="Derik Queen">Derik Queen <span class="sub">NOP · PF/C</span></td>
+<td class="sub" data-v="Kyrie Me River">Kyrie Me River</td><td class="num" data-v="6">$6</td>
+<td class="num" data-v="6.00">$6</td><td class="num muted" data-v="0.00">+0</td>
+<td class="num muted" data-v="113">113</td></tr><tr data-team="Discount liquors"><td class="num muted" data-v="121">121</td>
+<td data-v="John Collins">John Collins <span class="sub">DET · PF/C</span></td>
+<td class="sub" data-v="Discount liquors">Discount liquors</td><td class="num" data-v="4">$4</td>
+<td class="num" data-v="3.00">$3</td><td class="num muted" data-v="-1.00">-1</td>
+<td class="num muted" data-v="164">164</td></tr><tr data-team="Giddey up"><td class="num muted" data-v="122">122</td>
+<td data-v="Myles Turner">Myles Turner <span class="sub">MIL · C</span></td>
+<td class="sub" data-v="Giddey up">Giddey up</td><td class="num" data-v="5">$5</td>
+<td class="num" data-v="7.00">$7</td><td class="num pos" data-v="2.00">+2</td>
+<td class="num muted" data-v="109">109</td></tr><tr data-team="Black Zeus"><td class="num muted" data-v="123">123</td>
+<td data-v="Brandin Podziemski">Brandin Podziemski <span class="sub">GSW · PG/SG</span></td>
+<td class="sub" data-v="Black Zeus">Black Zeus</td><td class="num" data-v="7">$7</td>
+<td class="num" data-v="14.00">$14</td><td class="num pos" data-v="7.00">+7</td>
+<td class="num muted" data-v="71">71</td></tr><tr data-team="Sizzlin sons"><td class="num muted" data-v="124">124</td>
+<td data-v="Nic Claxton">Nic Claxton <span class="sub">CHI · C</span></td>
+<td class="sub" data-v="Sizzlin sons">Sizzlin sons</td><td class="num" data-v="7">$7</td>
+<td class="num" data-v="10.00">$10</td><td class="num pos" data-v="3.00">+3</td>
+<td class="num muted" data-v="90">90</td></tr><tr data-team="Kyrie Me River"><td class="num muted" data-v="125">125</td>
+<td data-v="Kevin Porter Jr.">Kevin Porter Jr. <span class="sub">MIL · PG/SG</span></td>
+<td class="sub" data-v="Kyrie Me River">Kyrie Me River</td><td class="num" data-v="6">$6</td>
+<td class="num" data-v="1.00">$1</td><td class="num neg" data-v="-5.00">-5</td>
+<td class="num muted" data-v="238">238</td></tr><tr data-team="Lakštingala negali nečiulbėti"><td class="num muted" data-v="126">126</td>
+<td data-v="Paul Reed">Paul Reed <span class="sub">DET · PF/C</span></td>
+<td class="sub" data-v="Lakštingala negali nečiulbėti">Lakštingala negali nečiulbėti</td><td class="num" data-v="3">$3</td>
+<td class="num" data-v="10.00">$10</td><td class="num pos" data-v="7.00">+7</td>
+<td class="num muted" data-v="86">86</td></tr><tr data-team="2nd cumming of Jokic"><td class="num muted" data-v="127">127</td>
+<td data-v="Reed Sheppard">Reed Sheppard <span class="sub">HOU · PG/SG</span></td>
+<td class="sub" data-v="2nd cumming of Jokic">2nd cumming of Jokic</td><td class="num" data-v="5">$5</td>
+<td class="num" data-v="9.00">$9</td><td class="num pos" data-v="4.00">+4</td>
+<td class="num muted" data-v="94">94</td></tr><tr data-team="Mamuko_Tequila.mp3"><td class="num muted" data-v="128">128</td>
+<td data-v="Keegan Murray">Keegan Murray <span class="sub">SAC · SF/PF</span></td>
+<td class="sub" data-v="Mamuko_Tequila.mp3">Mamuko_Tequila.mp3</td><td class="num" data-v="8">$8</td>
+<td class="num" data-v="4.00">$4</td><td class="num neg" data-v="-4.00">-4</td>
+<td class="num muted" data-v="146">146</td></tr><tr data-team="Discount liquors"><td class="num muted" data-v="129">129</td>
+<td data-v="CJ McCollum">CJ McCollum <span class="sub">ATL · PG/SG</span></td>
+<td class="sub" data-v="Discount liquors">Discount liquors</td><td class="num" data-v="8">$8</td>
+<td class="num" data-v="3.00">$3</td><td class="num neg" data-v="-5.00">-5</td>
+<td class="num muted" data-v="171">171</td></tr><tr data-team="Ant&#x27;s kitchen"><td class="num muted" data-v="130">130</td>
+<td data-v="Collin Gillespie">Collin Gillespie <span class="sub">PHX · PG/SG</span></td>
+<td class="sub" data-v="Ant&#x27;s kitchen">Ant&#x27;s kitchen</td><td class="num" data-v="6">$6</td>
+<td class="num" data-v="5.00">$5</td><td class="num muted" data-v="-1.00">-1</td>
+<td class="num muted" data-v="124">124</td></tr><tr data-team="2nd cumming of Jokic"><td class="num muted" data-v="131">131</td>
+<td data-v="Daniel Gafford">Daniel Gafford <span class="sub">DAL · C</span></td>
+<td class="sub" data-v="2nd cumming of Jokic">2nd cumming of Jokic</td><td class="num" data-v="3">$3</td>
+<td class="num" data-v="4.00">$4</td><td class="num muted" data-v="1.00">+1</td>
+<td class="num muted" data-v="141">141</td></tr><tr data-team="Ant&#x27;s kitchen"><td class="num muted" data-v="132">132</td>
+<td data-v="Toumani Camara">Toumani Camara <span class="sub">POR · SF/PF</span></td>
+<td class="sub" data-v="Ant&#x27;s kitchen">Ant&#x27;s kitchen</td><td class="num" data-v="6">$6</td>
+<td class="num" data-v="7.00">$7</td><td class="num muted" data-v="1.00">+1</td>
+<td class="num muted" data-v="106">106</td></tr><tr data-team="Discount liquors"><td class="num muted" data-v="133">133</td>
+<td data-v="Yaxel Lendeborg">Yaxel Lendeborg <span class="sub">GSW · SF/PF</span></td>
+<td class="sub" data-v="Discount liquors">Discount liquors</td><td class="num" data-v="6">$6</td>
+<td class="num" data-v="23.00">$23</td><td class="num pos" data-v="17.00">+17</td>
+<td class="num muted" data-v="43">43</td></tr><tr data-team="Discount liquors"><td class="num muted" data-v="134">134</td>
+<td data-v="Khaman Maluach">Khaman Maluach <span class="sub">PHX · C</span></td>
+<td class="sub" data-v="Discount liquors">Discount liquors</td><td class="num" data-v="7">$7</td>
+<td class="num" data-v="2.00">$2</td><td class="num neg" data-v="-5.00">-5</td>
+<td class="num muted" data-v="189">189</td></tr><tr data-team="Mamuko_Tequila.mp3"><td class="num muted" data-v="135">135</td>
+<td data-v="Aaron Gordon">Aaron Gordon <span class="sub">DEN · PF/C</span></td>
+<td class="sub" data-v="Mamuko_Tequila.mp3">Mamuko_Tequila.mp3</td><td class="num" data-v="4">$4</td>
+<td class="num" data-v="3.00">$3</td><td class="num muted" data-v="-1.00">-1</td>
+<td class="num muted" data-v="160">160</td></tr><tr data-team="Sizzlin sons"><td class="num muted" data-v="136">136</td>
+<td data-v="Jalen Green">Jalen Green <span class="sub">PHX · SG/SF</span></td>
+<td class="sub" data-v="Sizzlin sons">Sizzlin sons</td><td class="num" data-v="10">$10</td>
+<td class="num" data-v="1.00">$1</td><td class="num neg" data-v="-9.00">-9</td>
+<td class="num muted" data-v="211">211</td></tr><tr data-team="Ant&#x27;s kitchen"><td class="num muted" data-v="137">137</td>
+<td data-v="Rui Hachimura">Rui Hachimura <span class="sub">LAC · SF/PF</span></td>
+<td class="sub" data-v="Ant&#x27;s kitchen">Ant&#x27;s kitchen</td><td class="num" data-v="4">$4</td>
+<td class="num" data-v="3.00">$3</td><td class="num muted" data-v="-1.00">-1</td>
+<td class="num muted" data-v="155">155</td></tr><tr data-team="Lakštingala negali nečiulbėti"><td class="num muted" data-v="138">138</td>
+<td data-v="Peyton Watson">Peyton Watson <span class="sub">CLE · SF/PF</span></td>
+<td class="sub" data-v="Lakštingala negali nečiulbėti">Lakštingala negali nečiulbėti</td><td class="num" data-v="5">$5</td>
+<td class="num" data-v="5.00">$5</td><td class="num muted" data-v="0.00">+0</td>
+<td class="num muted" data-v="132">132</td></tr><tr data-team="Traes Comas Club"><td class="num muted" data-v="139">139</td>
+<td data-v="Kristaps Porziņģis">Kristaps Porziņģis <span class="sub">GSW · C</span></td>
+<td class="sub" data-v="Traes Comas Club">Traes Comas Club</td><td class="num" data-v="3">$3</td>
+<td class="num" data-v="1.00">$1</td><td class="num neg" data-v="-2.00">-2</td>
+<td class="num muted" data-v="9999">—</td></tr><tr data-team="Pizza ball"><td class="num muted" data-v="140">140</td>
+<td data-v="Cameron Johnson">Cameron Johnson <span class="sub">DEN · SF/PF</span></td>
+<td class="sub" data-v="Pizza ball">Pizza ball</td><td class="num" data-v="5">$5</td>
+<td class="num" data-v="5.00">$5</td><td class="num muted" data-v="0.00">+0</td>
+<td class="num muted" data-v="127">127</td></tr><tr data-team="Džesika Shai"><td class="num muted" data-v="141">141</td>
+<td data-v="Grayson Allen">Grayson Allen <span class="sub">CHA · SG/SF</span></td>
+<td class="sub" data-v="Džesika Shai">Džesika Shai</td><td class="num" data-v="3">$3</td>
+<td class="num" data-v="5.00">$5</td><td class="num pos" data-v="2.00">+2</td>
+<td class="num muted" data-v="120">120</td></tr><tr data-team="Pizza ball"><td class="num muted" data-v="142">142</td>
+<td data-v="Kyshawn George">Kyshawn George <span class="sub">WAS · SG/SF/PF</span></td>
+<td class="sub" data-v="Pizza ball">Pizza ball</td><td class="num" data-v="4">$4</td>
+<td class="num" data-v="12.00">$12</td><td class="num pos" data-v="8.00">+8</td>
+<td class="num muted" data-v="78">78</td></tr><tr data-team="Kyrie Me River"><td class="num muted" data-v="143">143</td>
+<td data-v="Kelly Oubre Jr.">Kelly Oubre Jr. <span class="sub">IND · SF/PF</span></td>
+<td class="sub" data-v="Kyrie Me River">Kyrie Me River</td><td class="num" data-v="3">$3</td>
+<td class="num" data-v="1.00">$1</td><td class="num neg" data-v="-2.00">-2</td>
+<td class="num muted" data-v="202">202</td></tr><tr data-team="Sizzlin sons"><td class="num muted" data-v="144">144</td>
+<td data-v="Anthony Black">Anthony Black <span class="sub">ORL · PG/SG/SF</span></td>
+<td class="sub" data-v="Sizzlin sons">Sizzlin sons</td><td class="num" data-v="3">$3</td>
+<td class="num" data-v="5.00">$5</td><td class="num pos" data-v="2.00">+2</td>
+<td class="num muted" data-v="121">121</td></tr><tr data-team="Overpayed"><td class="num muted" data-v="145">145</td>
+<td data-v="Ace Bailey">Ace Bailey <span class="sub">UTA · SF/PF</span></td>
+<td class="sub" data-v="Overpayed">Overpayed</td><td class="num" data-v="3">$3</td>
+<td class="num" data-v="5.00">$5</td><td class="num pos" data-v="2.00">+2</td>
+<td class="num muted" data-v="134">134</td></tr><tr data-team="Sizzlin sons"><td class="num muted" data-v="146">146</td>
+<td data-v="Quentin Grimes">Quentin Grimes <span class="sub">LAL · SG/SF</span></td>
+<td class="sub" data-v="Sizzlin sons">Sizzlin sons</td><td class="num" data-v="5">$5</td>
+<td class="num" data-v="1.00">$1</td><td class="num neg" data-v="-4.00">-4</td>
+<td class="num muted" data-v="288">288</td></tr><tr data-team="Kyrie Me River"><td class="num muted" data-v="147">147</td>
+<td data-v="Nikola Vučević">Nikola Vučević <span class="sub">ORL · C</span></td>
+<td class="sub" data-v="Kyrie Me River">Kyrie Me River</td><td class="num" data-v="1">$1</td>
+<td class="num" data-v="1.00">$1</td><td class="num muted" data-v="0.00">+0</td>
+<td class="num muted" data-v="353">353</td></tr><tr data-team="Sizzlin sons"><td class="num muted" data-v="148">148</td>
+<td data-v="Fred VanVleet">Fred VanVleet <span class="sub">HOU · PG</span></td>
+<td class="sub" data-v="Sizzlin sons">Sizzlin sons</td><td class="num" data-v="3">$3</td>
+<td class="num" data-v="12.00">$12</td><td class="num pos" data-v="9.00">+9</td>
+<td class="num muted" data-v="77">77</td></tr><tr data-team="Ant&#x27;s kitchen"><td class="num muted" data-v="149">149</td>
+<td data-v="Tari Eason">Tari Eason <span class="sub">HOU · SG/SF/PF</span></td>
+<td class="sub" data-v="Ant&#x27;s kitchen">Ant&#x27;s kitchen</td><td class="num" data-v="3">$3</td>
+<td class="num" data-v="4.00">$4</td><td class="num muted" data-v="1.00">+1</td>
+<td class="num muted" data-v="149">149</td></tr><tr data-team="Džesika Shai"><td class="num muted" data-v="150">150</td>
+<td data-v="Jusuf Nurkić">Jusuf Nurkić <span class="sub">UTA · C</span></td>
+<td class="sub" data-v="Džesika Shai">Džesika Shai</td><td class="num" data-v="4">$4</td>
+<td class="num" data-v="3.00">$3</td><td class="num muted" data-v="-1.00">-1</td>
+<td class="num muted" data-v="150">150</td></tr><tr data-team="Pizza ball"><td class="num muted" data-v="151">151</td>
+<td data-v="Wendell Carter Jr.">Wendell Carter Jr. <span class="sub">ORL · C</span></td>
+<td class="sub" data-v="Pizza ball">Pizza ball</td><td class="num" data-v="3">$3</td>
+<td class="num" data-v="10.00">$10</td><td class="num pos" data-v="7.00">+7</td>
+<td class="num muted" data-v="89">89</td></tr><tr data-team="Black Zeus"><td class="num muted" data-v="152">152</td>
+<td data-v="Yves Missi">Yves Missi <span class="sub">NOP · C</span></td>
+<td class="sub" data-v="Black Zeus">Black Zeus</td><td class="num" data-v="2">$2</td>
+<td class="num" data-v="4.00">$4</td><td class="num pos" data-v="2.00">+2</td>
+<td class="num muted" data-v="138">138</td></tr><tr data-team="Black Zeus"><td class="num muted" data-v="153">153</td>
+<td data-v="Jonathan Kuminga">Jonathan Kuminga <span class="sub">MIN · SF/PF</span></td>
+<td class="sub" data-v="Black Zeus">Black Zeus</td><td class="num" data-v="2">$2</td>
+<td class="num" data-v="3.00">$3</td><td class="num muted" data-v="1.00">+1</td>
+<td class="num muted" data-v="161">161</td></tr><tr data-team="Sizzlin sons"><td class="num muted" data-v="154">154</td>
+<td data-v="P.J. Washington">P.J. Washington <span class="sub">DAL · PF/C</span></td>
+<td class="sub" data-v="Sizzlin sons">Sizzlin sons</td><td class="num" data-v="2">$2</td>
+<td class="num" data-v="4.00">$4</td><td class="num pos" data-v="2.00">+2</td>
+<td class="num muted" data-v="142">142</td></tr><tr data-team="Ant&#x27;s kitchen"><td class="num muted" data-v="155">155</td>
+<td data-v="Dylan Cardwell">Dylan Cardwell <span class="sub">SAC · PF/C</span></td>
+<td class="sub" data-v="Ant&#x27;s kitchen">Ant&#x27;s kitchen</td><td class="num" data-v="1">$1</td>
+<td class="num" data-v="1.00">$1</td><td class="num muted" data-v="0.00">+0</td>
+<td class="num muted" data-v="201">201</td></tr><tr data-team="Sizzlin sons"><td class="num muted" data-v="156">156</td>
+<td data-v="Anfernee Simons">Anfernee Simons <span class="sub">PHI · PG/SG</span></td>
+<td class="sub" data-v="Sizzlin sons">Sizzlin sons</td><td class="num" data-v="1">$1</td>
+<td class="num" data-v="1.00">$1</td><td class="num muted" data-v="0.00">+0</td>
+<td class="num muted" data-v="230">230</td></tr><tr data-team="Overpayed"><td class="num muted" data-v="157">157</td>
+<td data-v="Cameron Carr">Cameron Carr <span class="sub">LAL · SG</span></td>
+<td class="sub" data-v="Overpayed">Overpayed</td><td class="num" data-v="2">$2</td>
+<td class="num" data-v="1.00">$1</td><td class="num muted" data-v="-1.00">-1</td>
+<td class="num muted" data-v="500">500</td></tr><tr data-team="2nd cumming of Jokic"><td class="num muted" data-v="158">158</td>
+<td data-v="Dillon Brooks">Dillon Brooks <span class="sub">PHX · SF/PF</span></td>
+<td class="sub" data-v="2nd cumming of Jokic">2nd cumming of Jokic</td><td class="num" data-v="2">$2</td>
+<td class="num" data-v="4.00">$4</td><td class="num pos" data-v="2.00">+2</td>
+<td class="num muted" data-v="144">144</td></tr><tr data-team="Tiltai miesteliuose"><td class="num muted" data-v="159">159</td>
+<td data-v="Jrue Holiday">Jrue Holiday <span class="sub">POR · PG/SG</span></td>
+<td class="sub" data-v="Tiltai miesteliuose">Tiltai miesteliuose</td><td class="num" data-v="4">$4</td>
+<td class="num" data-v="6.00">$6</td><td class="num pos" data-v="2.00">+2</td>
+<td class="num muted" data-v="119">119</td></tr><tr data-team="Mamuko_Tequila.mp3"><td class="num muted" data-v="160">160</td>
+<td data-v="Saddiq Bey">Saddiq Bey <span class="sub">NOP · SF/PF</span></td>
+<td class="sub" data-v="Mamuko_Tequila.mp3">Mamuko_Tequila.mp3</td><td class="num" data-v="2">$2</td>
+<td class="num" data-v="7.00">$7</td><td class="num pos" data-v="5.00">+5</td>
+<td class="num muted" data-v="104">104</td></tr><tr data-team="Lakštingala negali nečiulbėti"><td class="num muted" data-v="161">161</td>
+<td data-v="Pelle Larsson">Pelle Larsson <span class="sub">MIA · SG/SF</span></td>
+<td class="sub" data-v="Lakštingala negali nečiulbėti">Lakštingala negali nečiulbėti</td><td class="num" data-v="1">$1</td>
+<td class="num" data-v="3.00">$3</td><td class="num pos" data-v="2.00">+2</td>
+<td class="num muted" data-v="175">175</td></tr><tr data-team="Mamuko_Tequila.mp3"><td class="num muted" data-v="162">162</td>
+<td data-v="Moussa Diabaté">Moussa Diabaté <span class="sub">CHA · C</span></td>
+<td class="sub" data-v="Mamuko_Tequila.mp3">Mamuko_Tequila.mp3</td><td class="num" data-v="1">$1</td>
+<td class="num" data-v="17.00">$17</td><td class="num pos" data-v="16.00">+16</td>
+<td class="num muted" data-v="64">64</td></tr><tr data-team="Pizza ball"><td class="num muted" data-v="163">163</td>
+<td data-v="Gui Santos">Gui Santos <span class="sub">GSW · SF/PF</span></td>
+<td class="sub" data-v="Pizza ball">Pizza ball</td><td class="num" data-v="2">$2</td>
+<td class="num" data-v="1.00">$1</td><td class="num muted" data-v="-1.00">-1</td>
+<td class="num muted" data-v="247">247</td></tr><tr data-team="2nd cumming of Jokic"><td class="num muted" data-v="164">164</td>
+<td data-v="Bennedict Mathurin">Bennedict Mathurin <span class="sub">NOP · SG/SF</span></td>
+<td class="sub" data-v="2nd cumming of Jokic">2nd cumming of Jokic</td><td class="num" data-v="1">$1</td>
+<td class="num" data-v="1.00">$1</td><td class="num muted" data-v="0.00">+0</td>
+<td class="num muted" data-v="425">425</td></tr><tr data-team="Giddey up"><td class="num muted" data-v="165">165</td>
+<td data-v="Brook Lopez">Brook Lopez <span class="sub">LAC · C</span></td>
+<td class="sub" data-v="Giddey up">Giddey up</td><td class="num" data-v="1">$1</td>
+<td class="num" data-v="2.00">$2</td><td class="num muted" data-v="1.00">+1</td>
+<td class="num muted" data-v="188">188</td></tr><tr data-team="Ant&#x27;s kitchen"><td class="num muted" data-v="166">166</td>
+<td data-v="Herbert Jones">Herbert Jones <span class="sub">NOP · SG/SF</span></td>
+<td class="sub" data-v="Ant&#x27;s kitchen">Ant&#x27;s kitchen</td><td class="num" data-v="2">$2</td>
+<td class="num" data-v="1.00">$1</td><td class="num muted" data-v="-1.00">-1</td>
+<td class="num muted" data-v="222">222</td></tr><tr data-team="Overpayed"><td class="num muted" data-v="167">167</td>
+<td data-v="Keaton Wagler">Keaton Wagler <span class="sub">LAC · SG</span></td>
+<td class="sub" data-v="Overpayed">Overpayed</td><td class="num" data-v="1">$1</td>
+<td class="num" data-v="1.00">$1</td><td class="num muted" data-v="0.00">+0</td>
+<td class="num muted" data-v="252">252</td></tr><tr data-team="Tiltai miesteliuose"><td class="num muted" data-v="168">168</td>
+<td data-v="Cam Spencer">Cam Spencer <span class="sub">MEM · PG/SG</span></td>
+<td class="sub" data-v="Tiltai miesteliuose">Tiltai miesteliuose</td><td class="num" data-v="1">$1</td>
+<td class="num" data-v="5.00">$5</td><td class="num pos" data-v="4.00">+4</td>
+<td class="num muted" data-v="129">129</td></tr><tr data-team="Kyrie Me River"><td class="num muted" data-v="169">169</td>
+<td data-v="Bobby Portis Jr.">Bobby Portis Jr. <span class="sub">MIA · PF/C</span></td>
+<td class="sub" data-v="Kyrie Me River">Kyrie Me River</td><td class="num" data-v="1">$1</td>
+<td class="num" data-v="1.00">$1</td><td class="num muted" data-v="0.00">+0</td>
+<td class="num muted" data-v="207">207</td></tr><tr data-team="Pizza ball"><td class="num muted" data-v="170">170</td>
+<td data-v="Devin Vassell">Devin Vassell <span class="sub">SAS · SG/SF</span></td>
+<td class="sub" data-v="Pizza ball">Pizza ball</td><td class="num" data-v="3">$3</td>
+<td class="num" data-v="3.00">$3</td><td class="num muted" data-v="0.00">+0</td>
+<td class="num muted" data-v="154">154</td></tr><tr data-team="2nd cumming of Jokic"><td class="num muted" data-v="171">171</td>
+<td data-v="Aaron Nesmith">Aaron Nesmith <span class="sub">IND · SG/SF</span></td>
+<td class="sub" data-v="2nd cumming of Jokic">2nd cumming of Jokic</td><td class="num" data-v="1">$1</td>
+<td class="num" data-v="5.00">$5</td><td class="num pos" data-v="4.00">+4</td>
+<td class="num muted" data-v="133">133</td></tr><tr data-team="Giddey up"><td class="num muted" data-v="172">172</td>
+<td data-v="Julian Champagnie">Julian Champagnie <span class="sub">SAS · SF/PF</span></td>
+<td class="sub" data-v="Giddey up">Giddey up</td><td class="num" data-v="1">$1</td>
+<td class="num" data-v="3.00">$3</td><td class="num pos" data-v="2.00">+2</td>
+<td class="num muted" data-v="167">167</td></tr><tr data-team="Tiltai miesteliuose"><td class="num muted" data-v="173">173</td>
+<td data-v="De&#x27;Anthony Melton">De&#x27;Anthony Melton <span class="sub">GSW · PG/SG</span></td>
+<td class="sub" data-v="Tiltai miesteliuose">Tiltai miesteliuose</td><td class="num" data-v="1">$1</td>
+<td class="num" data-v="1.00">$1</td><td class="num muted" data-v="0.00">+0</td>
+<td class="num muted" data-v="208">208</td></tr><tr data-team="Kyrie Me River"><td class="num muted" data-v="174">174</td>
+<td data-v="Jake LaRavia">Jake LaRavia <span class="sub">LAL · SF/PF</span></td>
+<td class="sub" data-v="Kyrie Me River">Kyrie Me River</td><td class="num" data-v="1">$1</td>
+<td class="num" data-v="1.00">$1</td><td class="num muted" data-v="0.00">+0</td>
+<td class="num muted" data-v="212">212</td></tr><tr data-team="Džesika Shai"><td class="num muted" data-v="175">175</td>
+<td data-v="Jimmy Butler III">Jimmy Butler III <span class="sub">GSW · SF/PF</span></td>
+<td class="sub" data-v="Džesika Shai">Džesika Shai</td><td class="num" data-v="1">$1</td>
+<td class="num" data-v="2.00">$2</td><td class="num muted" data-v="1.00">+1</td>
+<td class="num muted" data-v="185">185</td></tr><tr data-team="Giddey up"><td class="num muted" data-v="176">176</td>
+<td data-v="Royce O&#x27;Neale">Royce O&#x27;Neale <span class="sub">CHA · SF/PF</span></td>
+<td class="sub" data-v="Giddey up">Giddey up</td><td class="num" data-v="1">$1</td>
+<td class="num" data-v="1.00">$1</td><td class="num muted" data-v="0.00">+0</td>
+<td class="num muted" data-v="236">236</td></tr><tr data-team="Tiltai miesteliuose"><td class="num muted" data-v="177">177</td>
+<td data-v="Jerami Grant">Jerami Grant <span class="sub">MEM · SF/PF</span></td>
+<td class="sub" data-v="Tiltai miesteliuose">Tiltai miesteliuose</td><td class="num" data-v="2">$2</td>
+<td class="num" data-v="1.00">$1</td><td class="num muted" data-v="-1.00">-1</td>
+<td class="num muted" data-v="289">289</td></tr><tr data-team="Džesika Shai"><td class="num muted" data-v="178">178</td>
+<td data-v="Draymond Green">Draymond Green <span class="sub">GSW · PF/C</span></td>
+<td class="sub" data-v="Džesika Shai">Džesika Shai</td><td class="num" data-v="1">$1</td>
+<td class="num" data-v="2.00">$2</td><td class="num muted" data-v="1.00">+1</td>
+<td class="num muted" data-v="191">191</td></tr><tr data-team="Giddey up"><td class="num muted" data-v="179">179</td>
+<td data-v="Jarred Vanderbilt">Jarred Vanderbilt <span class="sub">LAL · PF/C</span></td>
+<td class="sub" data-v="Giddey up">Giddey up</td><td class="num" data-v="1">$1</td>
+<td class="num" data-v="1.00">$1</td><td class="num muted" data-v="0.00">+0</td>
+<td class="num muted" data-v="335">335</td></tr><tr data-team="Džesika Shai"><td class="num muted" data-v="180">180</td>
+<td data-v="Tobias Harris">Tobias Harris <span class="sub">SAS · PF</span></td>
+<td class="sub" data-v="Džesika Shai">Džesika Shai</td><td class="num" data-v="1">$1</td>
+<td class="num" data-v="2.00">$2</td><td class="num muted" data-v="1.00">+1</td>
+<td class="num muted" data-v="180">180</td></tr><tr data-team="Giddey up"><td class="num muted" data-v="181">181</td>
+<td data-v="Bilal Coulibaly">Bilal Coulibaly <span class="sub">WAS · SG/SF</span></td>
+<td class="sub" data-v="Giddey up">Giddey up</td><td class="num" data-v="1">$1</td>
+<td class="num" data-v="1.00">$1</td><td class="num muted" data-v="0.00">+0</td>
+<td class="num muted" data-v="216">216</td></tr><tr data-team="Džesika Shai"><td class="num muted" data-v="182">182</td>
+<td data-v="Mitchell Robinson">Mitchell Robinson <span class="sub">BOS · C</span></td>
+<td class="sub" data-v="Džesika Shai">Džesika Shai</td><td class="num" data-v="1">$1</td>
+<td class="num" data-v="7.00">$7</td><td class="num pos" data-v="6.00">+6</td>
+<td class="num muted" data-v="108">108</td></tr></tbody></table></div>
+<script>
+(function () {
+  var table = document.getElementById('draft-board');
+  var tbody = table.querySelector('tbody');
+  document.getElementById('draft-team').addEventListener('change', function () {
+    var team = this.value;
+    tbody.querySelectorAll('tr').forEach(function (tr) {
+      tr.style.display = !team || tr.dataset.team === team ? '' : 'none';
+    });
+  });
+  var sorted = {col: 0, asc: true};
+  table.querySelectorAll('th.sort').forEach(function (th) {
+    th.addEventListener('click', function () {
+      var col = Number(th.dataset.col);
+      var numeric = th.classList.contains('num');
+      // Numeric columns open high-to-low, except nomination order and rank.
+      var asc = sorted.col === col ? !sorted.asc : (!numeric || col === 0 || col === 6);
+      sorted = {col: col, asc: asc};
+      var rows = Array.prototype.slice.call(tbody.querySelectorAll('tr'));
+      rows.sort(function (a, b) {
+        var va = a.children[col].dataset.v, vb = b.children[col].dataset.v;
+        var cmp = numeric ? Number(va) - Number(vb) : va.localeCompare(vb);
+        return asc ? cmp : -cmp;
+      });
+      rows.forEach(function (tr) { tbody.appendChild(tr); });
+      table.querySelectorAll('th.sort').forEach(function (h) { h.classList.remove('asc', 'desc'); });
+      th.classList.add(asc ? 'asc' : 'desc');
+    });
+  });
+})();
+</script></section></details></section>
+<footer>Last season: <a href="../nba/2025-26/">2025-26 playoff dashboard</a> ·
+<a href="../">all projects</a></footer>
+</body></html>
