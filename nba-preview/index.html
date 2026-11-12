@@ -68,25 +68,28 @@ font-weight:700;text-transform:uppercase;letter-spacing:1px;white-space:nowrap;v
 
 /* matchups */
 .games{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px}
-.game{background:var(--card);padding:12px 14px}
-.side{padding:6px 0}.side+.side{border-top:1px solid var(--rule-2)}
-.side-row{display:flex;align-items:baseline;gap:8px}
-.gteam{flex:1;font-weight:600;font-size:.92rem;color:var(--ink-2)}
-.side.fav .gteam{color:var(--ink);font-weight:800}
-.grec{font-size:.74rem;color:var(--muted)}
-.gstarts{font-size:.74rem;color:var(--muted)}
-.gnow{font-size:1.15rem;font-weight:700;min-width:16px;color:var(--ink)}
+.game{background:var(--card);padding:14px 16px 12px;--team-a:#2a7f8f;--team-b:#c98f1c}
+.side{padding:2px 0}
+.side-row{display:flex;align-items:baseline;gap:10px}
+.gteam{flex:1;font-weight:600;font-size:.95rem;color:var(--ink);min-width:0}
+.side.fav .gteam{font-weight:800}
+.grec{font-size:.72rem;color:var(--muted);font-weight:400;white-space:nowrap}
+.gprob{font-size:1.15rem;font-weight:500;color:var(--ink)}
+.side.fav .gprob{font-weight:800}
+.side-a .gprob{color:var(--team-a)}.side-b .gprob{color:var(--team-b)}
+.gbar{display:flex;height:8px;margin:8px 0;border-radius:4px;overflow:hidden;gap:2px}
+.gbar .ga{background:var(--team-a)}.gbar .gb{flex:1;background:var(--team-b)}
 .gnote{font-size:.72rem;color:var(--muted);margin-top:4px}
-.gprob{font-size:1.15rem;font-weight:500;width:56px;text-align:right;color:var(--muted)}
-.side.fav .gprob{color:var(--ink)}
-.gbar{height:6px;background:var(--rule-2);margin:5px 0 6px}
-.gbar span{display:block;height:100%;background:#bdbdbd}
-.side.fav .gbar span{background:var(--good)}
-.cats{display:flex;flex-wrap:wrap;align-items:center;gap:4px}
+.cats{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin-top:5px}
+.cats:empty{display:none}
 .cats-label{font-family:var(--mono);font-size:.64rem;color:var(--muted);text-transform:uppercase;margin-right:2px}
-.cat{font-size:.62rem;font-weight:600;padding:1px 6px;letter-spacing:.4px;background:var(--rule-2);color:var(--ink-2)}
-.side.fav .cat{background:var(--good-soft);color:var(--ink)}
-.cats.toss{padding-top:6px;border-top:1px solid var(--rule-2)}
+.cat{font-size:.62rem;font-weight:600;padding:2px 6px;letter-spacing:.4px;border-radius:3px;
+background:var(--rule-2);color:var(--ink)}
+.side-a .cat{background:color-mix(in srgb,var(--team-a) 16%,transparent)}
+.side-b .cat{background:color-mix(in srgb,var(--team-b) 20%,transparent)}
+.gfoot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px 12px;
+margin-top:10px;padding-top:8px;border-top:1px solid var(--rule-2);font-size:.74rem;color:var(--ink-2)}
+.gfoot .cats{margin-top:0}
 
 /* results */
 .results .winner{color:var(--ink)}
@@ -260,77 +263,49 @@ h1{font-size:2.1rem}h2{font-size:1.3rem}.dek{font-size:.98rem}
 <div class="sub">Week 3: lost 3–6 against Džesika Shai.</div></div><div class="mover falling"><div class="mover-tag">Falling</div>
 <div class="mover-team">Black Zeus</div>
 <div class="mover-odds mono">87% → <b>74%</b> <span class="chg down">▼ 13</span></div>
-<div class="sub">Week 3: lost 4–5 against Overpayed.</div></div></div></section><section id="matchups"><h2>Week 4 matchups</h2><p class="intro">Win chances for week 4 with today's rosters. They count the games each player can start this week ("gp"), with 10 starting slots a day. Players on IL or out (O) get no games. A team with a full roster drops its weakest player when an IL player returns. "Cats" is the expected number of categories won. The chips are the categories a team wins in more than 58% of weeks; toss-ups can go either way. The week has started: the left number is the categories won so far. The odds are for the full week and do not use the score.</p><div class="games"><div class="game"><div class="side fav">
-<div class="side-row"><span class="gnow mono" title="categories won so far">7</span><span class="gteam">Džesika Shai</span><span class="grec mono">2–1</span>
-<span class="gstarts mono" title="games started this week">46 gp</span>
+<div class="sub">Week 3: lost 4–5 against Overpayed.</div></div></div></section><section id="matchups"><h2>Week 4 matchups</h2><p class="intro">Win chances for week 4 with today's rosters. They count the games each player can start this week, with 10 starting slots a day. Players on IL or out (O) get no games. A team with a full roster drops its weakest player when an IL player returns. The categories under a team are the ones it wins in more than 58% of weeks; toss-ups can go either way. Expected categories is the average number of the 9 categories each team wins.</p><div class="games"><div class="game"><div class="side side-a fav">
+<div class="side-row"><span class="gteam">Džesika Shai <span class="grec mono">2–1</span></span>
 <span class="gprob mono">62%</span></div>
-<div class="gbar"><span style="width:62%"></span></div>
-<div class="cats"><span class="cats-label">5.1 cats</span><span class="cat">FT%</span><span class="cat">PTS</span><span class="cat">TO</span><span class="cat">STL</span><span class="cat">AST</span></div></div><div class="side">
-<div class="side-row"><span class="gnow mono" title="categories won so far">2</span><span class="gteam">Lakštingala negali nečiulbėti</span><span class="grec mono">2–1</span>
-<span class="gstarts mono" title="games started this week">40 gp</span>
+<div class="cats"><span class="cat" title="Džesika Shai wins FT% in more than 58% of weeks">FT%</span><span class="cat" title="Džesika Shai wins PTS in more than 58% of weeks">PTS</span><span class="cat" title="Džesika Shai wins TO in more than 58% of weeks">TO</span><span class="cat" title="Džesika Shai wins STL in more than 58% of weeks">STL</span><span class="cat" title="Džesika Shai wins AST in more than 58% of weeks">AST</span></div></div><div class="gbar" title="win chance"><span class="ga" style="width:62%"></span><span class="gb"></span></div><div class="side side-b">
+<div class="side-row"><span class="gteam">Lakštingala negali nečiulbėti <span class="grec mono">2–1</span></span>
 <span class="gprob mono">38%</span></div>
-<div class="gbar"><span style="width:38%"></span></div>
-<div class="cats"><span class="cats-label">3.9 cats</span><span class="cat">3PM</span><span class="cat">BLK</span><span class="cat">FG%</span></div></div><div class="cats toss"><span class="cats-label">Toss-ups</span><span class=cat>REB</span></div></div><div class="game"><div class="side fav">
-<div class="side-row"><span class="gnow mono" title="categories won so far">5</span><span class="gteam">Overpayed</span><span class="grec mono">2–1</span>
-<span class="gstarts mono" title="games started this week">37 gp</span>
+<div class="cats"><span class="cat" title="Lakštingala negali nečiulbėti wins 3PM in more than 58% of weeks">3PM</span><span class="cat" title="Lakštingala negali nečiulbėti wins BLK in more than 58% of weeks">BLK</span><span class="cat" title="Lakštingala negali nečiulbėti wins FG% in more than 58% of weeks">FG%</span></div></div><div class="gfoot"><span>Expected categories <b class="mono">5.1–3.9</b></span><span class="cats"><span class="cats-label">Toss-ups</span><span class=cat>REB</span></span></div></div><div class="game"><div class="side side-a fav">
+<div class="side-row"><span class="gteam">Overpayed <span class="grec mono">2–1</span></span>
 <span class="gprob mono">64%</span></div>
-<div class="gbar"><span style="width:64%"></span></div>
-<div class="cats"><span class="cats-label">5.0 cats</span><span class="cat">FG%</span><span class="cat">REB</span><span class="cat">BLK</span><span class="cat">TO</span></div></div><div class="side">
-<div class="side-row"><span class="gnow mono" title="categories won so far">4</span><span class="gteam">Giddey up</span><span class="grec mono">2–1</span>
-<span class="gstarts mono" title="games started this week">44 gp</span>
+<div class="cats"><span class="cat" title="Overpayed wins FG% in more than 58% of weeks">FG%</span><span class="cat" title="Overpayed wins REB in more than 58% of weeks">REB</span><span class="cat" title="Overpayed wins BLK in more than 58% of weeks">BLK</span><span class="cat" title="Overpayed wins TO in more than 58% of weeks">TO</span></div></div><div class="gbar" title="win chance"><span class="ga" style="width:64%"></span><span class="gb"></span></div><div class="side side-b">
+<div class="side-row"><span class="gteam">Giddey up <span class="grec mono">2–1</span></span>
 <span class="gprob mono">36%</span></div>
-<div class="gbar"><span style="width:36%"></span></div>
-<div class="cats"><span class="cats-label">4.0 cats</span><span class="cat">3PM</span><span class="cat">FT%</span><span class="cat">AST</span></div></div><div class="cats toss"><span class="cats-label">Toss-ups</span><span class=cat>PTS</span><span class=cat>STL</span></div></div><div class="game"><div class="side">
-<div class="side-row"><span class="gnow mono" title="categories won so far">3</span><span class="gteam">Pizza ball</span><span class="grec mono">3–0</span>
-<span class="gstarts mono" title="games started this week">42 gp</span>
+<div class="cats"><span class="cat" title="Giddey up wins 3PM in more than 58% of weeks">3PM</span><span class="cat" title="Giddey up wins FT% in more than 58% of weeks">FT%</span><span class="cat" title="Giddey up wins AST in more than 58% of weeks">AST</span></div></div><div class="gfoot"><span>Expected categories <b class="mono">5.0–4.0</b></span><span class="cats"><span class="cats-label">Toss-ups</span><span class=cat>PTS</span><span class=cat>STL</span></span></div></div><div class="game"><div class="side side-a">
+<div class="side-row"><span class="gteam">Pizza ball <span class="grec mono">3–0</span></span>
 <span class="gprob mono">46%</span></div>
-<div class="gbar"><span style="width:46%"></span></div>
-<div class="cats"><span class="cats-label">4.4 cats</span><span class="cat">BLK</span><span class="cat">AST</span><span class="cat">FG%</span></div></div><div class="side fav">
-<div class="side-row"><span class="gnow mono" title="categories won so far">6</span><span class="gteam">Mamuko_Tequila.mp3</span><span class="grec mono">2–1</span>
-<span class="gstarts mono" title="games started this week">40 gp</span>
+<div class="cats"><span class="cat" title="Pizza ball wins BLK in more than 58% of weeks">BLK</span><span class="cat" title="Pizza ball wins AST in more than 58% of weeks">AST</span><span class="cat" title="Pizza ball wins FG% in more than 58% of weeks">FG%</span></div></div><div class="gbar" title="win chance"><span class="ga" style="width:46%"></span><span class="gb"></span></div><div class="side side-b fav">
+<div class="side-row"><span class="gteam">Mamuko_Tequila.mp3 <span class="grec mono">2–1</span></span>
 <span class="gprob mono">54%</span></div>
-<div class="gbar"><span style="width:54%"></span></div>
-<div class="cats"><span class="cats-label">4.6 cats</span><span class="cat">3PM</span><span class="cat">TO</span><span class="cat">STL</span><span class="cat">PTS</span></div></div><div class="cats toss"><span class="cats-label">Toss-ups</span><span class=cat>FT%</span><span class=cat>REB</span></div></div><div class="game"><div class="side fav">
-<div class="side-row"><span class="gnow mono" title="categories won so far">3</span><span class="gteam">Kyrie Me River</span><span class="grec mono">1–2</span>
-<span class="gstarts mono" title="games started this week">44 gp</span>
+<div class="cats"><span class="cat" title="Mamuko_Tequila.mp3 wins 3PM in more than 58% of weeks">3PM</span><span class="cat" title="Mamuko_Tequila.mp3 wins TO in more than 58% of weeks">TO</span><span class="cat" title="Mamuko_Tequila.mp3 wins STL in more than 58% of weeks">STL</span><span class="cat" title="Mamuko_Tequila.mp3 wins PTS in more than 58% of weeks">PTS</span></div></div><div class="gfoot"><span>Expected categories <b class="mono">4.4–4.6</b></span><span class="cats"><span class="cats-label">Toss-ups</span><span class=cat>FT%</span><span class=cat>REB</span></span></div></div><div class="game"><div class="side side-a fav">
+<div class="side-row"><span class="gteam">Kyrie Me River <span class="grec mono">1–2</span></span>
 <span class="gprob mono">71%</span></div>
-<div class="gbar"><span style="width:71%"></span></div>
-<div class="cats"><span class="cats-label">5.3 cats</span><span class="cat">BLK</span><span class="cat">PTS</span><span class="cat">FG%</span><span class="cat">AST</span><span class="cat">REB</span></div></div><div class="side">
-<div class="side-row"><span class="gnow mono" title="categories won so far">4</span><span class="gteam">Tiltai miesteliuose</span><span class="grec mono">0–3</span>
-<span class="gstarts mono" title="games started this week">45 gp</span>
+<div class="cats"><span class="cat" title="Kyrie Me River wins BLK in more than 58% of weeks">BLK</span><span class="cat" title="Kyrie Me River wins PTS in more than 58% of weeks">PTS</span><span class="cat" title="Kyrie Me River wins FG% in more than 58% of weeks">FG%</span><span class="cat" title="Kyrie Me River wins AST in more than 58% of weeks">AST</span><span class="cat" title="Kyrie Me River wins REB in more than 58% of weeks">REB</span></div></div><div class="gbar" title="win chance"><span class="ga" style="width:71%"></span><span class="gb"></span></div><div class="side side-b">
+<div class="side-row"><span class="gteam">Tiltai miesteliuose <span class="grec mono">0–3</span></span>
 <span class="gprob mono">29%</span></div>
-<div class="gbar"><span style="width:29%"></span></div>
-<div class="cats"><span class="cats-label">3.7 cats</span><span class="cat">3PM</span><span class="cat">TO</span><span class="cat">STL</span></div></div><div class="cats toss"><span class="cats-label">Toss-ups</span><span class=cat>FT%</span></div></div><div class="game"><div class="side fav">
-<div class="side-row"><span class="gnow mono" title="categories won so far">3</span><span class="gteam">2nd cumming of Jokic</span><span class="grec mono">3–0</span>
-<span class="gstarts mono" title="games started this week">40 gp</span>
+<div class="cats"><span class="cat" title="Tiltai miesteliuose wins 3PM in more than 58% of weeks">3PM</span><span class="cat" title="Tiltai miesteliuose wins TO in more than 58% of weeks">TO</span><span class="cat" title="Tiltai miesteliuose wins STL in more than 58% of weeks">STL</span></div></div><div class="gfoot"><span>Expected categories <b class="mono">5.3–3.7</b></span><span class="cats"><span class="cats-label">Toss-ups</span><span class=cat>FT%</span></span></div></div><div class="game"><div class="side side-a fav">
+<div class="side-row"><span class="gteam">2nd cumming of Jokic <span class="grec mono">3–0</span></span>
 <span class="gprob mono">75%</span></div>
-<div class="gbar"><span style="width:75%"></span></div>
-<div class="cats"><span class="cats-label">5.7 cats</span><span class="cat">FG%</span><span class="cat">AST</span><span class="cat">REB</span><span class="cat">PTS</span><span class="cat">STL</span><span class="cat">FT%</span></div></div><div class="side">
-<div class="side-row"><span class="gnow mono" title="categories won so far">6</span><span class="gteam">Ant&#x27;s kitchen</span><span class="grec mono">0–3</span>
-<span class="gstarts mono" title="games started this week">42 gp</span>
+<div class="cats"><span class="cat" title="2nd cumming of Jokic wins FG% in more than 58% of weeks">FG%</span><span class="cat" title="2nd cumming of Jokic wins AST in more than 58% of weeks">AST</span><span class="cat" title="2nd cumming of Jokic wins REB in more than 58% of weeks">REB</span><span class="cat" title="2nd cumming of Jokic wins PTS in more than 58% of weeks">PTS</span><span class="cat" title="2nd cumming of Jokic wins STL in more than 58% of weeks">STL</span><span class="cat" title="2nd cumming of Jokic wins FT% in more than 58% of weeks">FT%</span></div></div><div class="gbar" title="win chance"><span class="ga" style="width:75%"></span><span class="gb"></span></div><div class="side side-b">
+<div class="side-row"><span class="gteam">Ant&#x27;s kitchen <span class="grec mono">0–3</span></span>
 <span class="gprob mono">25%</span></div>
-<div class="gbar"><span style="width:25%"></span></div>
-<div class="cats"><span class="cats-label">3.3 cats</span><span class="cat">3PM</span><span class="cat">TO</span></div></div><div class="cats toss"><span class="cats-label">Toss-ups</span><span class=cat>BLK</span></div></div><div class="game"><div class="side fav">
-<div class="side-row"><span class="gnow mono" title="categories won so far">3</span><span class="gteam">Traes Comas Club</span><span class="grec mono">0–3</span>
-<span class="gstarts mono" title="games started this week">43 gp</span>
+<div class="cats"><span class="cat" title="Ant&#x27;s kitchen wins 3PM in more than 58% of weeks">3PM</span><span class="cat" title="Ant&#x27;s kitchen wins TO in more than 58% of weeks">TO</span></div></div><div class="gfoot"><span>Expected categories <b class="mono">5.7–3.3</b></span><span class="cats"><span class="cats-label">Toss-ups</span><span class=cat>BLK</span></span></div></div><div class="game"><div class="side side-a fav">
+<div class="side-row"><span class="gteam">Traes Comas Club <span class="grec mono">0–3</span></span>
 <span class="gprob mono">63%</span></div>
-<div class="gbar"><span style="width:63%"></span></div>
-<div class="cats"><span class="cats-label">5.0 cats</span><span class="cat">FT%</span><span class="cat">3PM</span><span class="cat">AST</span></div></div><div class="side">
-<div class="side-row"><span class="gnow mono" title="categories won so far">5</span><span class="gteam">Discount liquors</span><span class="grec mono">1–2</span>
-<span class="gstarts mono" title="games started this week">43 gp</span>
+<div class="cats"><span class="cat" title="Traes Comas Club wins FT% in more than 58% of weeks">FT%</span><span class="cat" title="Traes Comas Club wins 3PM in more than 58% of weeks">3PM</span><span class="cat" title="Traes Comas Club wins AST in more than 58% of weeks">AST</span></div></div><div class="gbar" title="win chance"><span class="ga" style="width:63%"></span><span class="gb"></span></div><div class="side side-b">
+<div class="side-row"><span class="gteam">Discount liquors <span class="grec mono">1–2</span></span>
 <span class="gprob mono">37%</span></div>
-<div class="gbar"><span style="width:37%"></span></div>
-<div class="cats"><span class="cats-label">4.0 cats</span><span class="cat">REB</span><span class="cat">BLK</span><span class="cat">TO</span></div></div><div class="cats toss"><span class="cats-label">Toss-ups</span><span class=cat>FG%</span><span class=cat>PTS</span><span class=cat>STL</span></div></div><div class="game"><div class="side">
-<div class="side-row"><span class="gnow mono" title="categories won so far">3</span><span class="gteam">Sizzlin sons</span><span class="grec mono">2–1</span>
-<span class="gstarts mono" title="games started this week">41 gp</span>
+<div class="cats"><span class="cat" title="Discount liquors wins REB in more than 58% of weeks">REB</span><span class="cat" title="Discount liquors wins BLK in more than 58% of weeks">BLK</span><span class="cat" title="Discount liquors wins TO in more than 58% of weeks">TO</span></div></div><div class="gfoot"><span>Expected categories <b class="mono">5.0–4.0</b></span><span class="cats"><span class="cats-label">Toss-ups</span><span class=cat>FG%</span><span class=cat>PTS</span><span class=cat>STL</span></span></div></div><div class="game"><div class="side side-a">
+<div class="side-row"><span class="gteam">Sizzlin sons <span class="grec mono">2–1</span></span>
 <span class="gprob mono">42%</span></div>
-<div class="gbar"><span style="width:42%"></span></div>
-<div class="cats"><span class="cats-label">4.4 cats</span><span class="cat">3PM</span><span class="cat">FT%</span><span class="cat">PTS</span></div></div><div class="side fav">
-<div class="side-row"><span class="gnow mono" title="categories won so far">6</span><span class="gteam">Black Zeus</span><span class="grec mono">1–2</span>
-<span class="gstarts mono" title="games started this week">46 gp</span>
+<div class="cats"><span class="cat" title="Sizzlin sons wins 3PM in more than 58% of weeks">3PM</span><span class="cat" title="Sizzlin sons wins FT% in more than 58% of weeks">FT%</span><span class="cat" title="Sizzlin sons wins PTS in more than 58% of weeks">PTS</span></div></div><div class="gbar" title="win chance"><span class="ga" style="width:42%"></span><span class="gb"></span></div><div class="side side-b fav">
+<div class="side-row"><span class="gteam">Black Zeus <span class="grec mono">1–2</span></span>
 <span class="gprob mono">58%</span></div>
-<div class="gbar"><span style="width:58%"></span></div>
-<div class="cats"><span class="cats-label">4.6 cats</span><span class="cat">FG%</span><span class="cat">STL</span><span class="cat">AST</span><span class="cat">BLK</span><span class="cat">TO</span><span class="cat">REB</span></div></div></div></div></section><section id="results"><h2>Week 3 results</h2><p class="intro">The favorite won <b>4 of 7</b> games. Upsets: Overpayed (39%), Giddey up (38%), Sizzlin sons (46%). <b>Winner's forecast</b> is the chance the winner had in the forecast made before the week.</p><div class="scroll"><table class="grid results">
+<div class="cats"><span class="cat" title="Black Zeus wins FG% in more than 58% of weeks">FG%</span><span class="cat" title="Black Zeus wins STL in more than 58% of weeks">STL</span><span class="cat" title="Black Zeus wins AST in more than 58% of weeks">AST</span><span class="cat" title="Black Zeus wins BLK in more than 58% of weeks">BLK</span><span class="cat" title="Black Zeus wins TO in more than 58% of weeks">TO</span><span class="cat" title="Black Zeus wins REB in more than 58% of weeks">REB</span></div></div><div class="gfoot"><span>Expected categories <b class="mono">4.4–4.6</b></span><span class="cats"><span class="cats-label">Toss-ups</span><span class="muted">none</span></span></div></div></div></section><section id="results"><h2>Week 3 results</h2><p class="intro">The favorite won <b>4 of 7</b> games. Upsets: Overpayed (39%), Giddey up (38%), Sizzlin sons (46%). <b>Winner's forecast</b> is the chance the winner had in the forecast made before the week.</p><div class="scroll"><table class="grid results">
 <thead><tr><th>Winner</th><th class="num">Categories</th><th>Loser</th>
 <th class="num" title="The winner's chance in the forecast made before the week">Winner's forecast</th></tr></thead>
 <tbody><tr>
