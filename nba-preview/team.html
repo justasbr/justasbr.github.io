@@ -48,15 +48,10 @@ font-weight:700;text-transform:uppercase;letter-spacing:1px;white-space:nowrap;v
 .grid th.num{text-align:right}
 .rank{font-family:var(--mono);font-weight:500;color:var(--muted)}
 .team{font-weight:700;color:var(--ink);white-space:nowrap}
-.tcard{position:relative;display:flex;align-items:center;gap:10px;padding:4px 6px 4px 8px;border-radius:10px;
-overflow:hidden;isolation:isolate;background:linear-gradient(90deg,var(--rule-2),transparent 85%)}
-.tcard[style]{background:none}
-.tcard[style]::before{content:"";position:absolute;inset:-20px;z-index:-1;background:var(--logo) left center/60% auto no-repeat;
-filter:blur(22px) saturate(1.6);opacity:.35}
-.tcard[style]::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,transparent 30%,var(--card) 92%)}
-.tlogo{display:block;width:32px;height:32px;border-radius:7px;object-fit:cover;flex:none;box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.tcard{display:flex;align-items:center;gap:10px}
+.tlogo{display:block;width:32px;height:32px;border-radius:7px;object-fit:cover;flex:none}
 .tname{flex:1;min-width:0}.tname .team{white-space:normal}.towner{font-family:var(--mono);font-size:.74rem;color:var(--muted)}
-.tface{display:block;height:44px;width:auto;margin:-6px 0 -8px auto}
+.tface{display:block;height:50px;width:auto;margin:-9px 0 -9px auto}
 .tv-build{margin:2px 0 10px;font-weight:600}.tv-build .muted{font-weight:400;margin-right:4px}
 @media (max-width:640px){.tface{display:none}}
 .owner{font-family:var(--mono);font-size:.78em;font-weight:400;color:var(--muted);letter-spacing:.2px;text-transform:none;white-space:nowrap}
