@@ -337,9 +337,11 @@ text-transform:uppercase;letter-spacing:.6px;color:var(--ink-2);padding-bottom:6
 border:1px solid var(--rule);border-radius:999px;padding:3px 10px 3px 3px;cursor:pointer}
 .me-chip:hover{border-color:var(--accent);background:var(--weak-soft)}
 .me-logo{width:22px;height:22px;border-radius:50%}
-.mine-row>td:not(.rf-sq):not(.rf-tix),.mine-row.rk-row,.mine-row.game,.mine-row.mover{background-color:var(--weak-soft)!important}
+/* your row: tint only plain cells (heat-map cells keep their colour), and a line above and below the whole row */
+.mine-row>td:not([style]):not(.rf-sq),.mine-row.rk-row,.mine-row.game,.mine-row.mover{background-color:var(--weak-soft)!important}
 .mine-row.game,.mine-row.mover,.mine-row.rk-row{box-shadow:inset 4px 0 0 var(--accent)}
-tr.mine-row>td:first-child{box-shadow:inset 4px 0 0 var(--accent)}
+tr.mine-row>td{box-shadow:inset 0 2px 0 var(--accent),inset 0 -2px 0 var(--accent)}
+tr.mine-row>td:first-child{box-shadow:inset 4px 0 0 var(--accent),inset 0 2px 0 var(--accent),inset 0 -2px 0 var(--accent)}
 a.tl.mine{font-weight:800}
 .tr-recaps td{vertical-align:top}
 @media (max-width:640px){
