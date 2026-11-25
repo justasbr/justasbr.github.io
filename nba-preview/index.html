@@ -795,9 +795,10 @@ nav.tabs a.tab{padding:7px 9px 8px}
     var t = V.teams[String(id)];
     if (!t) return;
     sel.value = String(id);
-    // Full width: season so far and trades (wide tables). Half-width cards go in pairs, so no row has an empty half:
+    // Full width: season so far (a wide table). Half-width cards go in pairs, so no row has an empty half:
     // coming weeks + category profile, team value + best and worst games (its two lists stack).
-    out.innerHTML = [historyBlock(t), comingBlock(t), catsBlock(t), valueBlock(t), gamesBlock(t), movesBlock(t)].join('');
+    // The Trades card (movesBlock) is off; the Trades & draft tab shows the trade recaps.
+    out.innerHTML = [historyBlock(t), comingBlock(t), catsBlock(t), valueBlock(t), gamesBlock(t)].join('');
   }
   out.addEventListener('click', function (e) {
     var th = e.target.closest('th.tv-sort');
